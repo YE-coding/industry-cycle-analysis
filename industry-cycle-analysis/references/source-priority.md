@@ -75,3 +75,23 @@ Label all key claims:
 - Assumption: plausible but unverified condition that must be tracked.
 
 If a number cannot be verified, write the uncertainty explicitly.
+
+## Deep Research Evidence Rules
+
+For a deep industry-cycle analysis, do not stop at one generic market report. Each major section needs a minimum evidence base:
+
+- Industry chain: at least 2 reliable sources.
+- Demand: at least 3 reliable sources.
+- Supply and capacity: at least 3 reliable sources.
+- Price/order/inventory/margin: at least 3 reliable sources or an explicit data-gap note.
+- Capital-market expectation mapping: at least 2 sources, with a clear distinction between industrial reality and market narrative.
+
+When the minimum cannot be reached within the search budget, write:
+
+```text
+Evidence gap: [what is missing]
+Why unavailable: [not public / stale / proprietary / not found within budget]
+How to track later: [source or indicator]
+```
+
+Do not continue searching indefinitely to hide an evidence gap.

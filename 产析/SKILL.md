@@ -42,6 +42,30 @@ Use this skill for industry systems, not single objects.
 - Do not produce direct investment advice, stock recommendations, target prices, or short-term trading calls.
 - Treat public data, AI answers, media summaries, and broker commentary as clues, not facts.
 
+## 时间同步规则
+
+**每次调用此技能时，你必须：**
+
+1. 在分析开始时查询当前系统时间
+2. 存储时间戳以供整个报告使用
+3. 在所有日期引用和数据时效性检查中使用此时间戳
+
+```bash
+# 查询当前时间（在技能调用开始时运行）
+date "+%Y-%m-%d %H:%M:%S %Z"
+```
+
+**为什么这很重要：**
+- 行业数据具有时效性（季度报告、月度出货量、产能更新）
+- 过时的数据会导致周期阶段判断错误
+- 报告必须明确说明分析日期以供未来参考
+
+**存储格式：**
+```
+分析时间戳：[YYYY-MM-DD HH:MM:SS]
+数据时效：[覆盖的最新数据期间]
+```
+
 ## Workflow
 
 1. Define the industry boundary and chain.

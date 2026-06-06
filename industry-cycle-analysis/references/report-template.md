@@ -27,6 +27,17 @@ Key bottleneck:
 - [node]
 - [why it matters]
 
+## 1.5 Research Plan and Budget
+
+| Subtask | Search Rounds Used | Evidence Count | Status |
+|---|---:|---:|---|
+| Industry chain |  |  | complete / gap |
+| Demand |  |  | complete / gap |
+| Supply and capacity |  |  | complete / gap |
+| Price/order/inventory/margin |  |  | complete / gap |
+| Beneficiaries |  |  | complete / gap |
+| Market expectation |  |  | complete / gap |
+
 ## 2. Demand Side
 
 Facts:
@@ -109,6 +120,18 @@ Conclusion:
 - [what the market appears to be trading]
 - [what is not yet clear]
 
+## 8.5 Evidence Matrix
+
+| Claim | Evidence | Source Quality | Confidence | Gap |
+|---|---|---|---|---|
+|  |  | Tier 1 / Tier 2 / Tier 3 | high / medium / low |  |
+
+## 8.6 Conflicting Evidence
+
+| Topic | Source A | Source B | Difference | Handling |
+|---|---|---|---|---|
+|  |  |  |  | resolved / unresolved |
+
 ## 9. Three Scenarios
 
 Base case:
@@ -137,4 +160,5 @@ Do not confuse industry research with investment profit.
 - Correct direction does not equal correct timing.
 - Public data may already be priced.
 - AI answers require verification.
+- Search budgets and evidence gaps are part of the conclusion, not a weakness to hide.
 ````

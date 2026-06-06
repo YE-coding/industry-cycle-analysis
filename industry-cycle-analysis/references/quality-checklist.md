@@ -20,6 +20,8 @@ Use this before final delivery.
 - Are data sources ranked by reliability?
 - Are missing data points marked as missing?
 - Are AI-generated statements verified before becoming facts?
+- Does each major section meet its minimum evidence count or explicitly mark an evidence gap?
+- Are source date, geography, and data definition visible for important numbers?
 
 ## Supply-Demand
 
@@ -45,3 +47,11 @@ Use this before final delivery.
 - Are facts, inferences, and assumptions separated?
 - Are the biggest uncertainties visible?
 - Does the report explain what to track next month?
+
+## DeepSearch Controls
+
+- Was each subtask capped at a fixed number of search rounds?
+- Were repeated sources stopped instead of browsed indefinitely?
+- Were full logs, journals, JSONL files, and raw traces avoided?
+- Were long observations compressed before entering final reasoning?
+- Are unresolved conflicts preserved instead of averaged away?
