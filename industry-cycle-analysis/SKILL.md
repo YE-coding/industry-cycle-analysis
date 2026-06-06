@@ -67,6 +67,49 @@ Analysis Timestamp: [YYYY-MM-DD HH:MM:SS]
 Data Currency: [Latest data period covered]
 ```
 
+## Data Currency Verification Rule
+
+**CRITICAL: Before using ANY data point in the report, you MUST verify whether it is:**
+
+1. **Actual/Published data** - from annual reports, quarterly reports, official statistics
+2. **Estimated/Projected data** - from analyst forecasts, predictions, forward-looking statements
+
+### How to verify:
+
+1. **Check the source date**: Data from 2025 reports should be labeled as "2025 actual", not "2025 estimated"
+2. **Check the terminology**: Look for keywords like "预计", "预测", "forecast", "estimate" which indicate projections
+3. **Check the data period**: If current date is June 2026, 2025 data should be actual, not estimated
+
+### Data labeling requirements:
+
+```markdown
+# Correct labeling:
+- 2025年全球半导体市场实际规模约7,160-7,280亿美元（Source: Gartner/WSTS 2026年发布）
+- 台积电2025年全年营收突破3万亿新台币（Source: 台积电年报 2026-02）
+
+# Incorrect labeling (DO NOT use):
+- 2025年全球半导体市场预计约6,970亿美元（Source: WSTS 2025）← This is outdated forecast
+- 台积电2025年营收未确认 ← This should be confirmed by now
+```
+
+### When to mark data as uncertain:
+
+- If the data period is more than 12 months old and hasn't been updated
+- If the source is a forecast that hasn't been validated by actual results
+- If multiple sources conflict and neither is authoritative
+
+### Example of proper data currency check:
+
+```markdown
+## Data Currency Table
+
+| Data Point | Status | Source | Date |
+|------------|--------|--------|------|
+| 2025年全球半导体市场规模 | Actual | Gartner/WSTS | 2026-02 |
+| 台积电2025年营收 | Actual | 台积电年报 | 2026-02 |
+| 2026年市场预测 | Estimated | WSTS | 2025-12 |
+```
+
 ## Hard Research Controls
 
 Use these controls whenever web search, agentic browsing, logs, journals, or long tool outputs are involved:
