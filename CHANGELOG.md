@@ -2,69 +2,69 @@
 
 All notable changes to the industry-cycle-analysis skill will be documented in this file.
 
-## [1.1.0] - 2025-06-05
+## [1.2.0] - 2025-06-05
 
 ### Added
 
 #### SKILL.md
-- **Step 9: Profit/Order Transmission Chain** - Map how demand signals propagate upstream through the industry chain
-  - Track end demand → orders → revenue → margin → capex → upstream orders
-  - Identify profit pool shifts during cycle turns
-  - Distinguish order signals from revenue realization timing
-- **Step 11: Observation Posts (Watchpoints)** - Define 3-5 specific, measurable indicators to track monthly
-  - Each watchpoint includes: indicator name, data source, frequency, trigger threshold, signal meaning
-  - Examples: utilization rate, order-to-revenue ratio, inventory days, margin trend, capex timing
-- **Step 12: Cycle Timeline** - Construct historical cycle timeline with current position estimate
-  - Map past 2-3 cycles if data allows
-  - Estimate current position with date anchors
-  - Identify expected transition to next phase
-- **Updated Output Requirements** - Added 4 new mandatory deliverables:
-  - Profit/order transmission chain
-  - Observation posts (3-5 specific monthly watchpoints with thresholds)
-  - Cycle timeline (historical turns + current position estimate)
-  - Database-style tracking section (structured fields for ongoing updates)
+
+- **Dynamic-cycle rule** - New core principle requiring transmission chain analysis and falsifiable indicators
+- **Central model** - Added "profit/order transmission chain" to the core analysis flow
+- **Step 1: Industry Chain** - Added profit/order transmission chain drawing and AI semiconductor example
+- **Step 5: Supply-Demand Conflict** - Added transmission path explanation and second-order beneficiary separation
+- **Step 6: Data Review** - Added tracking database conversion capability
+- **Step 8: Cycle Stage** - Added timeline construction and key time lag identification
+- **Step 9: Profit/Order Transmission Chain** - Map how demand signals propagate upstream
+- **Step 11: Observation Posts** - Added falsifiability requirement and focused indicator list
+- **Step 13: Report Production** - Added 3 dynamic sections requirement
+- **Output Requirements** - Added profit/order transmission map, dynamic transmission explanation, cycle timeline, falsifiable observation posts, tracking database template
 
 #### report-template.md
-- **Section 5.5: Profit/Order Transmission Chain**
-  - Visual flow diagram of demand signal propagation
-  - Profit pool redistribution table by chain stage
-  - Key transmission lag quantification
-- **Section 5.6: Transmission Mechanism**
-  - Price pass-through analysis
-  - Order book transmission
-  - Inventory adjustment patterns
-  - Capex cycle dynamics
-  - Pricing power distribution
-- **Section 7.5: Cycle Timeline**
-  - Historical cycle turns table (start, peak, trough, duration, key driver)
-  - Current position estimate with confidence level
-  - Visual timeline showing current phase
-- **Section 10.5: Observation Posts (Watchpoints)**
-  - Structured table for 3-5 specific indicators
-  - Current value, source, threshold, signal meaning, action
-  - Update cadence definition
-- **Section 11: Database-Style Tracking**
-  - Latest Update section with structured fields (cycle stage, utilization, price, orders, inventory, margin, capex, policy)
-  - History Log for tracking events and cycle stage transitions
+
+- **Section 1.1: Profit and Order Transmission Chain** - Detailed node-level transmission analysis with bargaining power
+- **Section 4: Supply-Demand Conflict** - Added transmission flow diagram and second-order effects
+- **Section 5.5: Profit/Order Transmission Chain** - Detailed transmission lag analysis
+- **Section 5.6: Transmission Mechanism** - Price pass-through, order book, inventory, capex dynamics
+- **Section 7.1: Cycle Timeline** - Timeline table and cycle loop visualization
+- **Section 7.5: Cycle Timeline Detailed** - Historical turns and current position estimate
+- **Section 10.1: Observation Posts** - Focused falsifiable indicators with positive/disconfirming signals
+- **Section 10.2: Tracking Database Template** - Structured tracking with YoY/QoQ and cycle judgment impact
 
 #### quality-checklist.md
+
+- **Chain** - Added profit/order transmission chain and second-order beneficiary separation
+- **Supply-Demand** - Added transmission explanation verification
+- **Cycle** - Added timeline, time lag, and measurable disconfirming signals
+- **Reasoning** - Added observation posts and database-style tracking verification
 - **Profit Transmission Chain** section - Verify transmission chain mapping
 - **Cycle Timeline** section - Verify historical cycle documentation and current position
 - **Observation Posts** section - Verify watchpoint definitions and thresholds
 - **Database-Style Tracking** section - Verify structured tracking sections
-- **Delivery Verification** section - Prevent static conclusions and vague risk warnings:
-  - Static Conclusion Check: forward-looking conditionals, specific thresholds, "what would prove this wrong"
-  - Vague Risk Warning Check: specific trigger conditions, probability estimates, tie to observation posts
-  - Actionability Check: reader can take action, conditional recommendations, executable tracking plan
+- **Delivery Verification** section - Prevent static conclusions and vague risk warnings
 
 ### Changed
-- Workflow now includes 14 steps (was 12) with explicit profit chain and observation post construction
-- Report template expanded from 12 to 15 sections with new analytical frameworks
-- Quality checklist expanded from 7 to 12 categories with delivery verification
+
+- Workflow now includes 14 steps with explicit transmission chain and falsifiability requirements
+- Report template expanded with transmission-focused sections
+- Quality checklist expanded with transmission and falsifiability verification
+
+## [1.1.0] - 2025-06-05
+
+### Added
+
+- Step 9: Profit/order transmission chain analysis
+- Step 11: Observation posts (3-5 monthly watchpoints)
+- Step 12: Cycle timeline with historical turns
+- Section 5.5-5.6: Transmission chain and mechanism
+- Section 7.5: Cycle timeline visualization
+- Section 10.5: Observation posts with trigger thresholds
+- Section 11: Database-style tracking
+- Delivery verification in quality checklist
 
 ## [1.0.0] - Initial Release
 
 ### Added
+
 - Core skill definition with 12-step workflow
 - Industry chain mapping framework
 - Supply-demand conflict analysis

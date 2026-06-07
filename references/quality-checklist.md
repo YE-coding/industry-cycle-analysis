@@ -11,8 +11,10 @@ Use this before final delivery.
 ## Chain
 
 - Is the chain shown from upstream to downstream?
+- Is there a profit/order transmission chain, not only a textbook production chain?
 - Are bottleneck nodes distinguished from ordinary nodes?
 - Are true beneficiaries separated from concept exposure?
+- Are immediate beneficiaries separated from delayed second-order beneficiaries?
 
 ## Data
 
@@ -29,12 +31,16 @@ Use this before final delivery.
 - Is supply constraint clear?
 - Are capacity, yield, expansion plan, and ramp-up time separated?
 - Is announced capacity separated from effective capacity?
+- Does the report explain how demand transmits into orders, prices, capex, capacity release, and profits?
 
 ## Cycle
 
 - Is the current cycle stage named?
+- Is there a timeline showing demand discovery, shortage, price rise, capex, capacity release, oversupply risk, and clearing?
+- Is the key time lag explicit?
 - Are signals for the next stage listed?
 - Is there at least one disconfirming signal?
+- Are disconfirming signals measurable rather than generic risks?
 
 ## Capital Market
 
@@ -47,6 +53,8 @@ Use this before final delivery.
 - Are facts, inferences, and assumptions separated?
 - Are the biggest uncertainties visible?
 - Does the report explain what to track next month?
+- Are observation posts limited to a focused set of falsifiable indicators?
+- Is there a database-style tracking table with date, indicator, value, direction, source, and implication?
 
 ## DeepSearch Controls
 

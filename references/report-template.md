@@ -27,6 +27,22 @@ Key bottleneck:
 - [node]
 - [why it matters]
 
+## 1.1 Profit and Order Transmission Chain
+
+```text
+[end demand]
+-> [buyer / capex owner]
+-> [system integrator / product]
+-> [core component]
+-> [bottleneck component or process]
+-> [capacity owner]
+-> [equipment/material supplier]
+```
+
+| Node | Demand Source | Price/Profit Lever | Bargaining Power | Main Risk |
+|---|---|---|---|---|
+|  |  |  | high / medium / low |  |
+
 ## 1.5 Research Plan and Budget
 
 | Subtask | Search Rounds Used | Evidence Count | Status |
@@ -75,6 +91,24 @@ Answer:
 - How long?
 - Who can solve it?
 - When does new capacity release?
+
+Transmission:
+
+```text
+[demand driver]
+-> [order increase]
+-> [shortage node]
+-> [price/margin change]
+-> [capex/expansion]
+-> [new capacity release]
+-> [shortage relief or oversupply]
+```
+
+Second-order effects:
+
+- [who benefits immediately]
+- [who benefits with a lag]
+- [who may lose when capacity releases]
 
 ## 5. Price, Orders, Inventory, Margin
 
@@ -154,7 +188,26 @@ Disconfirming signals:
 
 - [what would prove this wrong]
 
-## 7.5 Cycle Timeline
+## 7.1 Cycle Timeline
+
+| Time | Industry Signal | Supply-Demand Meaning | What to Verify |
+|---|---|---|---|
+| [year/quarter] |  |  |  |
+
+Cycle loop:
+
+```text
+demand
+-> shortage/gap
+-> price rise
+-> capex/expansion
+-> capacity release
+-> shortage relief or oversupply
+-> clearing
+-> new demand
+```
+
+## 7.5 Cycle Timeline Detailed
 
 Historical cycle turns (if data available):
 
@@ -221,42 +274,21 @@ Risk case:
 |---|---|---|---|---|
 |  |  |  | Monthly |  |
 
-## 10.5 Observation Posts (Watchpoints)
+## 10.1 Observation Posts
 
-Define 3-5 specific, measurable indicators with trigger thresholds:
+Keep this list focused. Use about five falsifiable indicators.
 
-| # | Watchpoint | Current Value | Source | Threshold | Signal If Triggered | Action |
-|---|---|---|---|---|---|---|
-| 1 | [indicator name] |  |  | [above/below X] | [what it means] | [what to do] |
-| 2 |  |  |  |  |  |  |
-| 3 |  |  |  |  |  |  |
+| Observation Post | Source | Frequency | Positive Signal | Disconfirming Signal | Meaning |
+|---|---|---|---|---|---|
+|  |  | monthly / quarterly |  |  |  |
 
-Update cadence: monthly review, quarterly reassessment of thresholds.
+## 10.2 Tracking Database Template
 
-## 11. Database-Style Tracking
+| Date | Indicator | Node | Latest Value | YoY/QoQ | Direction | Source | Impact on Cycle Judgment | Note |
+|---|---|---|---|---|---|---|---|---|
+|  |  |  |  |  | up / flat / down |  |  |  |
 
-Use this section for ongoing structured updates:
-
-### Latest Update
-
-| Field | Value | Date | Source |
-|---|---|---|---|
-| Cycle stage |  |  |  |
-| Capacity utilization |  |  |  |
-| Price trend |  |  |  |
-| Order backlog |  |  |  |
-| Inventory days |  |  |  |
-| Gross margin |  |  |  |
-| Capex announcement |  |  |  |
-| Key policy change |  |  |  |
-
-### History Log
-
-| Date | Event | Impact | Cycle Stage Before | Cycle Stage After |
-|---|---|---|---|---|
-|  |  |  |  |  |
-
-## 12. Final Notes
+## 11. Final Notes
 
 Do not confuse industry research with investment profit.
 
