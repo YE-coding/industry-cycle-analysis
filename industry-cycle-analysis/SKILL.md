@@ -1,8 +1,8 @@
 ---
 name: industry-cycle-analysis
-description: 产业供需周期分析 Skill，触发词包括“产析skill”。用于研究一个行业、赛道或产业链的供需矛盾、产能周期、价格变化、资本开支、企业盈利、产业链传导和资本市场预期映射，并采用 DeepSearch 式子问题拆解、证据矩阵、冲突信息合并和检索成本控制。适合分析半导体、光通信、AI算力、新能源、化工、钢铁、焦煤、铁矿石、机器人、数据中心、电力、液冷等周期性或成长性行业。不要用于短线荐股、技术分析、K线预测或直接给投资建议。
+description: 产业供需周期分析 Skill，触发词包括"产析skill"。用于研究一个行业、赛道或产业链的供需矛盾、产能周期、价格变化、资本开支、企业盈利、产业链传导和资本市场预期映射，并采用 DeepSearch 式子问题拆解、证据矩阵、冲突信息合并和检索成本控制。适合分析半导体、光通信、AI算力、新能源、化工、钢铁、焦煤、铁矿石、机器人、数据中心、电力、液冷等周期性或成长性行业。不要用于短线荐股、技术分析、K线预测或直接给投资建议。
 argument-hint: [industry-or-sector]
-version: 1.1.0
+version: 1.2.0
 user-invocable: true
 allowed-tools: Read, WebSearch, WebFetch, Bash
 ---
@@ -43,7 +43,7 @@ Use this skill for industry systems, not single objects.
 - Treat public data, AI answers, media summaries, and broker commentary as clues, not facts.
 - For deep research tasks, use DeepSearch-style decomposition with strict search budgets and stopping conditions. Load `references/deepsearch-research-protocol.md`.
 
-## Time Synchronization Rule
+## Time Synchronization Rule (MUST execute first)
 
 **Every time this skill is invoked, you MUST:**
 
@@ -56,10 +56,19 @@ Use this skill for industry systems, not single objects.
 date "+%Y-%m-%d %H:%M:%S %Z"
 ```
 
-**Why this matters:**
-- Industry data is time-sensitive (quarterly reports, monthly shipments, capacity updates)
-- Stale data leads to incorrect cycle-stage judgment
-- Reports must clearly state the analysis date for future reference
+**Data collection scope based on current time:**
+
+| Current Month | Required Latest Data | Data Status |
+|--------------|---------------------|-------------|
+| Jan-Mar | Previous year Q4, previous year full year | Actual (annual reports released) |
+| Apr-Jun | Current year Q1, previous year full year | Actual (Q1 reports released) |
+| Jul-Sep | Current year Q2, current year Q1 | Actual |
+| Oct-Dec | Current year Q3, current year Q2 | Actual |
+
+**Examples:**
+- If current date is June 2026 → Must collect 2026 Q1 data (released Apr-May)
+- If current date is June 2026 → Must collect 2025 full year data (released Jan-Mar)
+- **DO NOT** use "forecast" data older than 6 months without collecting latest actual data
 
 **Storage format:**
 ```
@@ -83,32 +92,28 @@ Data Currency: [Latest data period covered]
 ### Data labeling requirements:
 
 ```markdown
-# Correct labeling:
-- 2025年全球半导体市场实际规模约7,160-7,280亿美元（Source: Gartner/WSTS 2026年发布）
-- 台积电2025年全年营收突破3万亿新台币（Source: 台积电年报 2026-02）
+# Correct labeling (use actual data):
+- 2025年全球半导体市场实际规模约7,160亿美元（Source: Gartner 2026-02）
+- 台积电2026年Q1营收255亿美元（Source: 台积电季报 2026-04）
 
 # Incorrect labeling (DO NOT use):
 - 2025年全球半导体市场预计约6,970亿美元（Source: WSTS 2025）← This is outdated forecast
-- 台积电2025年营收未确认 ← This should be confirmed by now
+- 2026年Q1数据待发布 ← This should be confirmed by now
 ```
 
-### When to mark data as uncertain:
-
-- If the data period is more than 12 months old and hasn't been updated
-- If the source is a forecast that hasn't been validated by actual results
-- If multiple sources conflict and neither is authoritative
-
-### Example of proper data currency check:
+### Data Currency Check Table (MUST fill for each analysis):
 
 ```markdown
 ## Data Currency Table
 
-| Data Point | Status | Source | Date |
-|------------|--------|--------|------|
-| 2025年全球半导体市场规模 | Actual | Gartner/WSTS | 2026-02 |
-| 台积电2025年营收 | Actual | 台积电年报 | 2026-02 |
-| 2026年市场预测 | Estimated | WSTS | 2025-12 |
+| Data Point | Status | Source | Release Date | Latest? |
+|------------|--------|--------|--------------|---------|
+| [Industry]2025 market size | Actual/Forecast | [Source] | [Date] | ✓/✗ |
+| [Company]2025 annual revenue | Actual/Forecast | [Source] | [Date] | ✓/✗ |
+| [Company]2026 Q1 revenue | Actual/Forecast | [Source] | [Date] | ✓/✗ |
 ```
+
+**If data is not latest, MUST search immediately to supplement!**
 
 ## Hard Research Controls
 
@@ -125,10 +130,11 @@ Use these controls whenever web search, agentic browsing, logs, journals, or lon
    - Draw a top-down and bottom-up chain if the industry is complex.
    - Load `references/framework.md` if the chain or analysis frame is unclear.
 
-2. Plan the DeepSearch-style research split.
-   - Load `references/deepsearch-research-protocol.md`.
-   - Split the industry into 6-10 research subtasks: chain map, demand, supply, capacity, price/order/inventory, company beneficiaries, policy/technology variables, market expectation.
-   - Set evidence minimums and search budgets before browsing.
+2. Collect latest data (MUST execute).
+   - **Industry overall data**: Market size, growth rate for last 2 years, monthly/quarterly data if available.
+   - **Key company data**: Latest financial reports (annual/quarterly), revenue, profit margins, shipments.
+   - **Supply-demand signals**: Latest price trends, capacity utilization, orders/inventory.
+   - Use WebSearch to collect data: `WebSearch: "[industry] market size 2025 2026"`
 
 3. Find the demand driver.
    - Identify whether demand comes from real end use, policy, replacement, inventory restocking, capital expenditure, or speculative expectation.
@@ -162,18 +168,32 @@ Use these controls whenever web search, agentic browsing, logs, journals, or lon
    - Explicitly ask whether the stock market is trading expectation start, expectation diffusion, earnings realization, valuation digestion, or expectation reversal.
 
 10. Produce the report.
-   - Use `references/report-template.md`.
-   - Keep conclusions split into facts, inferences, and assumptions.
-   - Include a tracking table for future monthly updates.
+    - Use `references/report-template.md`.
+    - Keep conclusions split into facts, inferences, and assumptions.
+    - Include a tracking table for future monthly updates.
 
 11. Validate before final delivery.
-   - Use `references/quality-checklist.md`.
-   - If creating a PDF, use `scripts/md_to_pdf.py`.
+    - Use `references/quality-checklist.md`.
+    - If creating a PDF, use `scripts/md_to_pdf.py`.
+
+12. Clean up temporary files (MUST execute).
+    - Delete all downloaded data files after report completion.
+    - Remove .xlsx, .csv, .pdf, .json files downloaded for data retrieval.
+    - Keep working directory clean and prevent data leakage.
+
+```bash
+# Delete downloaded data files
+rm -f [working-dir]/*.xlsx
+rm -f [working-dir]/*.csv
+rm -f [working-dir]/*.pdf
+rm -f [working-dir]/*.json
+```
 
 ## Output Requirements
 
 Every serious analysis should include:
 
+- **Analysis timestamp and data currency declaration** (MUST place at report header)
 - industry-chain map
 - key supply-demand conflict
 - past two years of relevant data or a note explaining data gaps
@@ -185,6 +205,7 @@ Every serious analysis should include:
 - evidence matrix with source quality and unresolved gaps
 - search budget note for deep research tasks
 - follow-up indicators to track monthly
+- **Data Currency Table** (MUST include)
 
 Keep these warnings visible:
 
@@ -194,6 +215,7 @@ correct industry direction != correct timing
 earnings realization != continued stock rise
 complete public data != market has not priced it
 AI answer != fact
+过时数据 != 当前事实
 ```
 
 ## Optional PDF Export
