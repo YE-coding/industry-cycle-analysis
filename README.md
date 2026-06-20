@@ -99,6 +99,38 @@ industry-cycle-analysis/
 2. 将 `industry-cycle-analysis` 和 `产析` 文件夹复制到 `~/.claude/skills/` 目录
 3. 重启 Claude Code
 
+## 已知问题与解决方案
+
+### WebSearch/WebFetch 工具不可用
+
+本 Skill 的核心工作流依赖大量的网络数据检索（行业规模、公司财报、价格走势等）。在某些环境下，Claude Code 自带的 `WebSearch` 和 `WebFetch` 工具可能无法正常使用（例如网络限制、API 配额耗尽等）。
+
+#### 解决方案：安装本地 SearXNG 元搜索引擎
+
+[SearXNG](https://github.com/searxng/searxng) 是一个开源的隐私友好型元搜索引擎，可以部署在本地，通过 `curl` 调用其 JSON API 实现网页搜索，完全替代 `WebSearch`/`WebFetch` 的功能。
+
+快速部署方式（Docker）：
+
+```bash
+# 1. 克隆 SearXNG
+git clone https://github.com/searxng/searxng.git
+cd searxng
+
+# 2. 使用 Docker Compose 启动
+docker-compose up -d
+
+# 3. 验证服务（默认端口 8080）
+curl "http://127.0.0.1:8080/search?q=test&format=json"
+```
+
+部署后，在 Skill 中通过以下方式调用搜索：
+
+```bash
+curl.exe -s "http://127.0.0.1:8080/search?q=<URL编码的查询>&format=json"
+```
+
+> **提示：** 本 Skill 已内置 SearXNG 调用逻辑。只需确保本地 SearXNG 服务运行在 `127.0.0.1:8080`，Skill 会自动优先使用 SearXNG 进行数据检索。
+
 ## 许可证
 
 MIT License
