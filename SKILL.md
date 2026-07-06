@@ -1,6 +1,6 @@
 ---
 name: industry-cycle-analysis
-description: 产业供需周期分析 Skill，触发词包括"产析skill"。用于研究一个行业、赛道或产业链的供需矛盾、产能周期、价格变化、资本开支、企业盈利、产业链传导和资本市场预期映射，并采用 DeepSearch 式子问题拆解、证据矩阵、冲突信息合并和检索成本控制。适合分析半导体、光通信、AI算力、新能源、化工、钢铁、焦煤、铁矿石、机器人、数据中心、电力、液冷等周期性或成长性行业。不要用于短线荐股、技术分析、K线预测或直接给投资建议。
+description: 产业供需周期分析 Skill，触发词包括"产析skill"。用于研究一个行业、赛道或产业链的供需矛盾、产能周期、价格变化、资本开支、企业盈利、产业链传导和资本市场预期映射，并采用多工具检索路由、DeepSearch 式子问题拆解、证据矩阵、冲突信息合并和检索成本控制。适合分析半导体、光通信、AI算力、新能源、化工、钢铁、焦煤、铁矿石、机器人、数据中心、电力、液冷等周期性或成长性行业。不要用于短线荐股、技术分析、K线预测或直接给投资建议。
 ---
 
 # Industry Cycle Analysis
@@ -34,8 +34,8 @@ Dynamic-cycle rule:
 
 ```text
 Do not stop at "demand is strong" or "supply is tight".
-Explain how the contradiction transmits across the chain, when capacity responds,
-which indicators would falsify the judgment, and how to update the database later.
+Explain what each important chain node is, how the contradiction transmits across the chain,
+who pays, who captures profit, when capacity responds, and which indicators would falsify the judgment.
 ```
 
 ## Boundary
@@ -48,6 +48,78 @@ Use this skill for industry systems, not single objects.
 - Treat public data, AI answers, media summaries, and broker commentary as clues, not facts.
 - For deep research tasks, use DeepSearch-style decomposition with strict search budgets and stopping conditions. Load `references/deepsearch-research-protocol.md`.
 
+## Time Synchronization Rule (MUST execute first)
+
+**Every time this skill is invoked, you MUST:**
+
+1. Query current system time at the start of analysis
+2. Store the timestamp for use throughout the report
+3. Use this timestamp in all date references and data currency checks
+
+```bash
+# Query current time (run at skill invocation start)
+date "+%Y-%m-%d %H:%M:%S %Z"
+```
+
+**Data collection scope based on current time:**
+
+| Current Month | Required Latest Data | Data Status |
+|--------------|---------------------|-------------|
+| Jan-Mar | Latest released quarter; previous-year full year only if officially filed | Mixed; verify release status |
+| Apr-Jun | Current year Q1 where released; previous-year full year where filed | Actual only after publication |
+| Jul-Sep | Current year Q2, current year Q1 | Actual |
+| Oct-Dec | Current year Q3, current year Q2 | Actual |
+
+**Examples:**
+- If current date is June 2026 → Must collect 2026 Q1 data (released Apr-May)
+- If current date is June 2026 → Must collect 2025 full year data (released Jan-Mar)
+- **DO NOT** use "forecast" data older than 6 months without collecting latest actual data
+
+**Storage format:**
+```
+Analysis Timestamp: [YYYY-MM-DD HH:MM:SS]
+Data Currency: [Latest data period covered]
+```
+
+## Data Currency Verification Rule
+
+**CRITICAL: Before using ANY data point in the report, you MUST verify whether it is:**
+
+1. **Actual/Published data** - from annual reports, quarterly reports, official statistics
+2. **Estimated/Projected data** - from analyst forecasts, predictions, forward-looking statements
+
+### How to verify:
+
+1. **Check the source date**: Data from 2025 reports should be labeled as "2025 actual", not "2025 estimated"
+2. **Check the terminology**: Look for keywords like "预计", "预测", "forecast", "estimate" which indicate projections
+3. **Check the data period**: If current date is June 2026, 2025 data should be actual, not estimated
+
+### Data labeling requirements:
+
+```markdown
+# Correct labeling (use actual data):
+- 2025年全球半导体市场实际规模约7,160亿美元（Source: Gartner 2026-02）
+- 台积电2026年Q1营收255亿美元（Source: 台积电季报 2026-04）
+
+# Incorrect labeling (DO NOT use):
+- 2025年全球半导体市场预计约6,970亿美元（Source: WSTS 2025）← This is outdated forecast
+- 2026年Q1数据待发布 ← This should be confirmed by now
+```
+
+### Data Currency Check Table (MUST fill for each analysis):
+
+```markdown
+## Data Currency Table
+
+| Data Point | Status | Source | Release Date | Latest? |
+|------------|--------|--------|--------------|---------|
+| [Industry]2025 market size | Actual/Forecast | [Source] | [Date] | ✓/✗ |
+| [Company]2025 annual revenue | Actual/Forecast | [Source] | [Date] | ✓/✗ |
+| [Company]2026 Q1 revenue | Actual/Forecast | [Source] | [Date] | ✓/✗ |
+```
+
+**If data is not latest, MUST search immediately to supplement!**
+
 ## Hard Research Controls
 
 Use these controls whenever web search, agentic browsing, logs, journals, or long tool outputs are involved:
@@ -55,20 +127,30 @@ Use these controls whenever web search, agentic browsing, logs, journals, or lon
 1. Cap each subtask at 3 search rounds by default. If evidence remains incomplete after the cap, summarize current evidence and mark the gap instead of searching indefinitely.
 2. Never read complete `journal`, `jsonl`, `log`, or agent trace files. Read only the latest 80-120 lines, or filter by `result`, `error`, `timeout`, `source`, `claim`, or `evidence`.
 3. Compress every round of tool observations into a short local summary before using it in reasoning. Do not repeatedly paste raw web pages, logs, or long tool outputs back into context.
+4. Treat search-result snippets, AI summaries, and social posts as discovery clues. Open the original source before promoting a claim to evidence.
+5. Load `references/search-routing.md` before web research and follow its tool-routing and query-ladder rules.
 
 ## Workflow
 
 1. Define the industry boundary and chain.
    - Identify upstream, midstream, downstream, end demand, and substitutes.
    - Draw a top-down and bottom-up chain if the industry is complex.
+   - For every important chain node, explain in plain language: what it is, what it does, who it sells to, who supplies it, how it makes money, and why it matters.
+   - Identify representative companies for each chain node, but do not turn the report into a single-company profile.
    - Draw a profit/order transmission chain, not only a textbook production chain.
    - For AI-related semiconductors, distinguish: AI applications -> model companies -> cloud capex -> data centers -> servers -> GPU/ASIC -> HBM -> advanced packaging -> foundry -> equipment.
    - Load `references/framework.md` if the chain or analysis frame is unclear.
 
-2. Plan the DeepSearch-style research split.
-   - Load `references/deepsearch-research-protocol.md`.
-   - Split the industry into 6-10 research subtasks: chain map, demand, supply, capacity, price/order/inventory, company beneficiaries, policy/technology variables, market expectation.
-   - Set evidence minimums and search budgets before browsing.
+2. Collect latest data (MUST execute).
+   - **Industry overall data**: Market size, growth rate for last 2 years, monthly/quarterly data if available.
+   - **Key company data**: Latest financial reports (annual/quarterly), revenue, profit margins, shipments.
+   - **Supply-demand signals**: Latest price trends, capacity utilization, orders/inventory.
+   - **Chain-node data**: representative companies, capacity/effective capacity, utilization, yield, lead time, customer qualification, gross margin or profit pool where disclosed.
+   - **Demand segmentation**: end-use segments, buyer/budget owner, adoption trigger, replacement cycle, policy driver, inventory cycle, and observable demand indicators.
+   - **Supply expansion detail**: announced capacity, effective capacity, ramp timing, equipment bottleneck, certification delay, raw-material constraint, power/land/logistics constraint, and cancellation/delay signals.
+   - Use the discovery → primary-source verification → metric verification → contradiction search ladder in `references/search-routing.md`.
+   - Use local SearXNG for broad discovery, Exa for semantic gap filling, direct originals/Jina or browser reading for verification, and Agent-Reach channels for platform-specific leads.
+   - Record which original document supports each important number; never cite only a search snippet.
 
 3. Find the demand driver.
    - Identify whether demand comes from real end use, policy, replacement, inventory restocking, capital expenditure, or speculative expectation.
@@ -103,8 +185,8 @@ Use these controls whenever web search, agentic browsing, logs, journals, or lon
 
 9. Trace the profit/order transmission chain.
    - Map how demand changes propagate upstream: end demand → orders → revenue → margin → capex → upstream orders.
-   - Identify where profit pools shift during cycle turns (who captures margin at each stage).
-   - Distinguish order信号 from revenue realization timing.
+   - Identify where profit pools shift during cycle turns: who pays, who captures gross profit, who absorbs costs, who bears capex risk, and who only has concept exposure.
+   - Distinguish order signal from revenue realization timing.
    - Use `references/framework.md` "Depth Axis: Power and Money" section.
 
 10. Map to capital-market expectations.
@@ -124,22 +206,30 @@ Use these controls whenever web search, agentic browsing, logs, journals, or lon
    - Identify which phase the industry is entering next and the expected transition window.
 
 13. Produce the report.
-   - Use `references/report-template.md`.
-   - Keep conclusions split into facts, inferences, and assumptions.
-   - Include a tracking table for future monthly updates.
-   - Include 3 dynamic sections: profit transmission map, cycle timeline, and observation posts.
-   - Keep observation posts few and falsifiable; prefer 5 core indicators over a long unfocused list.
+    - Use `references/report-template.md`.
+    - Keep conclusions split into facts, inferences, and assumptions.
+    - Include a tracking table for future monthly updates.
+    - Include detailed plain-language chain-node explanations so a reader with no industry background can understand what each node is and why it matters.
+    - Include 3 dynamic sections: profit/order transmission map, cycle timeline, and observation posts.
 
 14. Validate before final delivery.
-   - Use `references/quality-checklist.md`.
-   - Verify the report is not static: must include forward-looking tracking and conditional triggers.
-   - If creating a PDF, use `scripts/md_to_pdf.py`.
+    - Use `references/quality-checklist.md`.
+    - Verify the report is not static: it must include forward-looking tracking and conditional triggers.
+    - If creating a PDF, use `scripts/md_to_pdf.py`.
+
+15. Clean up temporary files (MUST execute).
+    - Put downloads in a dedicated task-specific directory under the operating-system temp directory.
+    - Delete only files created and recorded by the current task.
+    - Never wildcard-delete `.xlsx`, `.csv`, `.pdf`, or `.json` files from the workspace or user directories.
+    - Before recursive cleanup, resolve the absolute path and verify it remains inside the task-specific temp directory.
 
 ## Output Requirements
 
 Every serious analysis should include:
 
+- **Analysis timestamp and data currency declaration** (MUST place at report header)
 - industry-chain map
+- chain-node explanation table: what it is, what it does, who supplies it, who buys it, representative companies, monetization method, and why it matters
 - profit/order transmission map
 - key supply-demand conflict
 - dynamic transmission explanation from demand to price/order/capex/capacity/profit
@@ -153,7 +243,11 @@ Every serious analysis should include:
 - tracking database template for monthly or quarterly updates
 - capital-market expectation stage
 - evidence matrix with source quality and unresolved gaps
+- original-source verification status for important claims
+- search tools used and fallback paths taken
 - search budget note for deep research tasks
+- follow-up indicators to track monthly
+- **Data Currency Table** (MUST include)
 
 Keep these warnings visible:
 
@@ -163,6 +257,7 @@ correct industry direction != correct timing
 earnings realization != continued stock rise
 complete public data != market has not priced it
 AI answer != fact
+过时数据 != 当前事实
 ```
 
 ## Optional PDF Export

@@ -11,6 +11,7 @@ Use this before final delivery.
 ## Chain
 
 - Is the chain shown from upstream to downstream?
+- Does each important chain node explain what it is, what it does, who supplies it, who buys it, representative companies, monetization method, and why it matters?
 - Is there a profit/order transmission chain, not only a textbook production chain?
 - Are bottleneck nodes distinguished from ordinary nodes?
 - Are true beneficiaries separated from concept exposure?
@@ -24,6 +25,16 @@ Use this before final delivery.
 - Are AI-generated statements verified before becoming facts?
 - Does each major section meet its minimum evidence count or explicitly mark an evidence gap?
 - Are source date, geography, and data definition visible for important numbers?
+- Was every important claim verified against an opened original rather than a search snippet?
+
+## Search Routing
+
+- Was `search-routing.md` applied before browsing?
+- Was SearXNG used for broad discovery and Exa only for semantic gap filling rather than as final evidence?
+- Were official filings, statistics, association data, or direct company materials opened for Tier 1 claims?
+- Were Agent-Reach social/platform results treated as leads or expectation evidence unless they were direct first-party statements?
+- Did each subtask include a contradiction search instead of only confirmation queries?
+- Are tool failures and fallback paths visible in the research-plan table?
 
 ## Supply-Demand
 

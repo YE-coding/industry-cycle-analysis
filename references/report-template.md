@@ -43,16 +43,35 @@ Key bottleneck:
 |---|---|---|---|---|
 |  |  |  | high / medium / low |  |
 
+## 1.2 Chain Node Explanation
+
+Write this for a reader with no prior industry background. Keep it plain, concrete, and evidence-linked.
+
+| Chain Node | What It Is | What It Does | Who Supplies It | Who Buys It | Representative Companies | How It Makes Money | Why It Matters |
+|---|---|---|---|---|---|---|---|
+|  |  |  |  |  |  |  |  |
+
+## 1.3 Power and Profit Map
+
+| Question | Answer | Evidence / Source | Gap |
+|---|---|---|---|
+| Who pays? |  |  |  |
+| Who captures gross profit? |  |  |  |
+| Who bears capex risk? |  |  |  |
+| Who has pricing power? |  |  |  |
+| Who has scarce capacity? |  |  |  |
+| Who is important but cannot monetize well? |  |  |  |
+
 ## 1.5 Research Plan and Budget
 
-| Subtask | Search Rounds Used | Evidence Count | Status |
-|---|---:|---:|---|
-| Industry chain |  |  | complete / gap |
-| Demand |  |  | complete / gap |
-| Supply and capacity |  |  | complete / gap |
-| Price/order/inventory/margin |  |  | complete / gap |
-| Beneficiaries |  |  | complete / gap |
-| Market expectation |  |  | complete / gap |
+| Subtask | Search Rounds | Tools/Route | Original Sources | Status |
+|---|---:|---|---:|---|
+| Industry chain |  |  |  | complete / gap |
+| Demand |  |  |  | complete / gap |
+| Supply and capacity |  |  |  | complete / gap |
+| Price/order/inventory/margin |  |  |  | complete / gap |
+| Beneficiaries |  |  |  | complete / gap |
+| Market expectation |  |  |  | complete / gap |
 
 ## 2. Demand Side
 
@@ -244,9 +263,9 @@ Conclusion:
 
 ## 8.5 Evidence Matrix
 
-| Claim | Evidence | Source Quality | Confidence | Gap |
-|---|---|---|---|---|
-|  |  | Tier 1 / Tier 2 / Tier 3 | high / medium / low |  |
+| Claim | Evidence | Source Quality | Original Opened? | Confidence | Gap |
+|---|---|---|---|---|---|
+|  |  | Tier 1 / Tier 2 / Tier 3 | yes / no | high / medium / low |  |
 
 ## 8.6 Conflicting Evidence
 

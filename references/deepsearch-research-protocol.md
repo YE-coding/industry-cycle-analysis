@@ -23,7 +23,18 @@ Create 6-10 subtasks before browsing. For a normal industry-cycle report, use:
 | Policy, technology, substitution variables | 2 reliable sources | 2 rounds |
 | Capital-market expectation mapping | 2 reliable sources | 2 rounds |
 
-One search round means one focused query set plus source reading and compression. Do not run open-ended browsing.
+One search round means one focused query set plus original-source reading and compression. A result page or snippet without original-source reading does not complete a round. Do not run open-ended browsing.
+
+## Search Sequence
+
+For each subtask, use this order:
+
+1. Discovery: identify entities, vocabulary, candidate sources, and disputed claims.
+2. Primary-source verification: open filings, official statistics, association data, company presentations, tenders, or direct transcripts.
+3. Metric verification: search the exact KPI with period, geography, unit, and definition.
+4. Contradiction search: actively look for later data, alternative definitions, delays, cancellations, and disconfirming evidence.
+
+Use `search-routing.md` to choose SearXNG, Exa, direct page reading, or Agent-Reach channels. Do not spend all three rounds repeating broad market-size queries.
 
 ## Evidence Minimums
 
@@ -49,6 +60,8 @@ data definition
 geography
 time period
 confidence: high / medium / low
+retrieval tool
+original opened: yes / no
 ```
 
 Do not keep raw pages in the reasoning context. Compress each source into 3-6 bullet points.
@@ -71,6 +84,7 @@ Use these hard limits unless the user explicitly asks for a larger research run:
 - Maximum 3 search rounds per subtask.
 - Maximum 12 high-value sources in the final synthesis for a normal report.
 - Maximum 20 high-value sources for a long report.
+- A high-value source may support multiple subtasks. Evidence minimums are coverage requirements, not a requirement to collect a separate source for every table cell.
 - Stop browsing when additional sources repeat existing facts without changing the cycle judgment.
 - Stop browsing when the next missing fact is likely proprietary, delayed, or unavailable in public sources.
 

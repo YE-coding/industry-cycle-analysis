@@ -1,3 +1,4 @@
-display_name: 产业供需周期分析
-short_description: 从产业链、供需矛盾、产能周期和市场预期分析行业。
-default_prompt: 分析一个行业的产业链、供需矛盾、产能周期、盈利传导和资本市场预期映射。
+interface:
+  display_name: "产业供需周期分析"
+  short_description: "基于最新证据分析产业链、供需周期、盈利传导和市场预期映射"
+  default_prompt: "Use $industry-cycle-analysis to analyze this industry with current evidence and explicit search routing."

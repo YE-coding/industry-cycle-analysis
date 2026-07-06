@@ -34,6 +34,18 @@ Use the highest-quality sources available. Treat AI answers as a starting index,
 
 Use Tier 3 only to discover questions or leads. Do not base a conclusion on it alone.
 
+## Evidence Eligibility
+
+The following are not evidence by themselves:
+
+- search-result titles or snippets
+- SearXNG or Exa result summaries without opening the source
+- Jina output when the source identity or date cannot be verified
+- social posts that merely repeat another report
+- AI-generated summaries without an accessible original
+
+Promote a clue to evidence only after opening the original or an authoritative reproduction and recording its publisher, publication date, period, geography, and definition. Social posts can serve as direct evidence only for the author's own statement or for capital-market narrative, not for an undisclosed industry fact.
+
 ## AI Usage
 
 Use AI as an industry research assistant:
