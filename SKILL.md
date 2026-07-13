@@ -207,6 +207,7 @@ Use these controls whenever web search, agentic browsing, logs, journals, or lon
 
 13. Produce the report.
     - Use `references/report-template.md`.
+    - Preserve the template's exact header labels `分析日期`, `地理范围`, `数据时效`, and `行业边界` so reports can be validated and imported reliably.
     - Keep conclusions split into facts, inferences, and assumptions.
     - Include a tracking table for future monthly updates.
     - Include detailed plain-language chain-node explanations so a reader with no industry background can understand what each node is and why it matters.

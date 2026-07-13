@@ -3,17 +3,18 @@
 Use this template for a full analysis.
 
 ````markdown
-# [Industry] Supply-Demand Cycle Analysis
+# [行业]行业供需周期分析
 
-Research date: [date]
-Geography: [global / China / US / other]
-Industry boundary: [scope]
+分析日期：[YYYY-MM-DD HH:mm:ss timezone]
+地理范围：[全球 / 中国 / 美国 / 其他]
+数据时效：[最新实际数据覆盖期；预测数据覆盖期]
+行业边界：[分析范围]
 
-## 0. One-Sentence Judgment
+## 0. 一句话判断
 
 [State current cycle stage, core conflict, and biggest uncertainty.]
 
-## 1. Industry Chain
+## 1. 产业链
 
 ```text
 [upstream]
@@ -22,7 +23,7 @@ Industry boundary: [scope]
 -> [end demand]
 ```
 
-Key bottleneck:
+关键瓶颈：
 
 - [node]
 - [why it matters]

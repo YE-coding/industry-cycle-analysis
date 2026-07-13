@@ -23,6 +23,8 @@ $q = [Uri]::EscapeDataString("query")
 Invoke-RestMethod "http://127.0.0.1:8080/search?q=$q&format=json"
 ```
 
+Set `language=zh-CN` for Chinese queries and `language=en-US` for English queries. Inspect the first results before continuing: if they are off-topic, empty, or dominated by calendar/dictionary pages, treat that round as failed and switch to Exa instead of repeating the same query.
+
 Semantic discovery:
 
 ```bash
@@ -96,6 +98,7 @@ Search snippets, generated summaries, and reposts do not pass this gate.
 
 - SearXNG unavailable: ask the user to start Docker Desktop, then retry; use Exa meanwhile.
 - One SearXNG engine blocked: continue with responsive engines and record the limitation.
+- SearXNG returns off-topic results: retry once with an explicit language and official-domain query; if quality is still poor, switch to Exa and record the discovery gap.
 - Exa unavailable: continue with SearXNG and official-domain queries.
 - Original page blocked: try official PDF/API, browser reading, then Jina Reader; retain the original URL.
 - Social platform unavailable: mark the sentiment/early-signal gap; do not substitute social claims for Tier 1 evidence.
