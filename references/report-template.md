@@ -1,320 +1,220 @@
 # Report Template
 
-Use this template for a full analysis.
+Use this template for full research. Keep gaps explicit; delete unused optional rows rather than filling them with generic prose.
 
 ````markdown
 # [行业]行业供需周期分析
 
 分析日期：[YYYY-MM-DD HH:mm:ss timezone]
-地理范围：[全球 / 中国 / 美国 / 其他]
-数据时效：[最新实际数据覆盖期；预测数据覆盖期]
-行业边界：[分析范围]
+地理范围：[范围]
+数据时效：[latest full-period actuals; partial actuals; forecasts]
+行业边界：[included and excluded scope]
+研究模式：完整深研
 
-## 0. 一句话判断
+## 0. 结论与证据就绪度
 
-[State current cycle stage, core conflict, and biggest uncertainty.]
+一句话判断：[cycle hypothesis + core conflict + biggest evidence gap]
 
-## 1. 产业链
+- 结论状态：[可发布 / 暂定 / 阶段待验证]
+- 置信度：[高 / 中 / 低]
+- 最大缺口：[gap]
+
+| Evidence Lane | Status | Opened Reliable Sources | Required | Gap / Limitation |
+|---|---|---:|---:|---|
+| Industry chain | Ready / Gap |  | 2 |  |
+| Demand | Ready / Gap |  | 3 |  |
+| Supply and effective capacity | Ready / Gap |  | 3 |  |
+| Price/order/inventory/margin | Ready / Gap |  | 3 or explicit gap |  |
+| Capital-market expectations | Ready / Gap |  | 2 or explicit gap |  |
+
+Facts:
+
+- [claim ID + sourced fact]
+
+Inferences:
+
+- [inference derived from claim IDs]
+
+Assumptions:
+
+- [assumption and falsifier]
+
+## 1. 数据时效与证据覆盖
+
+| Metric | Period | Status | Release Date | Access Date | Freshness | Source | Locator | Limitation |
+|---|---|---|---|---|---|---|---|---|
+|  |  | Actual / Partial actual / Guidance / Forecast |  |  | current / superseded / unchecked |  | page/table/section |  |
+
+Release-status notes:
+
+- [what has been released]
+- [what has not yet been released]
+- [which newer source superseded an older one]
+
+## 2. 产业链与关系
+
+### 2.1 Physical / Production Flow
 
 ```text
-[upstream]
--> [midstream]
--> [downstream]
--> [end demand]
+[show parallel inputs explicitly]
 ```
 
-关键瓶颈：
-
-- [node]
-- [why it matters]
-
-## 1.1 Profit and Order Transmission Chain
-
-```text
-[end demand]
--> [buyer / capex owner]
--> [system integrator / product]
--> [core component]
--> [bottleneck component or process]
--> [capacity owner]
--> [equipment/material supplier]
-```
-
-| Node | Demand Source | Price/Profit Lever | Bargaining Power | Main Risk |
+| From | Relation | To | Evidence IDs | Notes |
 |---|---|---|---|---|
-|  |  |  | high / medium / low |  |
+|  | material input / equipment input / production / purchase / service |  |  |  |
 
-## 1.2 Chain Node Explanation
+### 2.2 Order and Budget Flow
 
-Write this for a reader with no prior industry background. Keep it plain, concrete, and evidence-linked.
+```text
+[end use] -> [budget owner] -> [system/product orders] -> [component/process orders] -> [capacity and equipment orders]
+```
 
-| Chain Node | What It Is | What It Does | Who Supplies It | Who Buys It | Representative Companies | How It Makes Money | Why It Matters |
+### 2.3 Chain Node Explanation
+
+| Node | What It Is / Does | Suppliers | Buyers | Representative Companies | Monetization | Bottleneck Role | Evidence IDs |
 |---|---|---|---|---|---|---|---|
 |  |  |  |  |  |  |  |  |
 
-## 1.3 Power and Profit Map
+### 2.4 Power and Profit Map
 
-| Question | Answer | Evidence / Source | Gap |
+| Question | Answer | Evidence IDs | Gap |
 |---|---|---|---|
 | Who pays? |  |  |  |
 | Who captures gross profit? |  |  |  |
-| Who bears capex risk? |  |  |  |
+| Who bears capex and inventory risk? |  |  |  |
 | Who has pricing power? |  |  |  |
-| Who has scarce capacity? |  |  |  |
 | Who is important but cannot monetize well? |  |  |  |
 
-## 1.5 Research Plan and Budget
-
-| Subtask | Search Rounds | Tools/Route | Original Sources | Status |
-|---|---:|---|---:|---|
-| Industry chain |  |  |  | complete / gap |
-| Demand |  |  |  | complete / gap |
-| Supply and capacity |  |  |  | complete / gap |
-| Price/order/inventory/margin |  |  |  | complete / gap |
-| Beneficiaries |  |  |  | complete / gap |
-| Market expectation |  |  |  | complete / gap |
-
-## 2. Demand Side
+## 3. 需求
 
 Facts:
 
-- [fact + source]
+- [claim ID + metric, period, geography and source]
 
-Inferences:
+Demand segmentation:
+
+| End Use | Buyer / Budget Owner | Trigger | Current or Expected | Observable Indicator | Evidence IDs |
+|---|---|---|---|---|---|
+|  |  |  |  |  |  |
+
+Inferences and assumptions:
 
 - [inference]
+- [assumption + falsifier]
 
-Assumptions:
+## 4. 供给
 
-- [assumption to track]
-
-## 3. Supply Side
+| Node / Project | Announced Capacity | Installed | Qualified / Yield-Ramped | Customer-Backed | Release Window | Evidence IDs | Gap |
+|---|---:|---:|---:|---:|---|---|---|
+|  |  |  |  |  |  |  |  |
 
 Facts:
 
-- [capacity / yield / expansion / lead time + source]
+- [capacity, yield, qualification, lead-time or capex fact]
 
-Inferences:
+Inferences and assumptions:
 
 - [inference]
+- [assumption + falsifier]
 
-Assumptions:
+## 5. 供需矛盾与高频信号
 
-- [assumption to track]
-
-## 4. Supply-Demand Conflict
-
-Answer:
+Core conflict:
 
 - What is short or excessive?
-- How much?
-- How long?
-- Who can solve it?
-- When does new capacity release?
+- At which node and under which definition?
+- How long can it persist?
+- Who can solve it, and when does qualified capacity arrive?
 
-Transmission:
+| Signal | Latest Value / Direction | Period | Evidence IDs | Interpretation | Gap |
+|---|---|---|---|---|---|
+| Price |  |  |  |  |  |
+| Orders |  |  |  |  |  |
+| Inventory |  |  |  |  |  |
+| Utilization / Yield |  |  |  |  |  |
+| Margin / Cash Flow |  |  |  |  |  |
 
-```text
-[demand driver]
--> [order increase]
--> [shortage node]
--> [price/margin change]
--> [capex/expansion]
--> [new capacity release]
--> [shortage relief or oversupply]
-```
+If a comparable public series does not exist, write an evidence gap, why it is unavailable, and the exact source to monitor next.
 
-Second-order effects:
-
-- [who benefits immediately]
-- [who benefits with a lag]
-- [who may lose when capacity releases]
-
-## 5. Price, Orders, Inventory, Margin
-
-| Signal | Latest Direction | Evidence | Meaning |
-|---|---|---|---|
-| Price |  |  |  |
-| Orders |  |  |  |
-| Inventory |  |  |  |
-| Margin |  |  |  |
-
-## 5.5 Profit/Order Transmission Chain
-
-Map how demand signals propagate upstream:
+## 6. 周期与利润/订单传导
 
 ```text
-[End Demand Change]
--> [Order Change at Downstream]
--> [Revenue Impact at Midstream]
--> [Margin Shift at Constrained Node]
--> [Capex Decision]
--> [Upstream Order Change]
+[demand/budget]
+-> [orders]
+-> [revenue recognition]
+-> [bottleneck margin]
+-> [capex]
+-> [qualified capacity]
+-> [price/margin reversal or continued shortage]
 ```
 
-Profit pool redistribution:
-
-| Stage | Current Margin Trend | Who Captures | Why |
-|---|---|---|---|
-| End demand |  |  |  |
-| Downstream assembly |  |  |  |
-| Midstream component |  |  |  |
-| Upstream material/equipment |  |  |  |
-
-Key transmission lag:
-
-- [From demand signal to upstream order: X months]
-- [From order to revenue recognition: X months]
-- [From revenue to capex decision: X months]
-
-## 5.6 Transmission Mechanism
-
-How does the industry pass cost and demand changes?
-
-| Mechanism | Direction | Speed | Evidence |
-|---|---|---|---|
-| Price pass-through | upstream→downstream or downstream→upstream |  |  |
-| Order book传导 | downstream→upstream |  |  |
-| Inventory adjustment | across chain |  |  |
-| Capex cycle | delayed response to profit |  |  |
-
-Pricing power distribution:
-
-- [Which node has pricing power?]
-- [Which node absorbs cost?]
-- [What determines who wins?]
-
-## 6. Beneficiaries and Non-Beneficiaries
-
-True beneficiaries:
-
-- [company/node + reason]
-
-Concept exposure only:
-
-- [company/node + reason]
-
-Potential losers:
-
-- [company/node + reason]
-
-## 7. Cycle Stage
+| Stage / Date | Signal | Profit Pool Shift | Key Lag | Evidence IDs | Next Verification |
+|---|---|---|---|---|---|
+|  |  |  |  |  |  |
 
 Current stage:
 
-- [introduction/growth/shortage/expansion/earnings realization/oversupply/clearing]
+- Phase: [stage or stage pending verification]
+- Entry date / anchor: [date]
+- Expected transition: [conditional trigger, not a generic time range]
+- Confidence: [high / medium / low]
+- What would prove this wrong: [measurable condition]
 
-Disconfirming signals:
+## 7. 资本市场预期
 
-- [what would prove this wrong]
+Keep market-pricing evidence separate from industry evidence.
 
-## 7.1 Cycle Timeline
+| Industry Reality | Market Narrative / Pricing Evidence | Source | Interpretation | Gap |
+|---|---|---|---|---|
+|  |  |  |  |  |
 
-| Time | Industry Signal | Supply-Demand Meaning | What to Verify |
-|---|---|---|---|
-| [year/quarter] |  |  |  |
+If no market evidence was collected, write `Evidence gap: capital-market expectation mapping not researched` and keep the industrial conclusion provisional for this section.
 
-Cycle loop:
+## 8. 情景与反证
 
-```text
-demand
--> shortage/gap
--> price rise
--> capex/expansion
--> capacity release
--> shortage relief or oversupply
--> clearing
--> new demand
-```
+| Scenario | Trigger Conditions | Evidence to Watch | Probability / Confidence | Consequence for Cycle Judgment |
+|---|---|---|---|---|
+| Base |  |  |  |  |
+| Upside |  |  |  |  |
+| Downside |  |  |  |  |
 
-## 7.5 Cycle Timeline Detailed
+Conflicting evidence:
 
-Historical cycle turns (if data available):
-
-| Cycle | Start | Peak | Trough | Duration | Key Driver |
-|---|---|---|---|---|---|
-| Previous 1 |  |  |  |  |  |
-| Previous 2 |  |  |  |  |  |
-
-Current position estimate:
-
-- Phase: [current phase]
-- Entry date: [when this phase started]
-- Expected transition: [to next phase, estimated window]
-- Confidence: [high/medium/low]
-
-Visual timeline:
-
-```text
-[Introduction] -> [Growth] -> [Shortage] -> [Expansion] -> [Earnings] -> [Oversupply] -> [Clearing]
-                                              ^
-                                              |--- We are here (est. [date]) ---|
-```
-
-## 8. Capital-Market Expectation Mapping
-
-| Industry Reality | Market Expectation | Evidence | Interpretation |
-|---|---|---|---|
-|  |  |  |  |
-
-Conclusion:
-
-- [what the market appears to be trading]
-- [what is not yet clear]
-
-## 8.5 Evidence Matrix
-
-| Claim | Evidence | Source Quality | Original Opened? | Confidence | Gap |
-|---|---|---|---|---|---|
-|  |  | Tier 1 / Tier 2 / Tier 3 | yes / no | high / medium / low |  |
-
-## 8.6 Conflicting Evidence
-
-| Topic | Source A | Source B | Difference | Handling |
+| Topic | Supporting Evidence IDs | Disconfirming Evidence IDs | Definition Difference | Handling |
 |---|---|---|---|---|
 |  |  |  |  | resolved / unresolved |
 
-## 9. Three Scenarios
+## 9. 观察哨与跟踪
 
-Base case:
+| Indicator | Baseline | Source | Frequency | Positive Trigger | Disconfirming Trigger | Meaning |
+|---|---|---|---|---|---|---|
+|  |  | [specific source or URL] | monthly / quarterly / event | [numeric or event threshold] | [numeric or event threshold] |  |
 
-- [trigger conditions]
+Tracking database:
 
-Bull case:
+| Date | Indicator | Node | Value | YoY/QoQ | Direction | Source | Impact on Judgment | Note |
+|---|---|---|---:|---:|---|---|---|---|
+|  |  |  |  |  |  |  |  |  |
 
-- [trigger conditions]
+## 10. 证据台账
 
-Risk case:
+| Claim ID | Claim | Type | Source | Publisher | Published | Accessed | Period | Geography / Unit | Locator | Opened | Freshness | Limitation |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| E1 |  | Fact / Guidance / Forecast / Inference |  |  |  |  |  |  | page/table/section | yes / no | current / superseded / unchecked |  |
 
-- [trigger conditions]
+## 11. 研究执行记录
 
-## 10. Monthly Tracking Plan
+Populate this only from the actual run.
 
-| Node | Indicator | Source | Frequency | Why It Matters |
-|---|---|---|---|---|
-|  |  |  | Monthly |  |
+| Subtask | Search Rounds | Route Actually Used | Evidence IDs | Status | Gap / Fallback |
+|---|---:|---|---|---|---|
+|  |  |  |  | complete / gap |  |
 
-## 10.1 Observation Posts
-
-Keep this list focused. Use about five falsifiable indicators.
-
-| Observation Post | Source | Frequency | Positive Signal | Disconfirming Signal | Meaning |
-|---|---|---|---|---|---|
-|  |  | monthly / quarterly |  |  |  |
-
-## 10.2 Tracking Database Template
-
-| Date | Indicator | Node | Latest Value | YoY/QoQ | Direction | Source | Impact on Cycle Judgment | Note |
-|---|---|---|---|---|---|---|---|---|
-|  |  |  |  |  | up / flat / down |  |  |  |
-
-## 11. Final Notes
-
-Do not confuse industry research with investment profit.
+## 12. Final Notes
 
 - Supply-demand gap does not equal stock-price rise.
 - Correct direction does not equal correct timing.
-- Public data may already be priced.
-- AI answers require verification.
-- Search budgets and evidence gaps are part of the conclusion, not a weakness to hide.
+- Earnings realization does not equal continued stock rise.
+- AI answers and search snippets are not facts.
+- Stale data is not a current fact.
 ````

@@ -1,109 +1,71 @@
-# Source Priority
+# Source Priority and Evidence Gates
 
-Use the highest-quality sources available. Treat AI answers as a starting index, not as evidence.
+Use the highest-quality source available. Treat AI answers and search results as an index, not evidence.
 
-## Source Hierarchy
+## Source hierarchy
 
-### Tier 1: Primary Evidence
+### Tier 1: primary evidence
 
-- company annual reports, quarterly reports, prospectuses, investor presentations
-- earnings-call transcripts and management Q&A
-- exchange filings and regulatory announcements
-- government statistics and customs data
-- industry association data
-- tender, bidding, procurement, export, and import records
-- company capacity announcements with dates, locations, and numbers
+- company filings, annual/quarterly reports, investor presentations, earnings calls and management Q&A
+- exchange/regulatory announcements, government statistics, customs data and industry-association data
+- tenders, procurement records, certification records and dated company capacity/project disclosures
 
-### Tier 2: Specialist Evidence
+### Tier 2: specialist evidence
 
-- technical white papers
-- conference presentations
-- supply-chain expert interviews
-- broker reports with disclosed assumptions
-- specialized industry databases
-- patent, certification, and customer qualification records
+- technical white papers, conference presentations, expert interviews and disclosed-assumption broker research
+- specialist databases, patents, qualification records and credible supply-chain surveys
 
-### Tier 3: Clues
+### Tier 3: discovery or narrative clues
 
-- media reports
-- social-media posts
-- influencer commentary
-- AI-generated summaries
-- forum discussions
-- chart screenshots without data source
+- media, social posts, influencer commentary, AI summaries, forums and unsourced chart screenshots
 
-Use Tier 3 only to discover questions or leads. Do not base a conclusion on it alone.
+Use Tier 3 only for discovery, direct first-party statements, or market-narrative evidence. Do not use it alone for an undisclosed industry fact.
 
-## Evidence Eligibility
+## Evidence eligibility
 
-The following are not evidence by themselves:
+A result is not evidence by itself when it is only:
 
-- search-result titles or snippets
-- SearXNG or Exa result summaries without opening the source
-- Jina output when the source identity or date cannot be verified
-- social posts that merely repeat another report
-- AI-generated summaries without an accessible original
+- a search title or snippet;
+- an SearXNG/Exa summary without an opened original;
+- a Jina rendering whose source identity or date is unverified;
+- a repost or social summary;
+- an AI-generated statement.
 
-Promote a clue to evidence only after opening the original or an authoritative reproduction and recording its publisher, publication date, period, geography, and definition. Social posts can serve as direct evidence only for the author's own statement or for capital-market narrative, not for an undisclosed industry fact.
+Promote a claim only after opening an original or authoritative reproduction and recording publisher, publication date, access date, period, geography, unit/definition, locator, actual/forecast status, and limitations.
 
-## AI Usage
+## Freshness rules
 
-Use AI as an industry research assistant:
+- Determine freshness per metric, not per document. A full-year figure may remain the latest annual actual while the same company has a newer quarterly release.
+- Check the source’s actual release calendar. Do not assume Q2, Q3, or Q4 results exist from the current month alone.
+- Label monthly/weekly data inside an unfinished quarter as `partial actual`.
+- Label guidance, announced capacity, qualification targets and production plans separately from actual output.
+- Mark an older source `superseded` when a newer release uses the same definition.
 
-```text
-Ask: who are the top wafer fabs in China?
-Ask: what are their 2024-2026 expansion plans?
-Ask: what monthly capacity is disclosed?
-Ask: what equipment suppliers are involved?
-Ask: what downstream customers are connected?
-```
+## Full-research minimums
 
-Do not ask:
+- Industry chain and relationships: at least 2 opened reliable sources.
+- Demand: at least 3 opened reliable sources.
+- Supply and effective capacity: at least 3 opened reliable sources.
+- Price/order/inventory/margin: at least 3 opened sources or a precise evidence-gap note.
+- Capital-market expectation mapping: at least 2 market-pricing or narrative sources, or a precise evidence-gap note.
+
+An explicit gap finishes the search subtask but does not raise conclusion confidence. If a core lane is missing, keep the stage provisional.
+
+Use this format:
 
 ```text
-Recommend a stock.
-Will this stock rise tomorrow?
-Which ticker can 10x?
-```
-
-## Public Data Limitation
-
-Assume free, accurate, monthly updated, complete capacity databases rarely exist.
-
-Common problems:
-
-- public data is stale
-- public data is scattered
-- broker/institutional reports may already reflect consensus
-- sensitive yield and ramp-up data is usually non-public
-- when a shortage is obvious in public data, market pricing may already be late
-
-## Evidence Labeling
-
-Label all key claims:
-
-- Fact: directly sourced or quoted data.
-- Inference: reasoned conclusion from multiple facts.
-- Assumption: plausible but unverified condition that must be tracked.
-
-If a number cannot be verified, write the uncertainty explicitly.
-
-## Deep Research Evidence Rules
-
-For a deep industry-cycle analysis, do not stop at one generic market report. Each major section needs a minimum evidence base:
-
-- Industry chain: at least 2 reliable sources.
-- Demand: at least 3 reliable sources.
-- Supply and capacity: at least 3 reliable sources.
-- Price/order/inventory/margin: at least 3 reliable sources or an explicit data-gap note.
-- Capital-market expectation mapping: at least 2 sources, with a clear distinction between industrial reality and market narrative.
-
-When the minimum cannot be reached within the search budget, write:
-
-```text
-Evidence gap: [what is missing]
+Evidence gap: [missing metric or definition]
 Why unavailable: [not public / stale / proprietary / not found within budget]
-How to track later: [source or indicator]
+How to track later: [specific source, page or release]
+Effect on conclusion: [what must remain provisional]
 ```
 
-Do not continue searching indefinitely to hide an evidence gap.
+## Claim labels
+
+- **Fact:** directly supported by an opened source.
+- **Guidance/Plan:** management or policy target that has not yet occurred.
+- **Forecast:** model-based future estimate.
+- **Inference:** reasoning from named evidence IDs.
+- **Assumption:** unverified condition with a falsifier.
+
+Never average unresolved definitions or hide a missing metric behind precise-looking prose.

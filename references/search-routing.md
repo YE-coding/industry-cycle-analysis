@@ -12,7 +12,7 @@ Use this reference before collecting web evidence.
 | GitHub, Twitter/X, LinkedIn, YouTube, Bilibili, RSS, forums | Agent-Reach and its active backend | Leads, direct first-party statements, or expectation mapping |
 | Company, regulator, government, association | Official site, filing, API, or original PDF | Preferred Tier 1 evidence |
 
-Use built-in WebSearch/WebFetch when available, but never depend on them. If unavailable, continue with SearXNG, Exa, direct page reading, and Agent-Reach.
+Use an available hosted web search/open capability when appropriate, but never depend on one named tool. Continue with SearXNG, Exa, direct page reading, or Agent-Reach according to the task.
 
 ## Commands
 
@@ -96,7 +96,7 @@ Search snippets, generated summaries, and reposts do not pass this gate.
 
 ## Failure Routing
 
-- SearXNG unavailable: ask the user to start Docker Desktop, then retry; use Exa meanwhile.
+- SearXNG unavailable: record the failed health check. If an available hosted web search/open capability or direct official URL can continue the task, use it and record the fallback. Ask the user to start Docker Desktop only when local SearXNG is required and no adequate fallback exists.
 - One SearXNG engine blocked: continue with responsive engines and record the limitation.
 - SearXNG returns off-topic results: retry once with an explicit language and official-domain query; if quality is still poor, switch to Exa and record the discovery gap.
 - Exa unavailable: continue with SearXNG and official-domain queries.

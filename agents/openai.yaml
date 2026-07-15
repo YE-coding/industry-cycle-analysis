@@ -1,4 +1,4 @@
 interface:
   display_name: "产业供需周期分析"
-  short_description: "基于最新证据分析产业链、供需周期、盈利传导和市场预期映射"
-  default_prompt: "Use $industry-cycle-analysis to analyze this industry with current evidence and explicit search routing."
+  short_description: "用可审计证据分析产业链、有效供给、周期和预期"
+  default_prompt: "Use $industry-cycle-analysis to analyze this industry with a freshness check, explicit relationship graph, evidence ledger, and provisional conclusions when evidence is incomplete."
