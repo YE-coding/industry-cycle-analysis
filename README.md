@@ -81,11 +81,16 @@ industry-cycle-analysis/
 │   ├── supply-demand-questions.md  # 供需问题清单
 │   ├── cycle-stages.md         # 周期阶段定义
 │   ├── capital-market-mapping.md   # 资本市场映射
+│   ├── deepsearch-research-protocol.md # 深度研究协议
+│   ├── evidence-ledger.md      # 证据台账规范
 │   ├── report-template.md      # 报告模板
+│   ├── search-routing.md       # 检索路由与核验流程
 │   ├── source-priority.md      # 数据来源优先级
 │   └── quality-checklist.md    # 质量检查清单
 ├── scripts/
-│   └── md_to_pdf.py           # PDF导出脚本
+│   ├── md_to_pdf.py           # PDF导出脚本
+│   ├── safe_log_extract.py    # 长日志安全提取
+│   └── validate_report.py     # 报告结构与证据校验
 └── agents/
     └── openai.yaml            # OpenAI配置
 
@@ -96,8 +101,9 @@ industry-cycle-analysis/
 ## 安装
 
 1. 克隆此仓库
-2. 将 `industry-cycle-analysis` 和 `产析` 文件夹复制到 `~/.claude/skills/` 目录
-3. 重启 Claude Code
+2. Claude Code：将两个文件夹复制到 `~/.claude/skills/`
+3. Codex：将两个文件夹复制到 `~/.codex/skills/`
+4. 重启对应客户端
 
 ## 已知问题与解决方案
 

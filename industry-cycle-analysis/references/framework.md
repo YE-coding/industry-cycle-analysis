@@ -45,10 +45,15 @@ Map:
 
 For each node, identify:
 
+- what the node is in plain language
+- what the node does in the production or service chain
+- who supplies it
+- who buys it
 - main companies
 - capacity
 - capacity utilization
 - customer qualification barriers
+- revenue model or monetization method
 - pricing power
 - margin level
 - bottleneck probability
