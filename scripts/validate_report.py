@@ -131,6 +131,41 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
         if mode == "full" and header not in watch:
             errors.append(f"watchpoint table missing field: {header}")
 
+    series_heading = re.search(r"^###\s*9\.1\s+可比时间序列\s*$", watch, re.MULTILINE)
+    series_gap = re.search(
+        r"Evidence gap:\s*comparable time series unavailable|可比时间序列(?:不可用|缺口)",
+        watch,
+        re.IGNORECASE,
+    )
+    if mode == "full" and not series_heading and not series_gap:
+        errors.append("missing comparable time-series table or explicit time-series evidence gap")
+    if series_heading:
+        series_block = watch[series_heading.end() :].split("Tracking database:", 1)[0]
+        required_series_headers = ["Date", "Indicator", "Value", "Unit", "Source", "Meaning"]
+        for header in required_series_headers:
+            if header not in series_block:
+                errors.append(f"comparable time-series table missing field: {header}")
+
+        table_lines = [line for line in series_block.splitlines() if line.strip().startswith("|")]
+        if len(table_lines) >= 3:
+            headers = [cell.strip() for cell in table_lines[0].strip().strip("|").split("|")]
+            header_index = {header: index for index, header in enumerate(headers)}
+            comparable_groups: dict[tuple[str, str], int] = {}
+            for line in table_lines[2:]:
+                cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+                if len(cells) < len(headers):
+                    continue
+                indicator = cells[header_index.get("Indicator", -1)] if "Indicator" in header_index else ""
+                unit = cells[header_index.get("Unit", -1)] if "Unit" in header_index else ""
+                value = cells[header_index.get("Value", -1)] if "Value" in header_index else ""
+                if indicator and unit and re.fullmatch(r"[-+]?\d[\d,]*(?:\.\d+)?", value):
+                    key = (indicator, unit)
+                    comparable_groups[key] = comparable_groups.get(key, 0) + 1
+            if not any(count >= 2 for count in comparable_groups.values()):
+                errors.append("comparable time-series table needs at least two numeric points for one indicator and unit")
+        elif mode == "full":
+            errors.append("comparable time-series table has fewer than two data rows")
+
     execution = section(text, "## 11. 研究执行记录")
     for row in execution.splitlines():
         if "| complete |" in row.lower() and not re.search(r"\bE\d+\b", row):

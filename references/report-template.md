@@ -190,6 +190,16 @@ Conflicting evidence:
 |---|---|---|---|---|---|---|
 |  |  | [specific source or URL] | monthly / quarterly / event | [numeric or event threshold] | [numeric or event threshold] |  |
 
+### 9.1 可比时间序列
+
+Use this table only for actual values that share the same indicator, definition, unit, geography, and reporting entity. Prefer three or more periods; two is the minimum for showing direction. Keep forecasts, margins, inventory, and other units in separate series rather than building a synthetic index.
+
+| Date | Indicator | Value | Unit | Source | Meaning |
+|---|---|---:|---|---|---|
+|  |  |  |  | [evidence ID or specific source] | [what this one series can and cannot proxy] |
+
+If no comparable public series exists, replace the table with `Evidence gap: comparable time series unavailable because [reason]; monitor [specific source] next.` Do not invent points or connect unlike metrics.
+
 Tracking database:
 
 | Date | Indicator | Node | Value | YoY/QoQ | Direction | Source | Impact on Judgment | Note |

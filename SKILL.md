@@ -118,6 +118,7 @@ materials/equipment -> packaging/foundry capacity (parallel inputs)
 8. Judge the cycle stage only after applying the evidence-readiness gate.
 9. Map industrial reality to the market expectation stage without giving a buy/sell call.
 10. Produce 3-5 falsifiable watchpoints with an actual source, baseline, frequency, direction, and numeric or event threshold.
+11. When public data permits, preserve at least one real comparable time series: the same indicator, definition, unit, geography, and reporting entity across two or more dates. Never combine revenue, margin, inventory, forecasts, or different companies into a synthetic line. If no such series is available, write the precise evidence gap and the source to monitor next.
 
 ## Write and validate the report
 
@@ -125,7 +126,7 @@ For full research:
 
 1. Use `references/report-template.md` and preserve the exact header labels `分析日期`, `地理范围`, `数据时效`, and `行业边界`.
 2. Separate facts, inferences, assumptions, and gaps.
-3. Include the evidence-readiness table, explicit relationship table, data-currency coverage, evidence ledger, cycle/profit transmission, and watchpoints.
+3. Include the evidence-readiness table, explicit relationship table, data-currency coverage, evidence ledger, cycle/profit transmission, watchpoints, and either a comparable time-series table or an explicit time-series evidence gap.
 4. Do not use placeholders such as `官方/协会/公司`, `待按产品核验`, `市场可能交易`, `见数据时效表`, or a generic “连续两期改善”.
 5. Run:
 

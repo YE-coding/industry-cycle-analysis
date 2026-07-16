@@ -53,6 +53,8 @@ Do not deliver a full report when any blocker remains:
 
 - Are 3-5 watchpoints sufficient and non-duplicative?
 - Does each watchpoint include a current baseline, a stable source, cadence, positive trigger, disconfirming trigger, and meaning?
+- Does the report include at least one same-definition, same-unit comparable time series when public data allows it, or state a precise evidence gap when it does not?
+- Does every plotted series avoid mixing companies, actuals with forecasts, or unlike measures such as revenue, margin, and inventory?
 - Is indicator polarity correct, such as lower inventory versus higher yield, rather than using one generic “improvement” rule?
 - Can the next update be performed from the tracking table without rereading the whole report?
 
