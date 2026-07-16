@@ -6,9 +6,11 @@ Use this reference before collecting web evidence.
 
 | Need | Preferred Route | Evidence Role |
 |---|---|---|
+| Previous reports, source URLs, or prior research decisions | `mem-search` when its `search`, `timeline`, and `get_observations` MCP tools are available | Leads only; reopen the original source and recheck freshness |
 | Broad general-web discovery | Local SearXNG (`http://127.0.0.1:8080`) | Candidate sources only |
 | Semantic discovery or missing vocabulary | Exa through `mcporter` | Candidate sources only |
 | Original page or document | Direct browser/fetch; Jina Reader only as a reading fallback | Evidence after identity/date verification |
+| Dynamic, login-gated, or anti-bot original page | `web-access` after static official page, PDF, or API routes are insufficient | Evidence only after original identity, date, metric, and locator verification |
 | GitHub, Twitter/X, LinkedIn, YouTube, Bilibili, RSS, forums | Agent-Reach and its active backend | Leads, direct first-party statements, or expectation mapping |
 | Company, regulator, government, association | Official site, filing, API, or original PDF | Preferred Tier 1 evidence |
 
@@ -40,6 +42,26 @@ gh search repos "query" --limit 10
 ```
 
 Check `agent-reach doctor --json` before platform-specific work and use its `active_backend`. Never extract browser cookies or request credentials in chat.
+
+## Optional History Recovery
+
+Use `mem-search` only when the current session exposes its three required MCP tools and the task benefits from prior-session context.
+
+1. Search by industry, metric, company, or source title.
+2. Use the timeline to identify the relevant research run.
+3. Fetch only the filtered observations.
+4. Treat recovered conclusions, values, and URLs as leads. Reopen the original source in the current run, verify whether a newer release supersedes it, and create a new evidence-ledger entry.
+
+Never set `opened=yes` or `freshness=current` merely because a source appeared in memory. If the MCP backend is unavailable, skip history recovery and continue with live discovery.
+
+## Dynamic or Login-Gated Originals
+
+Use `web-access` only when the target original requires browser rendering, interaction, login state, or an anti-bot fallback. Prefer an official static page, filing, PDF, or API when it contains the same evidence.
+
+- Run the dependency check and display the automation-risk notice required by `web-access` before starting its CDP proxy.
+- Create background tabs, preserve user tabs, and close only tabs created for the task.
+- Record the original URL, publisher, publication date, data period, metric definition, and page/table/section locator. Browser-rendered text without this metadata does not pass the verification gate.
+- If login or browser access is unavailable, record an original-source verification gap rather than promoting a search snippet or repost.
 
 ## Query Ladder
 
@@ -101,4 +123,6 @@ Search snippets, generated summaries, and reposts do not pass this gate.
 - SearXNG returns off-topic results: retry once with an explicit language and official-domain query; if quality is still poor, switch to Exa and record the discovery gap.
 - Exa unavailable: continue with SearXNG and official-domain queries.
 - Original page blocked: try official PDF/API, browser reading, then Jina Reader; retain the original URL.
+- `mem-search` MCP tools unavailable: skip history recovery; do not block live research.
+- `web-access` dependency or login unavailable: record the blocked original and the verification gap; continue with official static alternatives when possible.
 - Social platform unavailable: mark the sentiment/early-signal gap; do not substitute social claims for Tier 1 evidence.
