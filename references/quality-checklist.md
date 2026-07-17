@@ -13,8 +13,35 @@ Do not deliver a full report when any blocker remains:
 - Demand, effective supply, or price/order/inventory/margin has a material gap while the stage is presented as definitive or high-confidence.
 - Parallel inputs are represented as a false serial chain, or suppliers/buyers are inferred from array adjacency.
 - The final report contains placeholders such as `官方/协会/公司`, `待按产品核验`, `市场可能交易`, `视公开口径`, or `见数据时效表`.
-- Observation posts lack a specific source, baseline, direction, and numeric or event threshold.
+- Any explanatory sentence repeats 3+ times in one report, or the same boilerplate appears in reports for different industries (e.g. `钱和订单从…的需求向前传`, `负责把上游投入转成…可采购、可验证的产品或服务`).
+- A chain node explanation is a circular definition, or a node is a product instead of a stage/actor, or a node's description was copy-pasted from a different node type (e.g. a foundry described as "回款入口").
+- The capital-market lane is declared a gap without a recorded attempts table (section 6), or section 6 lacks the qualitative priced/unpriced paragraph, or section 7 lacks the three-scenario future-capital-flow table.
+- Observation posts lack a specific source, baseline, direction, and numeric or event threshold — or an indicator cell contains a value instead of an indicator name, or a baseline is stale beyond one release cycle without a 数据滞后 note.
 - Qualification, pilot line, announced capacity, installed capacity, and volume production are conflated.
+
+## Reader experience (both audiences)
+
+First-time reader — after reading only the main body, could they:
+
+- Say in one sentence what the industry sells and who pays for it? (Section 0 plain-language intro exists and avoids jargon.)
+- Redraw the chain from the mermaid map, including parallel inputs and the final payer?
+- Name 2-3 representative companies per key node, with listing venue and why they represent it?
+- State the current cycle stage and the reasoning behind it?
+- Say what the market has likely priced in and where money might flow next under each scenario?
+- Look up every unfamiliar term in the glossary? (Every jargon term in the body appears there.)
+
+Experienced reader — does the report contain anything they could not get from a generic summary:
+
+- Does each 进阶视角 block take a position with evidence IDs (or record a genuine no-controversy search trail), rather than restating the section above it?
+- Does section 5 compare against a named prior cycle with concrete years and lags, or honestly state none is comparable?
+- Does section 8 name the mainstream narrative and say where this report disagrees and whose evidence is harder?
+- Are calibration traps (shipment vs consumption, announced vs effective capacity, restocking vs end demand) called out where they actually bite in this industry?
+
+Structure:
+
+- Main body (0-10) is fully readable without opening any appendix; all audit tables live in appendices A/B/C.
+- Table headers and section labels are Chinese.
+- Reading-route note near the top tells each audience where to start.
 
 ## Evidence readiness
 
