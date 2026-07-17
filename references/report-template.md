@@ -1,300 +1,287 @@
 # Report Template
 
-Use this template for a full analysis.
+Use this template for full research. The report serves two audiences at once:
+
+- **正文（第 0–10 节）**：一个不懂该产业的读者按顺序读完，应当能说清产业链、利益传导、代表企业、周期位置、资金动向和未来资金可能走向。
+- **深读内容（每节的"进阶视角"块 + 第 8 节）**：有产业或投资经验的读者应当能读到非共识判断、口径陷阱、与上一轮周期的对照和冲突证据。
+- **附录（A/B/C）**：审计层。证据台账、数据时效、就绪度与执行记录全部放这里，不得占据正文。
+
+Keep gaps explicit; delete unused optional rows rather than filling them with generic prose. 表头、栏目一律用中文；证据编号保持 E1/E2 格式。禁止任何一句解释性文字在报告内复用三次及以上。
 
 ````markdown
-# [Industry] Supply-Demand Cycle Analysis
+# [行业]行业供需周期分析
 
-Research date: [date]
-Geography: [global / China / US / other]
-Industry boundary: [scope]
+分析日期：[YYYY-MM-DD HH:mm:ss 时区]
+地理范围：[范围]
+数据时效：[最新整期实际值；部分月度实际值；指引与预测分开说明]
+行业边界：[纳入什么、排除什么]
+研究模式：完整深研
 
-## 0. One-Sentence Judgment
+> 阅读路线——第一次接触本行业：按 0→1→2→3→4→5→6→7 顺序读，遇到不认识的词查第 10 节术语表。有经验的读者：读 0 后直接跳 4、5 的进阶视角和 8，再用附录A核对证据。
 
-[State current cycle stage, core conflict, and biggest uncertainty.]
+## 0. 一页看懂
 
-## 1. Industry Chain
+**这个行业是做什么的**：[两三句人话：产品是什么、卖给谁、大概多大规模。不许堆行话；首次出现的术语必须收进第 10 节术语表。]
 
-```text
-[upstream]
--> [midstream]
--> [downstream]
--> [end demand]
+**一句话判断**：[周期假设 + 核心矛盾 + 最大证据缺口]
+
+- 周期阶段：[阶段名]（推导见第 5 节）
+- 结论状态：[可发布 / 暂定 / 阶段待验证]
+- 置信度：[高 / 中 / 低]
+- 最大缺口：[gap]
+
+**三个最重要的数字**：
+
+| 数字 | 含义 | 为什么它最重要 | 证据 |
+|---|---|---|---|
+|  |  |  | E_ |
+
+## 1. 产业链地图
+
+### 1.1 全景图
+
+```mermaid
+[必须包含：主链各环节、平行输入（设备、材料、软件、能源、资金等，按实际情况取舍）、最终付款方。
+禁止把平行输入画成串行链；禁止把产品（如"焦炭"）当作环节节点。]
 ```
 
-Key bottleneck:
+[图下最多五句话讲解：货往哪个方向走、钱从哪里来、当前瓶颈卡在哪个节点。]
 
-- [node]
-- [why it matters]
+### 1.2 环节详解
 
-## 1.1 Profit and Order Transmission Chain
+对每个重要环节写一个小节（### 1.2.x 环节名），每节必须包含：
 
-```text
-[end demand]
--> [buyer / capex owner]
--> [system integrator / product]
--> [core component]
--> [bottleneck component or process]
--> [capacity owner]
--> [equipment/material supplier]
-```
+**它是干什么的**：[用外行能懂的话写出具体动作和产出，例如"把设计图变成硅片上的电路"。禁止"负责把上游投入转成下游可采购、可验证的产品或服务"这类放之四海皆准的循环定义。]
 
-| Node | Demand Source | Price/Profit Lever | Bargaining Power | Main Risk |
+**上游买什么 / 下游卖给谁**：[点名具体的物料、服务和客户类型]
+
+**代表企业**：
+
+| 公司 | 上市地/代码 | 在该环节的地位 | 为什么能代表该环节 | 证据 |
 |---|---|---|---|---|
-|  |  |  | high / medium / low |  |
+|  | [交易所+代码 / 未上市] |  |  | E_ |
 
-## 1.5 Research Plan and Budget
+**怎么赚钱、议价能力**：[收费方式；议价强弱及其原因（稀缺性/认证周期/转换成本），不许只写结论]
 
-| Subtask | Search Rounds Used | Evidence Count | Status |
-|---|---:|---:|---|
-| Industry chain |  |  | complete / gap |
-| Demand |  |  | complete / gap |
-| Supply and capacity |  |  | complete / gap |
-| Price/order/inventory/margin |  |  | complete / gap |
-| Beneficiaries |  |  | complete / gap |
-| Market expectation |  |  | complete / gap |
+**进阶视角**：[该环节的核心壁垒（技术、认证、成本曲线或客户绑定）；当前市场对它的主要争议；本报告基于哪些证据站在哪一边。写不出争议就写"未检索到分歧"并说明查过哪里。]
 
-## 2. Demand Side
+### 1.3 钱怎么流：利益传导
 
-Facts:
+| 问题 | 回答（必须点名具体环节和企业，禁止通用套话） | 证据 | 缺口 |
+|---|---|---|---|
+| 谁最终付款？ |  |  |  |
+| 利润当前集中在哪个环节，为什么？ |  |  |  |
+| 谁承担资本开支和库存风险？ |  |  |  |
+| 谁有定价权，凭什么？ |  |  |  |
+| 谁重要但赚不到钱？ |  |  |  |
 
-- [fact + source]
-
-Inferences:
-
-- [inference]
-
-Assumptions:
-
-- [assumption to track]
-
-## 3. Supply Side
-
-Facts:
-
-- [capacity / yield / expansion / lead time + source]
-
-Inferences:
-
-- [inference]
-
-Assumptions:
-
-- [assumption to track]
-
-## 4. Supply-Demand Conflict
-
-Answer:
-
-- What is short or excessive?
-- How much?
-- How long?
-- Who can solve it?
-- When does new capacity release?
-
-Transmission:
+订单与预算流（从右到左的钱，如何变成从左到右的货）：
 
 ```text
-[demand driver]
--> [order increase]
--> [shortage node]
--> [price/margin change]
--> [capex/expansion]
--> [new capacity release]
--> [shortage relief or oversupply]
+[终端真实需求] -> [预算所有者] -> [系统/整机订单] -> [部件/工序订单] -> [产能与设备订单]
 ```
 
-Second-order effects:
+## 2. 需求：谁在买、为什么买
 
-- [who benefits immediately]
-- [who benefits with a lag]
-- [who may lose when capacity releases]
+事实（每条带证据编号、期间、地域）：
 
-## 5. Price, Orders, Inventory, Margin
+- [E_ + 指标 + 期间 + 地域 + 来源]
 
-| Signal | Latest Direction | Evidence | Meaning |
-|---|---|---|---|
-| Price |  |  |  |
-| Orders |  |  |  |
-| Inventory |  |  |  |
-| Margin |  |  |  |
-
-## 5.5 Profit/Order Transmission Chain
-
-Map how demand signals propagate upstream:
-
-```text
-[End Demand Change]
--> [Order Change at Downstream]
--> [Revenue Impact at Midstream]
--> [Margin Shift at Constrained Node]
--> [Capex Decision]
--> [Upstream Order Change]
-```
-
-Profit pool redistribution:
-
-| Stage | Current Margin Trend | Who Captures | Why |
-|---|---|---|---|
-| End demand |  |  |  |
-| Downstream assembly |  |  |  |
-| Midstream component |  |  |  |
-| Upstream material/equipment |  |  |  |
-
-Key transmission lag:
-
-- [From demand signal to upstream order: X months]
-- [From order to revenue recognition: X months]
-- [From revenue to capex decision: X months]
-
-## 5.6 Transmission Mechanism
-
-How does the industry pass cost and demand changes?
-
-| Mechanism | Direction | Speed | Evidence |
-|---|---|---|---|
-| Price pass-through | upstream→downstream or downstream→upstream |  |  |
-| Order book传导 | downstream→upstream |  |  |
-| Inventory adjustment | across chain |  |  |
-| Capex cycle | delayed response to profit |  |  |
-
-Pricing power distribution:
-
-- [Which node has pricing power?]
-- [Which node absorbs cost?]
-- [What determines who wins?]
-
-## 6. Beneficiaries and Non-Beneficiaries
-
-True beneficiaries:
-
-- [company/node + reason]
-
-Concept exposure only:
-
-- [company/node + reason]
-
-Potential losers:
-
-- [company/node + reason]
-
-## 7. Cycle Stage
-
-Current stage:
-
-- [introduction/growth/shortage/expansion/earnings realization/oversupply/clearing]
-
-Disconfirming signals:
-
-- [what would prove this wrong]
-
-## 7.1 Cycle Timeline
-
-| Time | Industry Signal | Supply-Demand Meaning | What to Verify |
-|---|---|---|---|
-| [year/quarter] |  |  |  |
-
-Cycle loop:
-
-```text
-demand
--> shortage/gap
--> price rise
--> capex/expansion
--> capacity release
--> shortage relief or oversupply
--> clearing
--> new demand
-```
-
-## 7.5 Cycle Timeline Detailed
-
-Historical cycle turns (if data available):
-
-| Cycle | Start | Peak | Trough | Duration | Key Driver |
+| 终端用途 | 买方/预算所有者 | 购买动因 | 已兑现还是预期 | 可观察指标 | 证据 |
 |---|---|---|---|---|---|
-| Previous 1 |  |  |  |  |  |
-| Previous 2 |  |  |  |  |  |
+|  |  |  |  |  |  |
 
-Current position estimate:
+推断与假设：
 
-- Phase: [current phase]
-- Entry date: [when this phase started]
-- Expected transition: [to next phase, estimated window]
-- Confidence: [high/medium/low]
+- [推断，注明由哪些证据推出]
+- [假设 + 什么现象会推翻它]
 
-Visual timeline:
+**进阶视角**：[需求端最容易被误读的口径（如出货≠使用、补库≠终端好转）；当前需求数据里最可疑的一个点。]
+
+## 3. 供给：现在有多少、真能用的有多少
+
+| 环节/项目 | 公告产能 | 已安装 | 已验证/爬坡达标 | 有客户订单支撑 | 释放窗口 | 证据 | 缺口 |
+|---|---:|---:|---:|---:|---|---|---|
+|  |  |  |  |  |  |  |  |
+
+事实：
+
+- [产能、良率、认证、交期或资本开支的具体数字]
+
+推断与假设：
+
+- [推断]
+- [假设 + 反证条件]
+
+**进阶视角**：[名义产能与有效产能之间当前最大的折损环节在哪，依据是什么；哪些扩产公告值得打折看待。]
+
+## 4. 供需矛盾与高频信号
+
+核心矛盾（用具体名词回答，不许套模板句）：
+
+- 什么东西短缺或过剩？在哪个环节、什么口径下？
+- 能持续多久？谁能解决、合格产能什么时候到？
+
+| 信号 | 最新值/方向 | 数据期间 | 证据 | 解读（这个数说明了什么） | 缺口 |
+|---|---|---|---|---|---|
+| 价格 |  |  |  |  |  |
+| 订单 |  |  |  |  |  |
+| 库存 |  |  |  |  |  |
+| 利用率/良率 |  |  |  |  |  |
+| 利润/现金流 |  |  |  |  |  |
+
+数据期间必须写具体年月或季度，禁止写"最新已披露期"。若某行无公开可比数据，写明缺口原因和下一个应监控的来源。
+
+## 5. 周期位置与传导
+
+传导链（本行业专属版本，不是通用模板）：
 
 ```text
-[Introduction] -> [Growth] -> [Shortage] -> [Expansion] -> [Earnings] -> [Oversupply] -> [Clearing]
-                                              ^
-                                              |--- We are here (est. [date]) ---|
+[需求/预算] -> [订单] -> [收入确认] -> [瓶颈环节利润] -> [资本开支] -> [合格产能] -> [价格/利润逆转或持续短缺]
 ```
 
-## 8. Capital-Market Expectation Mapping
-
-| Industry Reality | Market Expectation | Evidence | Interpretation |
-|---|---|---|---|
-|  |  |  |  |
-
-Conclusion:
-
-- [what the market appears to be trading]
-- [what is not yet clear]
-
-## 8.5 Evidence Matrix
-
-| Claim | Evidence | Source Quality | Confidence | Gap |
-|---|---|---|---|---|
-|  |  | Tier 1 / Tier 2 / Tier 3 | high / medium / low |  |
-
-## 8.6 Conflicting Evidence
-
-| Topic | Source A | Source B | Difference | Handling |
-|---|---|---|---|---|
-|  |  |  |  | resolved / unresolved |
-
-## 9. Three Scenarios
-
-Base case:
-
-- [trigger conditions]
-
-Bull case:
-
-- [trigger conditions]
-
-Risk case:
-
-- [trigger conditions]
-
-## 10. Monthly Tracking Plan
-
-| Node | Indicator | Source | Frequency | Why It Matters |
-|---|---|---|---|---|
-|  |  |  | Monthly |  |
-
-## 10.1 Observation Posts
-
-Keep this list focused. Use about five falsifiable indicators.
-
-| Observation Post | Source | Frequency | Positive Signal | Disconfirming Signal | Meaning |
+| 阶段/日期 | 信号 | 利润池往哪移 | 关键时滞 | 证据 | 下一步验证 |
 |---|---|---|---|---|---|
-|  |  | monthly / quarterly |  |  |  |
+|  |  |  |  |  |  |
 
-## 10.2 Tracking Database Template
+当前阶段：
 
-| Date | Indicator | Node | Latest Value | YoY/QoQ | Direction | Source | Impact on Cycle Judgment | Note |
+- 阶段：[阶段名，或"阶段待验证"]
+- 进入时间/锚点：[日期 + 锚定哪期实际数据]
+- 预期切换条件：[可度量的触发条件，不是"未来2-6个季度"这类泛泛时间窗]
+- 置信度：[高/中/低]
+- 什么会证明这个判断错了：[可度量条件]
+
+**进阶视角：与上一轮周期的对照**：[上一轮同类周期（写明起止年份）中，从利润兑现到产能过剩用了多久、拐点信号是什么；这一轮哪里相似、哪里不同；样本只有一轮或不可比时如实说明。]
+
+## 6. 资金动向
+
+先做规定动作再下结论。检索尝试记录（做过什么就写什么，禁止跳过本表直接写缺口）：
+
+| 尝试的来源类型 | 具体来源 | 结果（拿到数据 / 无公开数据 / 口径不可比） |
+|---|---|---|
+| 行业指数估值分位 |  |  |
+| 行业 ETF 份额/资金流 |  |  |
+| 北向/两融或同类资金流指标（适用时） |  |  |
+| 龙头股价与盈利的剪刀差 |  |  |
+
+拿到数据时填写：
+
+| 产业现实 | 市场叙事/定价证据 | 预期阶段（未定价/扩散/已定价/消化/反转） | 来源 | 解读 |
+|---|---|---|---|---|
+|  |  |  |  |  |
+
+无论数据是否齐备，必须写定性判断段落：
+
+- 市场当前大概率**已定价**：[什么]
+- 市场当前大概率**未定价**：[什么]
+- 判断依据与不确定性：[基于哪些间接证据；哪里可能错]
+
+若定价数据缺口存在，结论状态保持暂定，并在附录C记录缺口。
+
+## 7. 未来资金可能流向
+
+> 本节是周期传导的情景推演，不构成任何买卖建议、目标价或个股推荐。
+
+| 情景 | 触发条件 | 利润池往哪个环节移动 | 先受益的环节 | 后受益/受损的环节 | 需要盯的证据 |
+|---|---|---|---|---|---|
+| 基准 |  |  |  |  |  |
+| 上行 |  |  |  |  |  |
+| 下行 |  |  |  |  |  |
+
+[表后用一段话解释推演逻辑：为什么这个情景下钱会先流向该环节——从订单、交期、认证壁垒和产能弹性推，不从股价走势推。]
+
+## 8. 分歧与反证
+
+主流叙事 vs 本报告：
+
+| 市场主流叙事 | 本报告判断 | 分歧在哪 | 谁的证据更硬 | 证据 |
+|---|---|---|---|---|
+|  |  |  |  |  |
+
+冲突证据（保留矛盾，不做算术平均）：
+
+| 议题 | 支持证据 | 反对证据 | 口径差异 | 处理 |
+|---|---|---|---|---|
+|  |  |  |  | 已解决 / 未解决 |
+
+反证优先级：先看实际值，再看指引，最后看预测；公司口径与行业口径冲突时保留差异。
+
+## 9. 观察哨与跟踪
+
+| 指标（写指标名，不是数值） | 基线（数值+日期） | 来源 | 频率 | 正向触发 | 反证触发 | 含义 |
+|---|---|---|---|---|---|---|
+|  |  | [具体来源或URL] | 月度/季度/事件 | [数值或事件阈值] | [数值或事件阈值] | [这个指标验证第几节的哪个判断] |
+
+基线必须是分析日期时点最新可得的实际值；若最新可得值距分析日期超过一个正常发布周期，注明"数据滞后"及原因。
+
+### 9.1 可比时间序列
+
+仅收同一指标、同一定义、同一单位、同一地域、同一主体的实际值。优先三期以上，两期是底线。预测值、不同公司、不同口径分开列，不造合成指数。
+
+| 日期 | 指标 | 数值 | 单位 | 来源 | 含义 |
+|---|---|---:|---|---|---|
+|  |  |  |  | [证据编号或具体来源] | [这一条序列能代表什么、不能代表什么] |
+
+若不存在可比公开序列，用一句话替代本表：`可比时间序列缺口：因[原因]不可得；下一步监控[具体来源]。`不许编造数据点或拼接异类指标。
+
+跟踪数据库：
+
+| 日期 | 指标 | 环节 | 数值 | 同比/环比 | 方向 | 来源 | 对判断的影响 | 备注 |
+|---|---|---|---:|---:|---|---|---|---|
+|  |  |  |  |  |  |  |  |  |
+
+## 10. 术语表
+
+正文首次出现的行业术语、缩写全部收录，按出现顺序排列。
+
+| 术语 | 人话解释（一两句，外行能懂） |
+|---|---|
+|  |  |
+
+## 附录A 证据台账
+
+| 证据ID | 结论 | 类型 | 发布方 | 发布日期 | 访问日期 | 数据期间 | 地域/单位 | 原文链接/定位 | 已打开 | 时效 | 局限 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| E1 |  | 事实/指引/预测/推断 |  |  |  |  | [该条数据自身的地域和单位，不是整篇报告的地理范围] | [URL + 页/表/节] | 是/否 | 当前/被更新版取代/未核验 | [该条证据自身的局限，逐条写，不许复用同一句] |
+
+## 附录B 数据时效与证据覆盖
+
+| 指标 | 期间 | 状态 | 发布日期 | 访问日期 | 时效 | 来源 | 定位 | 局限 |
 |---|---|---|---|---|---|---|---|---|
-|  |  |  |  |  | up / flat / down |  |  |  |
+|  |  | 实际/部分实际/指引/预测 |  |  | 当前/被取代/未核验 |  | [页/表/节] |  |
 
-## 11. Final Notes
+发布状态说明：
 
-Do not confuse industry research with investment profit.
+- [已发布什么]
+- [尚未发布什么]
+- [哪个新来源取代了哪个旧来源]
 
-- Supply-demand gap does not equal stock-price rise.
-- Correct direction does not equal correct timing.
-- Public data may already be priced.
-- AI answers require verification.
-- Search budgets and evidence gaps are part of the conclusion, not a weakness to hide.
+## 附录C 证据就绪度与研究执行记录
+
+| 证据车道 | 状态 | 已打开可靠来源数 | 最低要求 | 证据/缺口 |
+|---|---|---:|---:|---|
+| 产业链 | 就绪/缺口 |  | 2 |  |
+| 需求 | 就绪/缺口 |  | 3 |  |
+| 供给与有效产能 | 就绪/缺口 |  | 3 |  |
+| 价格/订单/库存/利润 | 就绪/缺口 |  | 3（或明确缺口） |  |
+| 资本市场预期 | 就绪/缺口 |  | 2（或明确缺口+第6节定性段） |  |
+
+| 子任务 | 检索轮次 | 实际使用的路径 | 证据 | 状态 | 缺口/回退 |
+|---|---:|---|---|---|---|
+|  |  |  |  | 完成/缺口 |  |
+
+事实、推断、假设分层：
+
+- 事实：[证据编号 + 有来源的事实]
+- 推断：[由哪些证据推出]
+- 假设：[假设 + 反证条件]
+
+## 尾注
+
+- 供需缺口 ≠ 股价上涨。
+- 方向正确 ≠ 时点正确。
+- 盈利兑现 ≠ 股价继续上涨。
+- AI 回答和搜索摘要不是事实。
+- 过期数据不是当前事实。
 ````
