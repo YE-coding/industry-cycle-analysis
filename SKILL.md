@@ -16,12 +16,36 @@ real demand -> buyer/budget -> orders -> effective supply -> price/inventory/mar
 
 Never convert a filled template into a confident conclusion. A missing metric is an evidence gap, not permission to write generic prose.
 
+## Write for two audiences at once
+
+Every full report must work for both readers:
+
+1. **First-time reader**: after one pass of the main body they can retell the industry chain, who pays whom, representative companies, the current cycle stage, capital flows, and where money may go next. Requirements:
+   - Main body (sections 0-10) comes first; all audit material (evidence ledger, data currency, readiness, execution record) goes to appendices.
+   - Section 0 opens with a plain-language "这个行业是做什么的" before any cycle judgment.
+   - Every jargon term or abbreviation used in the body appears in the `## 10. 术语表` section with a plain-language explanation.
+   - Representative companies get real introductions (listing venue/ticker, position in the segment, why representative) — never bare name lists.
+   - All table headers and section labels are Chinese.
+2. **Experienced reader**: the report must contain judgment they cannot get from a Wikipedia-level summary. Requirements:
+   - Each of sections 1.2 (per node), 2, 3, and 5 carries a `进阶视角` block: calibration traps, the sharpest current controversy, prior-cycle comparison, or where nominal capacity dies before becoming effective supply. These blocks must state a position backed by evidence IDs, or explicitly record that no controversy was found and where you looked.
+   - Section 8 must contrast the mainstream market narrative with this report's judgment and say whose evidence is harder. "无分歧" is acceptable only with the search trail recorded.
+   - Prior-cycle comparison in section 5 names concrete years and lag lengths, or states honestly that no comparable prior cycle exists.
+
+Anti-boilerplate rules (hard):
+
+- No explanatory sentence may repeat 3+ times within one report. If you notice yourself reusing a sentence pattern across nodes or rows, the content is not yet researched — go back to evidence.
+- Node explanations must describe the concrete action and output of that node ("把设计图变成硅片上的电路"), never circular definitions ("X负责把上游投入转成Y可采购的产品").
+- Chain nodes are stages or actors, never products (焦炭 is a product; 焦化厂 is the node).
+- Parallel inputs (equipment, materials, energy, software, finance) must appear as parallel branches in the mermaid chart, not be omitted or serialized.
+- Every data period must be an explicit year-month or quarter; "最新已披露期" is banned.
+- Watchpoint `指标` cells contain indicator names, never values.
+
 ## Choose the research mode
 
 - Use a **quick scan** for boundary clarification, a preliminary cycle hypothesis, or a short update. Keep the evidence table compact, but still label facts, inferences, assumptions, freshness, and gaps.
-- Use **full research** when the user asks for a report, deep research, cross-chain comparison, or capital-market mapping. Load `references/report-template.md`, `references/quality-checklist.md`, and `references/evidence-ledger.md`.
+- Use **full research** when the user asks for a report, deep research, cross-chain comparison, or capital-market mapping. Load `references/report-template.md`, `references/quality-checklist.md`, `references/evidence-ledger.md`, and `references/capital-market-mapping.md` (the last is mandatory because sections 6-7 of the template require its attempt checklist).
 - For agentic or multi-round deep research, also load `references/deepsearch-research-protocol.md`.
-- Load `references/framework.md`, `references/supply-demand-questions.md`, `references/cycle-stages.md`, or `references/capital-market-mapping.md` only when that part of the analysis needs them.
+- Load `references/framework.md`, `references/supply-demand-questions.md`, or `references/cycle-stages.md` only when that part of the analysis needs them.
 
 ## Synchronize time and release status first
 
@@ -78,7 +102,7 @@ Assess these lanes before naming a cycle stage:
 | Demand | 3 opened reliable sources |
 | Supply and effective capacity | 3 opened reliable sources |
 | Price/order/inventory/margin | 3 opened sources, or an explicit gap |
-| Capital-market expectations | 2 opened sources, or an explicit gap |
+| Capital-market expectations | 2 opened sources, or a gap documented via the mandatory attempts below |
 
 Rules:
 
@@ -86,6 +110,15 @@ Rules:
 - If both demand and effective supply are unresolved, write `阶段待验证` rather than forcing a stage label.
 - An explicit evidence gap is honest completion of a search subtask, but it is not positive evidence for the industry conclusion.
 - Do not reuse one source as if it independently satisfied several unrelated lanes.
+
+## Capital-market lane: mandatory attempts before declaring a gap
+
+Declaring the capital-market lane a gap without trying is not allowed. Before writing any gap:
+
+1. Load `references/capital-market-mapping.md` and actually attempt the free-source checklist there (index valuation percentile, sector ETF flows/shares, northbound/margin balances where applicable, leader price-vs-earnings divergence). Record every attempt and its outcome in the section-6 attempts table — including failures.
+2. Whether or not quantitative data was obtained, section 6 must contain the qualitative paragraph: what the market has probably already priced, what it probably has not, and on what indirect evidence — clearly labeled as inference, never as measured fact.
+3. Section 7 (未来资金可能流向) is mandatory: for each of the three scenarios in section 8's logic, state which chain node the profit pool would shift toward, which benefits first/later, derived from order lead times, qualification barriers, and capacity elasticity — never from price charts. Keep the no-buy/sell-advice disclaimer visible.
+4. Only after steps 1-2 are recorded may the lane be marked gap, and the conclusion stays provisional.
 
 ## Model relationships explicitly
 
@@ -124,10 +157,10 @@ materials/equipment -> packaging/foundry capacity (parallel inputs)
 
 For full research:
 
-1. Use `references/report-template.md` and preserve the exact header labels `分析日期`, `地理范围`, `数据时效`, and `行业边界`.
+1. Use `references/report-template.md` and preserve the exact header labels `分析日期`, `地理范围`, `数据时效`, and `行业边界`. Follow its section order: reader-facing body (0-10) first, audit appendices (A/B/C) last.
 2. Separate facts, inferences, assumptions, and gaps.
-3. Include the evidence-readiness table, explicit relationship table, data-currency coverage, evidence ledger, cycle/profit transmission, watchpoints, and either a comparable time-series table or an explicit time-series evidence gap.
-4. Do not use placeholders such as `官方/协会/公司`, `待按产品核验`, `市场可能交易`, `见数据时效表`, or a generic “连续两期改善”.
+3. Include the mermaid chain map with parallel inputs, per-node explanations with representative-company tables, the money-flow table, capital-flow attempts table plus qualitative pricing paragraph, future-capital-flow scenarios, mainstream-vs-report contrast, watchpoints, the glossary, and either a comparable time-series table or an explicit time-series evidence gap.
+4. Do not use placeholders such as `官方/协会/公司`, `待按产品核验`, `市场可能交易`, `见数据时效表`, or a generic “连续两期改善”. Also banned as filler: `钱和订单从…的需求向前传`, `负责把上游投入转成…可采购、可验证的产品或服务`, `核心产品需求`, `新增场景`, `直接观测`/`交叉验证` as an entire interpretation cell, `最新已披露期` as a period, and reusing one identical Limitation sentence across every ledger row.
 5. Run:
 
 ```bash
@@ -135,6 +168,10 @@ python scripts/validate_report.py path/to/report.md --mode full --strict
 ```
 
 6. Use `references/quality-checklist.md` for the final substantive pass. A structurally valid Skill does not prove that a generated report is valid.
+
+## One industry, one research run
+
+Never batch-generate reports for multiple industries by re-instantiating one filled report with different nouns. Each industry requires its own search rounds, its own evidence ledger, and its own chain map. Shared boilerplate across reports for different industries is a defect: if two reports contain the same explanatory sentence outside the fixed template scaffolding and 尾注, at least one of them was not researched.
 
 ## Optional export and cleanup
 
