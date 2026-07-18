@@ -7,6 +7,7 @@ import argparse
 import re
 import sys
 from collections import Counter
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 
@@ -56,6 +57,24 @@ EMPTY_INTERPRETATION_CELLS = {"直接观测", "交叉验证"}
 REPEAT_MIN_LEN = 18
 REPEAT_LIMIT = 3
 
+NODE_FIELD_PATTERNS = {
+    "what": r"^\*\*它是干什么的\*\*[：:]\s*(.+)$",
+    "suppliers": r"^\*\*向谁采购\*\*[：:]\s*(.+)$",
+    "buyers": r"^\*\*卖给谁\*\*[：:]\s*(.+)$",
+    "money": r"^\*\*怎么赚钱、议价能力\*\*[：:]\s*(.+)$",
+    "bottleneck": r"^\*\*为什么会卡住\*\*[：:]\s*(.+)$",
+    "advanced": r"^\*\*进阶视角\*\*[：:]\s*(.+)$",
+}
+
+NODE_FIELD_MIN_LENGTH = {
+    "what": 12,
+    "suppliers": 10,
+    "buyers": 10,
+    "money": 20,
+    "bottleneck": 10,
+    "advanced": 36,
+}
+
 
 def section(text: str, heading: str) -> str:
     start = text.find(heading)
@@ -79,6 +98,71 @@ def table_rows(block: str) -> list[list[str]]:
     return rows
 
 
+def markdown_tables(block: str) -> list[list[list[str]]]:
+    """Return Markdown tables separately so validation targets the intended table."""
+    tables: list[list[list[str]]] = []
+    current: list[list[str]] = []
+    for line in block.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("|"):
+            cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+            if not all(re.fullmatch(r":?-{3,}:?", cell) for cell in cells if cell):
+                current.append(cells)
+            continue
+        if current:
+            tables.append(current)
+            current = []
+    if current:
+        tables.append(current)
+    return tables
+
+
+def normalize_text(value: str) -> str:
+    return re.sub(r"[\s`*_，。；;：:、（）()\[\]]+", "", value).lower()
+
+
+def extract_node_blocks(chain: str) -> list[tuple[str, str]]:
+    matches = list(
+        re.finditer(r"^(?:###|####)\s*1\.2\.\d+\s+(.+?)\s*$", chain, re.MULTILINE)
+    )
+    blocks: list[tuple[str, str]] = []
+    for index, match in enumerate(matches):
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(chain)
+        next_section = re.search(r"^###\s+1\.(?!2\.)", chain[match.end() : end], re.MULTILINE)
+        if next_section:
+            end = match.end() + next_section.start()
+        blocks.append((match.group(1).strip(), chain[match.end() : end]))
+    return blocks
+
+
+def node_field(block: str, key: str) -> str:
+    match = re.search(NODE_FIELD_PATTERNS[key], block, re.MULTILINE)
+    return match.group(1).strip() if match else ""
+
+
+def representative_company_rows(block: str) -> list[list[str]]:
+    marker = re.search(r"^\*\*代表企业\*\*[：:]?\s*$", block, re.MULTILINE)
+    if not marker:
+        rows = table_rows(block)
+        return rows[1:] if rows else []
+    tail = block[marker.end() :]
+    next_field = re.search(r"^\*\*(?:怎么赚钱、议价能力|为什么会卡住|进阶视角)\*\*", tail, re.MULTILINE)
+    table = tail if not next_field else tail[: next_field.start()]
+    rows = table_rows(table)
+    return rows[1:] if rows else []
+
+
+def parse_timestamp(raw: str) -> datetime | None:
+    value = raw.strip().replace("Z", "+00:00")
+    value = re.sub(r"\s+(UTC|GMT)([+-]\d{1,2}:?\d{0,2})$", r" \2", value, flags=re.IGNORECASE)
+    value = re.sub(r"([+-]\d{2})(\d{2})$", r"\1:\2", value)
+    try:
+        parsed = datetime.fromisoformat(value)
+    except ValueError:
+        return None
+    return parsed if parsed.tzinfo is not None else None
+
+
 def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
@@ -90,6 +174,12 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
     timestamp = re.search(r"^分析日期[：:]\s*(.+)$", text, re.MULTILINE)
     if timestamp and not re.search(r"\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}(?::\d{2})?.*(?:[+-]\d{2}:?\d{2}|(?:UTC|GMT))", timestamp.group(1)):
         errors.append("analysis timestamp must include a date, HH:mm, and timezone")
+    elif timestamp:
+        parsed_timestamp = parse_timestamp(timestamp.group(1))
+        if parsed_timestamp is None:
+            errors.append("analysis timestamp is not a parseable timezone-aware datetime")
+        elif parsed_timestamp.astimezone(timezone.utc) > datetime.now(timezone.utc) + timedelta(minutes=5):
+            errors.append("analysis timestamp is in the future; query system time instead of hard-coding it")
 
     if mode == "full":
         for heading in FULL_SECTIONS:
@@ -133,10 +223,56 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
         if "谁最终付款" not in chain:
             errors.append("missing money-flow table (谁最终付款…)")
 
+        if re.search(r"\*\*上游买什么\s*/\s*下游卖给谁\*\*", chain):
+            errors.append("combined upstream/downstream node field remains; use separate 向谁采购 and 卖给谁 fields")
+
+        nodes = extract_node_blocks(chain)
+        if len(nodes) < 4:
+            errors.append(f"only {len(nodes)} detailed chain nodes; full research requires at least 4")
+
+        for node_name, block in nodes:
+            values: dict[str, str] = {}
+            for key, minimum in NODE_FIELD_MIN_LENGTH.items():
+                value = node_field(block, key)
+                values[key] = value
+                if not value:
+                    errors.append(f"node '{node_name}' missing structured field: {key}")
+                elif len(normalize_text(value)) < minimum:
+                    errors.append(
+                        f"node '{node_name}' field '{key}' is too thin ({len(normalize_text(value))} < {minimum})"
+                    )
+
+            normalized = [normalize_text(value) for value in values.values() if value]
+            if len(normalized) != len(set(normalized)):
+                errors.append(f"node '{node_name}' repeats the same content across structured fields")
+
+            companies = representative_company_rows(block)
+            if len(companies) < 2:
+                errors.append(f"node '{node_name}' has fewer than 2 representative companies/institutions")
+            for company in companies:
+                if len(company) < 4 or not company[0] or not company[1]:
+                    errors.append(f"node '{node_name}' has an incomplete representative-company row")
+                    continue
+                if not re.search(r"交易所|证交所|澳交所|伦交所|德交所|台交所|未上市|非上市|机构|多主体|非单一|NYSE|NASDAQ|LSE|SSE|SZSE|HKEX|ASX|TSX|TSE|NSE|SIX|XETRA|EPA|Euronext|纳斯达克|纽交所|港交所|上交所|深交所", company[1], re.IGNORECASE):
+                    errors.append(f"node '{node_name}' company '{company[0]}' lacks a listing venue or unlisted/institution label")
+                if not re.search(r"\bE\d+\b", " ".join(company)):
+                    errors.append(f"node '{node_name}' company '{company[0]}' lacks an evidence ID")
+
+            if not re.search(r"\bE\d+\b", values.get("advanced", "")):
+                errors.append(f"node '{node_name}' advanced view lacks an evidence ID")
+
+        profit_block = chain.split("### 1.3", 1)[1] if "### 1.3" in chain else ""
+        profit_rows = table_rows(profit_block)
+        if len(profit_rows) < 5:
+            errors.append("power-and-profit map has fewer than 4 data rows")
+
     # --- Section 4: interpretation cells must carry content ---
     signals = section(text, "## 4. 供需矛盾与高频信号")
     if mode == "full" and signals:
-        for row in table_rows(signals):
+        signal_rows = table_rows(signals)
+        if len(signal_rows) < 6:
+            errors.append("supply-demand signal table has fewer than 5 data rows")
+        for row in signal_rows:
             for cell in row:
                 if cell in EMPTY_INTERPRETATION_CELLS:
                     errors.append(
@@ -146,6 +282,9 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
     # --- Section 5: prior-cycle comparison and falsification ---
     cycle = section(text, "## 5. 周期位置与传导")
     if mode == "full":
+        cycle_rows = table_rows(cycle)
+        if len(cycle_rows) < 4:
+            errors.append("cycle timeline has fewer than 3 data rows")
         if "进阶视角" not in cycle:
             errors.append("section 5 missing 进阶视角 prior-cycle comparison")
         if not re.search(r"什么会证明这个判断错了|What would prove this wrong", cycle):
@@ -154,9 +293,10 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
     # --- Advanced-reader blocks across the body ---
     if mode == "full":
         advanced_count = len(re.findall(r"进阶视角", text))
-        if advanced_count < 3:
+        required_advanced = len(extract_node_blocks(chain)) + 3
+        if advanced_count < required_advanced:
             errors.append(
-                f"only {advanced_count} 进阶视角 blocks; need them in chain nodes, demand, supply and cycle sections"
+                f"only {advanced_count} 进阶视角 blocks; expected at least {required_advanced} for every node plus demand, supply and cycle"
             )
 
     # --- Section 6: capital-flow attempts table + qualitative paragraph ---
@@ -195,7 +335,19 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
             errors.append(f"watchpoint table missing field: {header}")
 
     # Watchpoint indicator cells must be names, not values.
-    watch_rows = table_rows(watch.split("### 9.1", 1)[0])
+    watch_tables = markdown_tables(watch)
+    watch_rows = next(
+        (
+            rows
+            for rows in watch_tables
+            if rows
+            and any(header.startswith("基线") for header in rows[0])
+            and {"来源", "频率", "正向触发", "反证触发"}.issubset(set(rows[0]))
+        ),
+        [],
+    )
+    if mode == "full" and len(watch_rows) < 6:
+        errors.append("watchpoint table has fewer than 5 data rows")
     for row in watch_rows[1:]:
         if row and re.search(r"\d[\d,.]*\s*(元|美元|欧元|亿|万|吨|百万|GWh|MW|TWh|%)", row[0]):
             errors.append(f"watchpoint indicator cell contains a value, not an indicator name: '{row[0][:30]}'")
@@ -279,8 +431,22 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
     missing_ids = sorted(referenced_ids - set(ledger_ids))
     if missing_ids:
         errors.append(f"evidence IDs referenced but absent from ledger: {', '.join(missing_ids)}")
-    if mode == "full" and strict and len(ledger_ids) < 6:
-        errors.append(f"full strict report has only {len(ledger_ids)} evidence-ledger rows; expected at least 6")
+    if mode == "full" and strict and len(ledger_ids) < 8:
+        errors.append(f"full strict report has only {len(ledger_ids)} evidence-ledger rows; expected at least 8")
+
+    ledger_table = table_rows(ledger)
+    if ledger_table:
+        headers = ledger_table[0]
+        publisher_header = "发布方" if "发布方" in headers else "Publisher"
+        if publisher_header in headers:
+            publisher_index = headers.index(publisher_header)
+            publishers = {
+                row[publisher_index].strip()
+                for row in ledger_table[1:]
+                if len(row) > publisher_index and row[publisher_index].strip()
+            }
+            if mode == "full" and strict and len(publishers) < 5:
+                errors.append(f"evidence ledger has only {len(publishers)} distinct publishers; expected at least 5")
 
     # --- Appendix C: readiness + execution ---
     readiness = section(text, "## 附录C 证据就绪度与研究执行记录")
@@ -316,9 +482,9 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
             errors.append("research row marked complete without evidence IDs")
 
     urls = set(re.findall(r"https?://[^)\s|>]+", text))
-    if mode == "full" and strict and len(urls) < 6:
-        errors.append(f"full strict report has only {len(urls)} distinct source URLs; expected at least 6")
-    elif mode == "full" and len(urls) < 6:
+    if mode == "full" and strict and len(urls) < 8:
+        errors.append(f"full strict report has only {len(urls)} distinct source URLs; expected at least 8")
+    elif mode == "full" and len(urls) < 8:
         warnings.append(f"only {len(urls)} distinct source URLs")
 
     if re.search(r"Original Opened\?", text):

@@ -22,6 +22,7 @@
 - 价格、订单、库存、利润与资本开支传导；
 - 周期阶段、反证条件和市场预期映射；
 - 证据台账、数据时效检查和严格报告校验；
+- 逐节点六字段质量契约与跨报告语料审计；
 - 真实时间序列可比性检查，避免把不同口径数据拼成趋势。
 
 ## 使用方式
@@ -59,6 +60,15 @@ python scripts/validate_report.py path/to/report.md --mode full --strict
 
 快速扫描报告可将 `--mode full` 改为 `--mode quick`。严格校验失败表示报告仍有结构、证据、时效或可比性缺口，不应把它当作完整结论发布。
 
+批量报告在逐篇校验后，还必须运行语料级审计：
+
+```bash
+python scripts/validate_corpus.py path/to/reports --pattern "??_*.md" \
+  --benchmark path/to/reports/01_半导体行业供需周期分析.md --strict
+```
+
+语料审计会检查跨报告重复句、节点平均信息量、公司覆盖、证据发布者与 URL 多样性，并量化相对基准报告的结构差距。完整报告至少有 4 个关键节点；每个节点必须独立填写“它是干什么的、向谁采购、卖给谁、怎么赚钱、为什么会卡住、进阶视角”，并列出至少 2 个可核验主体。
+
 ## 文件结构
 
 ```text
@@ -80,6 +90,7 @@ industry-cycle-analysis/
 └── scripts/
     ├── md_to_pdf.py
     ├── safe_log_extract.py
+    ├── validate_corpus.py
     └── validate_report.py
 ```
 
@@ -88,4 +99,5 @@ industry-cycle-analysis/
 - `main` 是唯一维护分支和默认分支；
 - `v1.3.0` 标签保留旧双目录版本；
 - `v1.4.0` 起使用根目录单一 Skill 包；
+- `v1.5.0` 起启用逐节点质量契约和语料级审计；
 - 版本变化见 [CHANGELOG.md](CHANGELOG.md)。
