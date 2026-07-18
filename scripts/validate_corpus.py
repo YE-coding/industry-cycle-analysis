@@ -20,6 +20,7 @@ from pathlib import Path
 from validate_report import (
     extract_node_blocks,
     node_field,
+    markdown_tables,
     normalize_text,
     representative_company_rows,
     section,
@@ -118,6 +119,7 @@ def audit(
     warnings: list[str] = []
     metrics: dict[Path, ReportMetrics] = {}
     prose_owners: defaultdict[str, list[Path]] = defaultdict(list)
+    timeline_owners: defaultdict[tuple[str, ...], list[Path]] = defaultdict(list)
 
     benchmark_average = 0.0
     if benchmark:
@@ -145,6 +147,15 @@ def audit(
             )
         for sentence in reusable_prose(text):
             prose_owners[sentence].append(report)
+        cycle = section(text, "## 5. 周期位置与传导")
+        timeline_tables = [
+            rows for rows in markdown_tables(cycle)
+            if rows and any("阶段" in cell or "日期" in cell for cell in rows[0])
+        ]
+        if timeline_tables:
+            periods = tuple(normalize_text(row[0]) for row in timeline_tables[0][1:] if row)
+            if periods:
+                timeline_owners[periods].append(report)
 
     for sentence, owners in prose_owners.items():
         unique_owners = sorted({owner.name for owner in owners})
@@ -152,6 +163,14 @@ def audit(
             errors.append(
                 "cross-report repeated prose in "
                 f"{', '.join(unique_owners)}: {sentence[:64]}..."
+            )
+
+    for periods, owners in timeline_owners.items():
+        unique_owners = sorted({owner.name for owner in owners})
+        if len(unique_owners) >= 2:
+            errors.append(
+                "cross-report repeated cycle timeline in "
+                f"{', '.join(unique_owners)}: {', '.join(periods)}"
             )
 
     return errors, warnings, metrics

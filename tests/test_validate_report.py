@@ -67,6 +67,11 @@ def valid_report(timestamp: datetime | None = None) -> str:
 3. 2026 年已公告但未认证产能为 30 单位（E3）。
 
 结论状态：可发布
+周期阶段：上行确认
+置信度：中
+证据截至时间：{timestamp.isoformat(timespec="seconds")}
+上调条件：订单覆盖连续两个季度高于 1.5 倍且单位利润继续改善
+下调条件：终端使用量转负且认证产能集中释放
 
 ## 1. 产业链地图
 
@@ -113,11 +118,12 @@ flowchart LR
 
 ## 5. 周期位置与传导
 
-| 时段 | 需求 | 有效供给 | 价格利润 | 阶段 |
-|---|---|---|---|---|
-| 2024H2 | 温和增加 | 相对充足 | 价格承压 | 去库存 |
-| 2025H1 | 利用量加速 | 认证偏慢 | 利润企稳 | 修复 |
-| 2025H2 | 订单兑现 | 部分受限 | 利润扩张 | 上行确认 |
+| 阶段/日期 | 性质 | 信号 | 利润池往哪移 | 关键时滞 | 证据 | 下一步验证 |
+|---|---|---|---|---|---|---|
+| 2024H2 去库存 | 已发生 | 终端使用温和增加 | 运营端 | 一个季度 | E2 | 库存下降 |
+| 2025H1 修复 | 已发生 | 利用量加速而认证偏慢 | 核心部件 | 两个季度 | E3 | 利润企稳 |
+| 2025H2 上行确认 | 已发生 | 订单兑现且供给受限 | 认证产能 | 三个季度 | E4 | 交付延长 |
+| 2026H1 风险检验 | 风险窗口 | 公告产能进入认证 | 集成与运营 | 半年 | E6 | 良率和库存 |
 
 **进阶视角**：与上轮只靠补库存不同，本轮需要终端使用量和认证交付共同成立；利润先于大规模扩产改善才是有效收紧（E5、E6）。
 
@@ -125,19 +131,29 @@ flowchart LR
 
 ## 6. 资金动向
 
-| 尝试的来源类型 | 结果 | 已定价 | 未定价 | 证据 |
-|---|---|---|---|---|
-| 交易所公告 | 已打开 | 订单增长 | 取消风险 | E4 |
-| 公司年报 | 已打开 | 当前利润 | 新线良率 | E3 |
-| 行业统计 | 已打开 | 使用量增长 | 区域错配 | E2 |
+| 尝试的来源类型 | 具体来源 | 结果（拿到数据 / 无公开数据 / 口径不可比） |
+|---|---|---|
+| 行业指数估值分位 | 示例产业指数发行商 | 拿到 2026-07-17 估值数据 |
+| 行业 ETF 份额/资金流 | 示例 ETF 发行商 | 拿到 2026-07-17 NAV 和份额 |
+| 龙头股价与盈利剪刀差 | 甲公司 IR | 拿到 2026Q1 盈利与同期市场指标 |
+
+| 代理层级（行业/子链/公司） | 工具/主体 | 覆盖节点 | 指标与期间 | 来源 | 结论 | 局限 |
+|---|---|---|---|---|---|---|
+| 行业 | 示例 ETF | 全链上市公司 | 2026-07-17 NAV 120.5，年内回报 12.0% | E7 | 叙事已扩散 | 不代表未上市供应商 |
+| 公司 | 节点甲公司 | 核心部件 | 2026Q1 利润同比增长 8% | E3 | 盈利开始兑现 | 单一公司样本 |
 
 产业现实是利润先在认证稀缺的部件端改善，估值反应是否充分需要与可比公司的订单兑现交叉验证。
 
+- 市场当前大概率**已定价**：订单增长与当前利润改善。
+- 市场当前大概率**未定价**：新线认证良率与取消风险。
+
 ## 7. 未来资金可能流向
 
-- 基准：认证按计划完成，利润由核心部件向集成环节扩散。
-- 上行：终端使用超预期且设备交付延后，稀缺环节获得更高议价权。
-- 下行：新增产能集中认证，价格和库存同时转弱。
+| 情景 | 触发条件 | 利润池往哪个环节移动 | 先受益的环节 | 后受益/受损的环节 | 需要盯的证据 |
+|---|---|---|---|---|---|
+| 基准 | 认证按计划完成 | 核心部件向集成移动 | 核心部件 | 集成受益、低效产能受损 | 认证和交付 |
+| 上行 | 终端使用超预期且设备延后 | 稀缺认证产能 | 核心部件 | 运营端后受益 | 订单和交期 |
+| 下行 | 新增产能集中认证 | 现金流稳定的运营端 | 运营服务 | 高库存部件受损 | 库存和利润 |
 
 以上情景不构成任何买卖建议。
 
@@ -235,6 +251,27 @@ class ValidateReportTests(unittest.TestCase):
         )
         self.assert_has_error(report, "fewer than 2 representative companies")
 
+    def test_all_gap_capital_market_evidence_is_rejected(self) -> None:
+        report = valid_report().replace(
+            "2026-07-17 NAV 120.5，年内回报 12.0%",
+            "未取得公开数据",
+        ).replace(
+            "2026Q1 利润同比增长 8%",
+            "未构建同日序列",
+        )
+        self.assert_has_error(report, "contains no dated usable metric")
+
+    def test_missing_future_flow_field_is_rejected(self) -> None:
+        report = valid_report().replace(
+            "| 基准 | 认证按计划完成 | 核心部件向集成移动 | 核心部件 | 集成受益、低效产能受损 | 认证和交付 |",
+            "| 基准 | 认证按计划完成 | 核心部件向集成移动 |  | 集成受益、低效产能受损 | 认证和交付 |",
+        )
+        self.assert_has_error(report, "scenario has an empty field")
+
+    def test_missing_conclusion_confidence_is_rejected(self) -> None:
+        report = valid_report().replace("置信度：中\n", "")
+        self.assert_has_error(report, "independent conclusion field: 置信度")
+
     def test_cross_report_prose_reuse_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -244,6 +281,7 @@ class ValidateReportTests(unittest.TestCase):
             second.write_text(valid_report(), encoding="utf-8")
             errors, _, _ = audit([first, second], first, True)
         self.assertTrue(any("cross-report repeated prose" in item for item in errors), errors)
+        self.assertTrue(any("cross-report repeated cycle timeline" in item for item in errors), errors)
 
 
 if __name__ == "__main__":
