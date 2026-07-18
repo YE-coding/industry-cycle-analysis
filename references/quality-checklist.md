@@ -59,6 +59,9 @@ Structure:
 - Are production flow, order/budget flow, and profit/cost flow separated?
 - Does every important edge specify `from`, `relation`, `to`, and evidence IDs?
 - Does each important node identify suppliers, buyers, monetization, bottleneck role, representative companies, and evidence IDs?
+- Are suppliers and buyers written under separate labels, with different content, rather than combined or inferred from a generic paragraph containing “客户”?
+- Does a full report contain at least four important nodes, two representative companies/institutions per node, and a distinct evidence-backed 进阶视角 for every node?
+- Across a multi-report corpus, does each report average at least 200 structured node characters and avoid reusing explanatory prose from another industry?
 
 ## Supply-demand reasoning
 
