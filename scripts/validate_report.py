@@ -117,6 +117,14 @@ def markdown_tables(block: str) -> list[list[list[str]]]:
     return tables
 
 
+def table_with_headers(block: str, required: set[str]) -> list[list[str]]:
+    """Return the first table whose header contains every required label."""
+    for rows in markdown_tables(block):
+        if rows and required.issubset(set(rows[0])):
+            return rows
+    return []
+
+
 def normalize_text(value: str) -> str:
     return re.sub(r"[\s`*_，。；;：:、（）()\[\]]+", "", value).lower()
 
@@ -208,6 +216,16 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
             errors.append("section 0 missing '三个最重要的数字'")
         if not re.search(r"结论状态[：:]", overview):
             errors.append("section 0 missing 结论状态")
+        for field in ("周期阶段", "置信度", "证据截至时间", "上调条件", "下调条件"):
+            if not re.search(rf"{field}[：:]\s*\S+", overview):
+                errors.append(f"section 0 missing independent conclusion field: {field}")
+        intro_match = re.search(
+            r"###\s*这个行业是做什么的\s*(.*?)(?=\n###\s|\Z)",
+            overview,
+            re.DOTALL,
+        )
+        if intro_match and "结论状态" in intro_match.group(1):
+            errors.append("section 0 industry intro contains conclusion status")
 
     # --- Section 1: mermaid chart, node explanations, representative companies ---
     chain = section(text, "## 1. 产业链地图")
@@ -282,9 +300,24 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
     # --- Section 5: prior-cycle comparison and falsification ---
     cycle = section(text, "## 5. 周期位置与传导")
     if mode == "full":
-        cycle_rows = table_rows(cycle)
-        if len(cycle_rows) < 4:
-            errors.append("cycle timeline has fewer than 3 data rows")
+        cycle_tables = markdown_tables(cycle)
+        cycle_rows = next(
+            (rows for rows in cycle_tables if rows and any("阶段" in cell or "日期" in cell for cell in rows[0])),
+            [],
+        )
+        if len(cycle_rows) < 5:
+            errors.append("cycle timeline has fewer than 4 data rows")
+        if len(cycle_rows) > 7:
+            errors.append("cycle timeline has more than 6 data rows")
+        if cycle_rows:
+            header = cycle_rows[0]
+            if not any("性质" in cell for cell in header):
+                errors.append("cycle timeline missing actual/plan/forecast/risk type column")
+            timeline_text = " ".join(" ".join(row) for row in cycle_rows[1:])
+            if not re.search(r"已发生|实际", timeline_text):
+                errors.append("cycle timeline has no actual event row")
+            if not re.search(r"计划|预测|风险窗口", timeline_text):
+                errors.append("cycle timeline does not distinguish plans, forecasts or risk windows")
         if "进阶视角" not in cycle:
             errors.append("section 5 missing 进阶视角 prior-cycle comparison")
         if not re.search(r"什么会证明这个判断错了|What would prove this wrong", cycle):
@@ -314,6 +347,30 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
         if "尝试的来源类型" in capital and len(attempt_rows) < 3:
             errors.append("capital-flow attempts table has fewer than 3 recorded attempts")
 
+        proxy_required = {"工具/主体", "覆盖节点", "指标与期间", "来源", "结论", "局限"}
+        proxy_rows = table_with_headers(capital, proxy_required)
+        if len(proxy_rows) < 3:
+            errors.append("capital-market proxy table has fewer than 2 evidence rows")
+        else:
+            headers = proxy_rows[0]
+            metric_index = headers.index("指标与期间")
+            source_index = headers.index("来源")
+            usable = [
+                row for row in proxy_rows[1:]
+                if len(row) > max(metric_index, source_index)
+                and re.search(r"\d{4}[-年/.]|\d{4}Q\d|\d+(?:\.\d+)?%|\d+(?:\.\d+)?倍", row[metric_index])
+                and re.search(r"https?://|\bE\d+\b", row[source_index])
+                and not re.search(r"无公开数据|未取得|不可得|未构建", row[metric_index])
+            ]
+            if not usable:
+                errors.append("capital-market proxy table contains no dated usable metric")
+
+        if attempt_rows and all(
+            any(re.search(r"无公开数据|未取得|不可得|口径不可比|未构建", cell) for cell in row)
+            for row in attempt_rows
+        ) and len(proxy_rows) < 3:
+            errors.append("all capital-market attempts are gaps; market lane cannot be complete")
+
     # --- Section 7: future capital flow scenarios ---
     future = section(text, "## 7. 未来资金可能流向")
     if mode == "full":
@@ -322,6 +379,14 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
                 errors.append(f"section 7 missing scenario: {scenario}")
         if not re.search(r"不构成.{0,12}买卖建议", future):
             errors.append("section 7 missing no-advice disclaimer")
+        future_required = {"情景", "触发条件", "利润池往哪个环节移动", "先受益的环节", "后受益/受损的环节", "需要盯的证据"}
+        future_rows = table_with_headers(future, future_required)
+        if len(future_rows) != 4:
+            errors.append("section 7 must contain exactly three complete scenario rows")
+        else:
+            for row in future_rows[1:]:
+                if len(row) < 6 or any(not normalize_text(cell) for cell in row[:6]):
+                    errors.append(f"section 7 scenario has an empty field: {row[0] if row else 'unknown'}")
 
     # --- Section 8: mainstream narrative contrast ---
     contrast = section(text, "## 8. 分歧与反证")

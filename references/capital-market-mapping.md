@@ -32,6 +32,20 @@ Rules:
 - If data was obtained, fill the mapping table below and cite it in the evidence ledger like any other claim.
 - If all rows fail, the lane is a documented gap: conclusion stays provisional, and the qualitative paragraph below is still required.
 
+## Layered proxy contract
+
+Do not test whether one ETF perfectly represents the whole chain. Use the narrowest available evidence at three levels:
+
+| Proxy layer | Acceptable original source | What must be recorded |
+|---|---|---|
+| Industry ETF/index | issuer, exchange or index provider | dated NAV/return/valuation/units and total coverage |
+| Sub-chain proxy | focused ETF/index or disclosed basket | the chain nodes actually covered and omitted |
+| Representative company | company IR plus same-date exchange/issuer evidence | reported earnings/orders versus the observed market proxy |
+
+Every proxy row records the instrument or entity, node coverage, metric and period, original source, conclusion, and limitation. Partial coverage is expected and must be disclosed; it is not a failed attempt. If no industry ETF exists, combine sub-chain and company proxies and label market conclusions as narrower than the industry.
+
+An attempts table with no usable metric does not satisfy the market lane. The report must either add at least one dated quantitative market observation or explicitly remain an evidence gap with a reduced evidence score.
+
 ## Qualitative pricing paragraph (always required)
 
 Even with a full data gap, section 6 must answer, clearly labeled as inference:

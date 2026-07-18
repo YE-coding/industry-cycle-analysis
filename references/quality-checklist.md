@@ -16,6 +16,10 @@ Do not deliver a full report when any blocker remains:
 - Any explanatory sentence repeats 3+ times in one report, or the same boilerplate appears in reports for different industries (e.g. `钱和订单从…的需求向前传`, `负责把上游投入转成…可采购、可验证的产品或服务`).
 - A chain node explanation is a circular definition, or a node is a product instead of a stage/actor, or a node's description was copy-pasted from a different node type (e.g. a foundry described as "回款入口").
 - The capital-market lane is declared a gap without a recorded attempts table (section 6), or section 6 lacks the qualitative priced/unpriced paragraph, or section 7 lacks the three-scenario future-capital-flow table.
+- The stage label, conclusion status, confidence and evidence cutoff are merged, or structural quality is presented as conclusion confidence.
+- Every capital-market attempt is a failure, no layered proxy row contains a dated metric, yet the report or interface treats the market lane as complete.
+- A future-capital-flow row omits its trigger, profit-pool movement, first beneficiary, later beneficiary/damaged node, or evidence.
+- The cycle timeline has fewer than four industry-specific dated anchors, does not distinguish actuals from plans/forecasts/risks, or reuses another industry's year sequence and explanatory prose.
 - Observation posts lack a specific source, baseline, direction, and numeric or event threshold — or an indicator cell contains a value instead of an indicator name, or a baseline is stale beyond one release cycle without a 数据滞后 note.
 - Qualification, pilot line, announced capacity, installed capacity, and volume production are conflated.
 

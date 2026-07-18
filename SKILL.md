@@ -121,6 +121,18 @@ Declaring the capital-market lane a gap without trying is not allowed. Before wr
 3. Section 7 (未来资金可能流向) is mandatory: for each of the three scenarios in section 8's logic, state which chain node the profit pool would shift toward, which benefits first/later, derived from order lead times, qualification barriers, and capacity elasticity — never from price charts. Keep the no-buy/sell-advice disclaimer visible.
 4. Only after steps 1-2 are recorded may the lane be marked gap, and the conclusion stays provisional.
 
+### Use a layered proxy basket, not an impossible one-instrument test
+
+No listed instrument is required to represent an entire industrial chain. Map market evidence in three layers and state the coverage boundary of each layer:
+
+1. **Industry ETF or index**: broad narrative, valuation and fund-performance proxy.
+2. **Sub-chain proxy**: an ETF, index or listed basket concentrated in the bottleneck node.
+3. **Representative company**: price-versus-reported-earnings or order evidence for a named node.
+
+For every usable proxy record `代理层级`, `工具/主体`, `覆盖节点`, `指标与期间`, `来源`, `结论`, and `局限`. A current NAV, dated total return, holdings weight, valuation multiple, shares outstanding, or same-date price-versus-earnings observation is usable market evidence when the original issuer, exchange, index provider, or company source was opened. A product's incomplete chain coverage is a limitation, not a reason to discard the observation.
+
+If every attempt failed, name the exact pages opened and why each metric was unavailable. An all-gap attempts table cannot satisfy the market-evidence lane or receive a full evidence score.
+
 ## Model relationships explicitly
 
 1. Define the industry boundary, adjacent industries, substitutes, and geography.
@@ -153,6 +165,8 @@ materials/equipment -> packaging/foundry capacity (parallel inputs)
 9. Map industrial reality to the market expectation stage without giving a buy/sell call.
 10. Produce 3-5 falsifiable watchpoints with an actual source, baseline, frequency, direction, and numeric or event threshold.
 11. When public data permits, preserve at least one real comparable time series: the same indicator, definition, unit, geography, and reporting entity across two or more dates. Never combine revenue, margin, inventory, forecasts, or different companies into a synthetic line. If no such series is available, write the precise evidence gap and the source to monitor next.
+12. Keep the stage judgment separate from its epistemic status. Record `阶段判断`, `结论状态`, `置信度`, `证据截至时间`, `上调条件`, and `下调条件` as independent fields. A stage may be “扩张” while the conclusion remains “暂定”; the interface must never make these look like one label.
+13. Build the cycle timeline from 4-6 industry-specific dated events or quarters. Mark each row as an actual, company plan, forecast, or risk window. The visible time label must carry meaning beyond a reused sequence of calendar years.
 
 ## Write and validate the report
 
@@ -160,7 +174,7 @@ For full research:
 
 1. Use `references/report-template.md` and preserve the exact header labels `分析日期`, `地理范围`, `数据时效`, and `行业边界`. Follow its section order: reader-facing body (0-10) first, audit appendices (A/B/C) last.
 2. Separate facts, inferences, assumptions, and gaps.
-3. Include the mermaid chain map with parallel inputs, at least four fully structured node explanations, representative-company tables with two or more rows per node, the money-flow table, capital-flow attempts table plus qualitative pricing paragraph, future-capital-flow scenarios, mainstream-vs-report contrast, watchpoints, the glossary, and either a comparable time-series table or an explicit time-series evidence gap.
+3. Include the mermaid chain map with parallel inputs, at least four fully structured node explanations, representative-company tables with two or more rows per node, the money-flow table, capital-flow attempts table, layered market-proxy evidence, qualitative pricing paragraph, complete future-capital-flow scenarios, mainstream-vs-report contrast, watchpoints, the glossary, and either a comparable time-series table or an explicit time-series evidence gap.
 4. Do not use placeholders such as `官方/协会/公司`, `待按产品核验`, `市场可能交易`, `见数据时效表`, or a generic “连续两期改善”. Also banned as filler: `钱和订单从…的需求向前传`, `负责把上游投入转成…可采购、可验证的产品或服务`, `核心产品需求`, `新增场景`, `直接观测`/`交叉验证` as an entire interpretation cell, `最新已披露期` as a period, and reusing one identical Limitation sentence across every ledger row.
 5. Run:
 
