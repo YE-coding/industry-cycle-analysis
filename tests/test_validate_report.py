@@ -96,6 +96,13 @@ flowchart LR
 
 ## 2. 需求
 
+### 2.1 政策重要性闸门
+
+- 政策是否实质驱动当前周期：否
+- 判断依据：当前需求由终端使用和认证交付驱动，政策只是背景变量（E2）。
+- 主要作用通道：不适用；已检查需求、供给和准入
+- 政策状态截至：{timestamp.isoformat(timespec="seconds")}
+
 需求由存量替换、终端新增利用量和安全冗余共同推动，不能把意向订单直接计入已经发生的采购（E2）。
 
 **进阶视角**：当使用量增速高于预算增速时，运营者会先消化闲置资源；预算、招标和验收连续出现才能确认需求进入兑现阶段（E2、E5）。
@@ -218,6 +225,39 @@ class ValidateReportTests(unittest.TestCase):
         self.assertEqual([], errors)
         self.assertEqual([], warnings)
 
+    def test_policy_gate_is_required(self) -> None:
+        report = valid_report().replace(
+            """### 2.1 政策重要性闸门
+
+- 政策是否实质驱动当前周期：否
+- 判断依据：当前需求由终端使用和认证交付驱动，政策只是背景变量（E2）。
+- 主要作用通道：不适用；已检查需求、供给和准入
+- 政策状态截至：""",
+            """### 2.1 已删除的闸门
+
+- 政策状态截至：""",
+        )
+        self.assert_has_error(report, "missing policy-materiality gate")
+
+    def test_material_policy_requires_structured_jurisdiction_row(self) -> None:
+        report = valid_report().replace(
+            "政策是否实质驱动当前周期：否",
+            "政策是否实质驱动当前周期：是",
+        )
+        self.assert_has_error(report, "requires a structured jurisdiction row")
+
+    def test_non_material_policy_rejects_country_padding(self) -> None:
+        policy_table = """
+| 国家/地区 | 政策或工具 | 状态与截至日期 | 影响环节 | 可核实经济效应 | 落地差或局限 | 到期/反转风险 | 证据 |
+|---|---|---|---|---|---|---|---|
+| 示例国 | 示例规则 | 已发布规则，截至 2026-07-18 | 需求 | 影响一个单位 | 尚未形成订单 | 规则可能到期 | E2 |
+"""
+        report = valid_report().replace(
+            "需求由存量替换、终端新增利用量",
+            f"{policy_table}\n需求由存量替换、终端新增利用量",
+        )
+        self.assert_has_error(report, "must not retain a jurisdiction table")
+
     def test_combined_upstream_downstream_is_rejected(self) -> None:
         report = valid_report().replace(
             "**向谁采购**：节点1向专业材料商、关键设备制造商和能源服务机构采购不同投入品。\n\n**卖给谁**：节点1向下一制造环节、系统集成商以及具备明确预算的终端运营者销售。",
@@ -267,6 +307,33 @@ class ValidateReportTests(unittest.TestCase):
             "| 基准 | 认证按计划完成 | 核心部件向集成移动 |  | 集成受益、低效产能受损 | 认证和交付 |",
         )
         self.assert_has_error(report, "scenario has an empty field")
+
+    def test_duplicate_cycle_timeline_is_rejected(self) -> None:
+        report = valid_report()
+        start = report.index("| 阶段/日期", report.index("## 5. 周期位置与传导"))
+        end = report.index("\n\n", start)
+        table = report[start:end]
+        report = report[:end] + "\n\n" + table + report[end:]
+        self.assert_has_error(report, "section 5 must contain exactly one cycle timeline table")
+
+    def test_duplicate_future_flow_table_is_rejected(self) -> None:
+        report = valid_report()
+        start = report.index("| 情景", report.index("## 7. 未来资金可能流向"))
+        end = report.index("\n\n", start)
+        table = report[start:end]
+        report = report[:end] + "\n\n" + table + report[end:]
+        self.assert_has_error(report, "section 7 must contain exactly one future-capital-flow scenario table")
+
+    def test_duplicate_no_advice_disclaimer_is_rejected(self) -> None:
+        report = valid_report().replace(
+            "以上情景不构成任何买卖建议。",
+            "> 以上情景不构成任何买卖建议。\n\n> 情景推演不构成买卖建议或个股推荐。",
+        )
+        self.assert_has_error(report, "duplicate no-advice disclaimers")
+
+    def test_repeated_chinese_full_stop_is_rejected(self) -> None:
+        report = valid_report().replace("需求真实改善 |", "需求真实改善。。 |")
+        self.assert_has_error(report, "repeated Chinese full stop")
 
     def test_missing_conclusion_confidence_is_rejected(self) -> None:
         report = valid_report().replace("置信度：中\n", "")

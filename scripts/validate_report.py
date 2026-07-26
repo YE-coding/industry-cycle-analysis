@@ -198,6 +198,9 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
         if re.search(pattern, text, re.IGNORECASE):
             errors.append(f"placeholder or generic content remains: {label}")
 
+    if re.search(r"。。+", text):
+        errors.append("repeated Chinese full stop remains")
+
     # --- Anti-boilerplate: no long sentence may repeat REPEAT_LIMIT+ times ---
     sentences = re.split(r"[。；;\n]", text)
     counts = Counter(s.strip() for s in sentences if len(s.strip()) >= REPEAT_MIN_LEN)
@@ -285,6 +288,59 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
             errors.append("power-and-profit map has fewer than 4 data rows")
 
     # --- Section 4: interpretation cells must carry content ---
+    demand = section(text, "## 2. 需求")
+    if mode == "full":
+        policy_gate = re.search(
+            r"^###\s*2\.1\s+政策重要性闸门\s*$([\s\S]*?)(?=^###\s+|^##\s+|\Z)",
+            demand,
+            re.MULTILINE,
+        )
+        if not policy_gate:
+            errors.append("section 2 missing policy-materiality gate")
+        else:
+            gate = policy_gate.group(1)
+            answer = re.search(r"政策是否实质驱动当前周期[：:]\s*(是|否)\s*$", gate, re.MULTILINE)
+            if not answer:
+                errors.append("policy-materiality answer must be exactly 是 or 否")
+            basis = re.search(r"判断依据[：:]\s*(.+)$", gate, re.MULTILINE)
+            if not basis or not re.search(r"\bE\d+\b", basis.group(1)):
+                errors.append("policy-materiality basis must include an evidence ID")
+            channel = re.search(r"主要作用通道[：:]\s*(.+)$", gate, re.MULTILINE)
+            if not channel or not normalize_text(channel.group(1)):
+                errors.append("policy-materiality gate missing transmission channel")
+            status_date = re.search(r"政策状态截至[：:]\s*(.+)$", gate, re.MULTILINE)
+            if not status_date or not re.search(
+                r"\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}(?::\d{2})?.*(?:[+-]\d{2}:?\d{2}|(?:UTC|GMT))",
+                status_date.group(1),
+            ):
+                errors.append("policy-materiality status must include a date, HH:mm, and timezone")
+
+            policy_required = {
+                "国家/地区",
+                "政策或工具",
+                "状态与截至日期",
+                "影响环节",
+                "可核实经济效应",
+                "落地差或局限",
+                "到期/反转风险",
+                "证据",
+            }
+            policy_rows = table_with_headers(gate, policy_required)
+            if answer and answer.group(1) == "是":
+                if len(policy_rows) < 2:
+                    errors.append("policy-materiality answer 是 requires a structured jurisdiction row")
+                else:
+                    for row in policy_rows[1:]:
+                        if len(row) < len(policy_required) or any(not normalize_text(cell) for cell in row[:8]):
+                            errors.append("policy-materiality jurisdiction row has an empty field")
+                        if not re.search(r"提案|已立法|已发布规则|已执行|已拨付", " ".join(row)):
+                            errors.append("policy-materiality jurisdiction row lacks an explicit policy status")
+                        if not re.search(r"\bE\d+\b", " ".join(row)):
+                            errors.append("policy-materiality jurisdiction row lacks an evidence ID")
+            if answer and answer.group(1) == "否" and policy_rows:
+                errors.append("policy-materiality answer 否 must not retain a jurisdiction table")
+
+    # --- Section 4: interpretation cells must carry content ---
     signals = section(text, "## 4. 供需矛盾与高频信号")
     if mode == "full" and signals:
         signal_rows = table_rows(signals)
@@ -301,6 +357,8 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
     cycle = section(text, "## 5. 周期位置与传导")
     if mode == "full":
         cycle_tables = markdown_tables(cycle)
+        if len(cycle_tables) != 1:
+            errors.append("section 5 must contain exactly one cycle timeline table")
         cycle_rows = next(
             (rows for rows in cycle_tables if rows and any("阶段" in cell or "日期" in cell for cell in rows[0])),
             [],
@@ -379,6 +437,14 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
                 errors.append(f"section 7 missing scenario: {scenario}")
         if not re.search(r"不构成.{0,12}买卖建议", future):
             errors.append("section 7 missing no-advice disclaimer")
+        disclaimer_count = len(
+            re.findall(r"^>\s*.*不构成.*(?:买卖建议|个股推荐).*$", future, re.MULTILINE)
+        )
+        if disclaimer_count > 1:
+            errors.append("section 7 contains duplicate no-advice disclaimers")
+        future_tables = markdown_tables(future)
+        if len(future_tables) != 1:
+            errors.append("section 7 must contain exactly one future-capital-flow scenario table")
         future_required = {"情景", "触发条件", "利润池往哪个环节移动", "先受益的环节", "后受益/受损的环节", "需要盯的证据"}
         future_rows = table_with_headers(future, future_required)
         if len(future_rows) != 4:

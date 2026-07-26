@@ -46,6 +46,7 @@ Anti-boilerplate rules (hard):
 - Use a **quick scan** for boundary clarification, a preliminary cycle hypothesis, or a short update. Keep the evidence table compact, but still label facts, inferences, assumptions, freshness, and gaps.
 - Use **full research** when the user asks for a report, deep research, cross-chain comparison, or capital-market mapping. Load `references/report-template.md`, `references/quality-checklist.md`, `references/evidence-ledger.md`, and `references/capital-market-mapping.md` (the last is mandatory because sections 6-7 of the template require its attempt checklist).
 - For agentic or multi-round deep research, also load `references/deepsearch-research-protocol.md`.
+- For full research, always run the policy-materiality gate. Load `references/policy-materiality.md` when the gate is `是` or when the answer is uncertain.
 - Load `references/framework.md`, `references/supply-demand-questions.md`, or `references/cycle-stages.md` only when that part of the analysis needs them.
 
 ## Synchronize time and release status first
@@ -159,14 +160,15 @@ materials/equipment -> packaging/foundry capacity (parallel inputs)
 3. Collect the latest available actuals for demand, supply/effective capacity, price/orders/inventory/margins, expansion timing, and representative companies.
 4. Separate announced capacity from installed, qualified, yield-ramped, and customer-backed capacity.
 5. Find the buyer and demand trigger; separate actual use from policy, restocking, capex, or expectation.
-6. Locate the bottleneck or surplus and explain the transmission lag from demand to orders, revenue, margin, capex, qualified capacity, and reversal.
-7. Preserve conflicting evidence and unresolved definitions instead of averaging them away.
-8. Judge the cycle stage only after applying the evidence-readiness gate.
-9. Map industrial reality to the market expectation stage without giving a buy/sell call.
-10. Produce 3-5 falsifiable watchpoints with an actual source, baseline, frequency, direction, and numeric or event threshold.
-11. When public data permits, preserve at least one real comparable time series: the same indicator, definition, unit, geography, and reporting entity across two or more dates. Never combine revenue, margin, inventory, forecasts, or different companies into a synthetic line. If no such series is available, write the precise evidence gap and the source to monitor next.
-12. Keep the stage judgment separate from its epistemic status. Record `阶段判断`, `结论状态`, `置信度`, `证据截至时间`, `上调条件`, and `下调条件` as independent fields. A stage may be “扩张” while the conclusion remains “暂定”; the interface must never make these look like one label.
-13. Build the cycle timeline from 4-6 industry-specific dated events or quarters. Mark each row as an actual, company plan, forecast, or risk window. The visible time label must carry meaning beyond a reused sequence of calendar years.
+6. Run the policy-materiality gate: answer `是` or `否`, give one evidence-backed sentence, name the transmission channel, and stamp the policy status date. If `是`, cover only jurisdictions that materially change demand, supply, cost, trade flow, qualification, or capital expenditure; distinguish proposal, enacted rule, and executed funding. If `否`, do not pad the report with country-by-country `N/A` rows.
+7. Locate the bottleneck or surplus and explain the transmission lag from demand to orders, revenue, margin, capex, qualified capacity, and reversal.
+8. Preserve conflicting evidence and unresolved definitions instead of averaging them away.
+9. Judge the cycle stage only after applying the evidence-readiness gate.
+10. Map industrial reality to the market expectation stage without giving a buy/sell call.
+11. Produce 3-5 falsifiable watchpoints with an actual source, baseline, frequency, direction, and numeric or event threshold.
+12. When public data permits, preserve at least one real comparable time series: the same indicator, definition, unit, geography, and reporting entity across two or more dates. Never combine revenue, margin, inventory, forecasts, or different companies into a synthetic line. If no such series is available, write the precise evidence gap and the source to monitor next.
+13. Keep the stage judgment separate from its epistemic status. Record `阶段判断`, `结论状态`, `置信度`, `证据截至时间`, `上调条件`, and `下调条件` as independent fields. A stage may be “扩张” while the conclusion remains “暂定”; the interface must never make these look like one label.
+14. Build the cycle timeline from 4-6 industry-specific dated events or quarters. Mark each row as an actual, company plan, forecast, or risk window. The visible time label must carry meaning beyond a reused sequence of calendar years.
 
 ## Write and validate the report
 
@@ -174,7 +176,7 @@ For full research:
 
 1. Use `references/report-template.md` and preserve the exact header labels `分析日期`, `地理范围`, `数据时效`, and `行业边界`. Follow its section order: reader-facing body (0-10) first, audit appendices (A/B/C) last.
 2. Separate facts, inferences, assumptions, and gaps.
-3. Include the mermaid chain map with parallel inputs, at least four fully structured node explanations, representative-company tables with two or more rows per node, the money-flow table, capital-flow attempts table, layered market-proxy evidence, qualitative pricing paragraph, complete future-capital-flow scenarios, mainstream-vs-report contrast, watchpoints, the glossary, and either a comparable time-series table or an explicit time-series evidence gap.
+3. Include the mermaid chain map with parallel inputs, at least four fully structured node explanations, representative-company tables with two or more rows per node, the money-flow table, the policy-materiality gate, capital-flow attempts table, layered market-proxy evidence, qualitative pricing paragraph, complete future-capital-flow scenarios, mainstream-vs-report contrast, watchpoints, the glossary, and either a comparable time-series table or an explicit time-series evidence gap.
 4. Do not use placeholders such as `官方/协会/公司`, `待按产品核验`, `市场可能交易`, `见数据时效表`, or a generic “连续两期改善”. Also banned as filler: `钱和订单从…的需求向前传`, `负责把上游投入转成…可采购、可验证的产品或服务`, `核心产品需求`, `新增场景`, `直接观测`/`交叉验证` as an entire interpretation cell, `最新已披露期` as a period, and reusing one identical Limitation sentence across every ledger row.
 5. Run:
 

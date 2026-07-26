@@ -25,6 +25,8 @@ Create 6-10 subtasks before browsing. For a normal industry-cycle report, use:
 
 One search round means one focused query set plus original-source reading and compression. A result page or snippet without original-source reading does not complete a round. Do not run open-ended browsing.
 
+For the policy subtask, first answer the policy-materiality gate. If the answer is `否`, record the checked channel and stop; the two-source minimum does not force a country survey. If the answer is `是`, open the current government or regulator text, record legal/implementation status and date, and expand only the jurisdictions that materially change the cycle judgment.
+
 ## Search Sequence
 
 For each subtask, use this order:
