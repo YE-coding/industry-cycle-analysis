@@ -20,6 +20,9 @@ Do not deliver a full report when any blocker remains:
 - Every capital-market attempt is a failure, no layered proxy row contains a dated metric, yet the report or interface treats the market lane as complete.
 - A future-capital-flow row omits its trigger, profit-pool movement, first beneficiary, later beneficiary/damaged node, or evidence.
 - The cycle timeline has fewer than four industry-specific dated anchors, does not distinguish actuals from plans/forecasts/risks, or reuses another industry's year sequence and explanatory prose.
+- Section 5 or section 7 contains more than one Markdown table for the same purpose. Keep one canonical cycle timeline and one canonical three-scenario future-capital-flow table so parsers and raw-Markdown readers see the same report.
+- Section 2 lacks the four-field policy-materiality gate, the answer is not exactly `是` or `否`, or its basis lacks an evidence ID.
+- The policy gate says `是` but has no structured jurisdiction table, policy status/deadline, economic transmission, implementation gap, reversal risk, and evidence; or it says `否` while retaining an empty or `N/A` country table.
 - Observation posts lack a specific source, baseline, direction, and numeric or event threshold — or an indicator cell contains a value instead of an indicator name, or a baseline is stale beyond one release cycle without a 数据滞后 note.
 - Qualification, pilot line, announced capacity, installed capacity, and volume production are conflated.
 
@@ -71,6 +74,7 @@ Structure:
 
 - Is the buyer or budget owner clear?
 - Is actual use separated from policy, restocking, capex, and expectation?
+- Does the policy-materiality gate identify whether policy is a current cycle driver, with a dated status and only materially relevant jurisdictions?
 - Are announced, installed, qualified, yield-ramped, and customer-backed capacities separated?
 - Are yield, qualification, equipment lead time, materials, power, land, logistics, and cancellation/delay signals considered where relevant?
 - Does the report explain demand -> orders -> revenue -> margin -> capex -> qualified capacity -> reversal?
