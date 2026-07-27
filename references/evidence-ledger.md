@@ -32,6 +32,8 @@ Maintain one record for every important claim. Use stable claim IDs such as `E1`
 5. Record a direct source URL rather than a search/taxonomy page whenever possible.
 6. Preserve conflicting rows; do not overwrite or average them.
 7. Count a source toward an evidence lane only when it materially supports that lane.
+8. For a public-channel observation, put the platform, seller, SKU/specification, price definition, timestamp/timezone and availability in the claim or locator, and record promotion, delisting, regional and representativeness limits explicitly.
+9. Do not upgrade a single-channel observation into an industry price or shortage claim unless a separate ledger row supplies cross-channel or upstream corroboration.
 
 ## Minimal JSON shape for deterministic generators
 

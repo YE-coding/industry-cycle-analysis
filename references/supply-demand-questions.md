@@ -18,6 +18,9 @@ Use these questions to turn an industry into a concrete chain of conflicts.
 - Is demand domestic, overseas, or global?
 - Is demand concentrated in a few customers?
 - Is the customer willing to pay higher prices?
+- Is the buyer funding the budget from operating cash flow, balance-sheet cash, debt, equity, or public funding? What observable condition would tighten or cancel that budget?
+- Is the disclosed backlog supported by deposits, binding long-term or take-or-pay terms, ordinary cancellable orders, or only framework intentions?
+- Could customers be placing duplicate or multi-supplier orders to reserve scarce capacity? What shipment, inventory, cancellation, or customer-use data would disprove that?
 - What data confirms demand: shipment, order, capex, utilization, tender, price, or import/export?
 
 ## Supply Questions

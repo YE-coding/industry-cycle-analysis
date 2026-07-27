@@ -15,6 +15,20 @@ Use the highest-quality source available. Treat AI answers and search results as
 - technical white papers, conference presentations, expert interviews and disclosed-assumption broker research
 - specialist databases, patents, qualification records and credible supply-chain surveys
 
+#### Public-channel proxies: narrow Tier 2 observations
+
+- retailer or distributor SKU price and availability pages
+- dated public tender results, delivery estimates, or channel inventory observations
+
+Treat these as Tier 2 evidence only for the exact platform, seller, SKU/specification, price definition, availability state, and timestamp that was opened. They are not Tier 1 evidence and do not become Tier 2 evidence for upstream ASP, industry-wide shortage, or end-use demand without separate corroboration.
+
+To use a channel proxy:
+
+1. Record platform, seller, SKU/specification, list/coupon/transaction price definition, timestamp with timezone, availability, direct URL or durable locator, and limitations.
+2. Compare like with like across dates; a seller change, promotion, clearance, product refresh, or marketplace listing breaks comparability.
+3. Cross-check with another channel or an upstream price, inventory, shipment, utilization, or company disclosure.
+4. Count a qualifying observation as one source in the price/order/inventory lane, never as enough evidence to complete that lane by itself.
+
 ### Tier 3: discovery or narrative clues
 
 - media, social posts, influencer commentary, AI summaries, forums and unsourced chart screenshots
@@ -30,6 +44,7 @@ A result is not evidence by itself when it is only:
 - a Jina rendering whose source identity or date is unverified;
 - a repost or social summary;
 - an AI-generated statement.
+- an undated screenshot or a channel price whose seller, SKU, or price definition is missing.
 
 Promote a claim only after opening an original or authoritative reproduction and recording publisher, publication date, access date, period, geography, unit/definition, locator, actual/forecast status, and limitations.
 

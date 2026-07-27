@@ -8,7 +8,7 @@ Answer `是` only when an enacted, funded, or actively executed policy materiall
 
 - end demand, procurement eligibility, or buyer economics;
 - effective supply, qualification, permitting, or operating constraints;
-- cost, tax, subsidy, tariff, quota, or trade flow;
+- regulated price, reimbursement, profit pool, cost, tax, subsidy, tariff, quota, or trade flow;
 - capital expenditure timing, financing, or localization.
 
 Answer `否` when the current cycle is mainly explained by commercial demand, inventories, technology, weather, commodity economics, or company capital discipline and policy is only background noise. `否` means the policy channel was checked; it does not mean policy never affects the industry.
@@ -33,7 +33,7 @@ Always write the four gate fields:
 
 - 政策是否实质驱动当前周期：是 / 否
 - 判断依据：[一句话 + 证据 ID]
-- 主要作用通道：[需求 / 供给 / 成本 / 贸易流 / 资本开支 / 认证与准入，可多选]
+- 主要作用通道：[需求 / 供给 / 价格与利润 / 成本 / 贸易流 / 资本开支 / 融资与资本准入 / 认证与经营准入，可多选]
 - 政策状态截至：[YYYY-MM-DD HH:mm:ss 时区]
 ```
 

@@ -11,7 +11,19 @@ supply-demand gap != immediate stock rise
 correct industry direction != correct timing
 real shortage != unpriced opportunity
 earnings realization != continued re-rating
+low cyclical PE != cheap without normalizing earnings
 ```
+
+## Cycle-adjust valuation before interpreting it
+
+For a cyclical industry, a low PE can coincide with peak earnings and a high PE can coincide with depressed earnings. Never use a static PE or PE percentile alone to label an industry cheap or expensive.
+
+Every full report records an `估值口径校准` paragraph that:
+
+- states whether current earnings or margins appear above, near, or below a mid-cycle level;
+- cross-checks PE with margin plus at least one of price, inventory, or utilization;
+- explains when PE is not meaningful because earnings are negative, distorted, or not comparable;
+- names the alternative evidence used, such as PB, EV/EBITDA, replacement cost, normalized earnings, or price-versus-order divergence, without turning it into a buy/sell call.
 
 ## Mandatory attempt checklist (before any gap is declared)
 
@@ -19,7 +31,7 @@ Try each row and record the outcome in the section-6 attempts table — "拿到�
 
 | Source type | Where to try (free/public) | What it tells you |
 |---|---|---|
-| 行业指数估值分位 | 中证指数官网（PE/PB 月报）、国证指数官网、指数编制方 factsheet、交易所披露 | 行业整体贵不贵，处于历史什么位置 |
+| 行业指数估值分位 | 中证指数官网（PE/PB 月报）、国证指数官网、指数编制方 factsheet、交易所披露 | 当前估值处于什么历史位置；周期行业必须再做盈利正常化，不能直接解释为贵或便宜 |
 | 行业 ETF 份额与资金流 | 基金公司官网每日份额披露、交易所基金公告、ETF 发行方月报 | 增量资金在进还是在出 |
 | 北向/两融（A股适用） | 港交所披露的北向持股、交易所两融余额统计 | 边际资金的方向和杠杆意愿 |
 | 龙头股价 vs 盈利剪刀差 | 公司 IR 页的股价与已披露 EPS/营收，同日期对齐 | 市场跑在基本面前面还是后面 |
