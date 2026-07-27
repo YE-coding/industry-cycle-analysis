@@ -25,6 +25,11 @@ Do not deliver a full report when any blocker remains:
 - The policy gate says `是` but has no structured jurisdiction table, policy status/deadline, economic transmission, implementation gap, reversal risk, and evidence; or it says `否` while retaining an empty or `N/A` country table.
 - Observation posts lack a specific source, baseline, direction, and numeric or event threshold — or an indicator cell contains a value instead of an indicator name, or a baseline is stale beyond one release cycle without a 数据滞后 note.
 - Qualification, pilot line, announced capacity, installed capacity, and volume production are conflated.
+- Any representative company lacks a stated production-control model, or externally purchased/contracted output is presented as self-owned capacity.
+- The payer's funding source and an observable budget-tightening condition are missing, or a precise funding runway is asserted without evidence.
+- Order support is described without contract type and cancellability, or framework intentions and possible duplicate/multi-supplier orders are treated as firm demand.
+- Section 6 calls a low PE or low valuation percentile “cheap” without calibrating against margins/profit, inventory, price and utilization/open-rate conditions.
+- A public-channel proxy is used without fixing the platform, seller, SKU/specification, price definition, observation time and availability; or one channel is extrapolated to the industry without cross-channel or upstream corroboration.
 
 ## Reader experience (both audiences)
 
@@ -33,6 +38,7 @@ First-time reader — after reading only the main body, could they:
 - Say in one sentence what the industry sells and who pays for it? (Section 0 plain-language intro exists and avoids jargon.)
 - Redraw the chain from the mermaid map, including parallel inputs and the final payer?
 - Name 2-3 representative companies per key node, with listing venue and why they represent it?
+- Explain whether each representative controls production through owned assets, a joint venture, outsourcing, locked contracted volume, or spot-market purchasing?
 - State the current cycle stage and the reasoning behind it?
 - Say what the market has likely priced in and where money might flow next under each scenario?
 - Look up every unfamiliar term in the glossary? (Every jargon term in the body appears there.)
@@ -73,9 +79,11 @@ Structure:
 ## Supply-demand reasoning
 
 - Is the buyer or budget owner clear?
+- Is the payer's funding source identified, and is there an observable condition that would tighten or exhaust that budget?
 - Is actual use separated from policy, restocking, capex, and expectation?
 - Does the policy-materiality gate identify whether policy is a current cycle driver, with a dated status and only materially relevant jurisdictions?
 - Are announced, installed, qualified, yield-ramped, and customer-backed capacities separated?
+- Are order deposits, long-term agreements, take-or-pay terms, framework intentions, cancellation rights and duplicate/multi-supplier ordering distinguished?
 - Are yield, qualification, equipment lead time, materials, power, land, logistics, and cancellation/delay signals considered where relevant?
 - Does the report explain demand -> orders -> revenue -> margin -> capex -> qualified capacity -> reversal?
 
@@ -85,6 +93,7 @@ Structure:
 - Is the next transition conditional on measurable triggers rather than a generic “future 2-6 quarters”?
 - Is there at least one real disconfirming source or a clearly stated contradiction-search gap?
 - Are industrial evidence and market-pricing/narrative evidence kept separate?
+- Is PE or valuation percentile interpreted together with the profit/margin, inventory, price and utilization/open-rate cycle rather than as a stand-alone cheap/expensive signal?
 - Does the report avoid buy/sell calls, target prices, and short-term forecasts?
 
 ## Tracking quality

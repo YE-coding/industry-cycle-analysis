@@ -149,15 +149,32 @@ def node_field(block: str, key: str) -> str:
 
 
 def representative_company_rows(block: str) -> list[list[str]]:
+    rows = representative_company_table(block)
+    return rows[1:] if rows else []
+
+
+def representative_company_table(block: str) -> list[list[str]]:
     marker = re.search(r"^\*\*代表企业\*\*[：:]?\s*$", block, re.MULTILINE)
     if not marker:
-        rows = table_rows(block)
-        return rows[1:] if rows else []
+        return next(
+            (
+                rows
+                for rows in markdown_tables(block)
+                if rows and any("企业" in cell or "机构" in cell for cell in rows[0])
+            ),
+            [],
+        )
     tail = block[marker.end() :]
     next_field = re.search(r"^\*\*(?:怎么赚钱、议价能力|为什么会卡住|进阶视角)\*\*", tail, re.MULTILINE)
     table = tail if not next_field else tail[: next_field.start()]
-    rows = table_rows(table)
-    return rows[1:] if rows else []
+    return next(iter(markdown_tables(table)), [])
+
+
+def row_index(headers: list[str], label: str) -> int:
+    try:
+        return headers.index(label)
+    except ValueError:
+        return -1
 
 
 def parse_timestamp(raw: str) -> datetime | None:
@@ -267,7 +284,14 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
             if len(normalized) != len(set(normalized)):
                 errors.append(f"node '{node_name}' repeats the same content across structured fields")
 
-            companies = representative_company_rows(block)
+            company_table = representative_company_table(block)
+            companies = company_table[1:] if company_table else []
+            company_headers = company_table[0] if company_table else []
+            control_index = row_index(company_headers, "产能/生产控制方式")
+            if control_index < 0:
+                errors.append(
+                    f"node '{node_name}' representative-company table missing 产能/生产控制方式"
+                )
             if len(companies) < 2:
                 errors.append(f"node '{node_name}' has fewer than 2 representative companies/institutions")
             for company in companies:
@@ -278,6 +302,20 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
                     errors.append(f"node '{node_name}' company '{company[0]}' lacks a listing venue or unlisted/institution label")
                 if not re.search(r"\bE\d+\b", " ".join(company)):
                     errors.append(f"node '{node_name}' company '{company[0]}' lacks an evidence ID")
+                if control_index >= 0:
+                    control = company[control_index] if len(company) > control_index else ""
+                    if not normalize_text(control):
+                        errors.append(
+                            f"node '{node_name}' company '{company[0]}' lacks a production-control model"
+                        )
+                    elif not re.search(
+                        r"自有|合资|委外|外包|代工|长协|锁量|市场采购|外采|采购|租赁|特许|运营|控制|权益|非单一|多主体|非生产主体|不适用",
+                        control,
+                        re.IGNORECASE,
+                    ):
+                        errors.append(
+                            f"node '{node_name}' company '{company[0]}' production-control model is not explicit"
+                        )
 
             if not re.search(r"\bE\d+\b", values.get("advanced", "")):
                 errors.append(f"node '{node_name}' advanced view lacks an evidence ID")
@@ -286,6 +324,50 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
         profit_rows = table_rows(profit_block)
         if len(profit_rows) < 5:
             errors.append("power-and-profit map has fewer than 4 data rows")
+        money_table = table_with_headers(profit_block, {"问题", "证据", "缺口"})
+        funding_row = next(
+            (
+                row
+                for row in money_table[1:]
+                if row and row[0].strip("？? ") == "付款方资金来源与预算持续性"
+            ),
+            [],
+        )
+        if not funding_row:
+            errors.append("money-flow table missing 付款方资金来源与预算持续性")
+        else:
+            headers = money_table[0]
+            evidence_index = row_index(headers, "证据")
+            gap_index = row_index(headers, "缺口")
+            answer_index = next(
+                (
+                    index
+                    for index, header in enumerate(headers)
+                    if index not in (0, evidence_index, gap_index)
+                ),
+                1,
+            )
+            answer = funding_row[answer_index] if len(funding_row) > answer_index else ""
+            evidence = funding_row[evidence_index] if 0 <= evidence_index < len(funding_row) else ""
+            gap = funding_row[gap_index] if 0 <= gap_index < len(funding_row) else ""
+            if not re.search(
+                r"经营现金流|自由现金流|存量现金|净现金|债务|股权|财政|预算|融资|拨款",
+                answer,
+                re.IGNORECASE,
+            ):
+                errors.append("payer funding row lacks a concrete funding source")
+            if not re.search(
+                r"收紧|耗尽|下调|削减|推迟|放缓|到期|融资成本|自由现金流|杠杆|取消|暂停|违约|缺口|未披露",
+                f"{answer} {gap}",
+                re.IGNORECASE,
+            ):
+                errors.append("payer funding row lacks an observable tightening condition")
+            if not re.search(r"\bE\d+\b", evidence) and len(normalize_text(gap)) < 8:
+                errors.append("payer funding row needs evidence or a precise public-data gap")
+            if re.search(r"(?:还能?|可以|可)\s*烧\s*\d+(?:\.\d+)?\s*(?:年|个月)", answer) and not re.search(
+                r"\bE\d+\b", evidence
+            ):
+                errors.append("payer funding runway is falsely precise without evidence")
 
     # --- Section 4: interpretation cells must carry content ---
     demand = section(text, "## 2. 需求")
@@ -340,6 +422,59 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
             if answer and answer.group(1) == "否" and policy_rows:
                 errors.append("policy-materiality answer 否 must not retain a jurisdiction table")
 
+            allowed_channels = (
+                "需求",
+                "供给",
+                "价格与利润",
+                "成本",
+                "贸易流",
+                "资本开支",
+                "融资与资本准入",
+                "认证与经营准入",
+            )
+            if channel and not any(item in channel.group(1) for item in allowed_channels):
+                errors.append("policy-materiality gate uses an unsupported transmission channel")
+
+    # --- Section 3: effective supply and order quality ---
+    supply = section(text, "## 3. 供给")
+    if mode == "full":
+        supply_rows = next(
+            (
+                rows
+                for rows in markdown_tables(supply)
+                if rows
+                and "订单支撑、性质与可撤销性" in rows[0]
+                and any("公告" in cell or "计划" in cell for cell in rows[0])
+                and any(
+                    "验证" in cell or "认证" in cell or "量产" in cell
+                    for cell in rows[0]
+                )
+            ),
+            [],
+        )
+        if len(supply_rows) < 2:
+            errors.append("section 3 missing supply table with 订单支撑、性质与可撤销性")
+        else:
+            headers = supply_rows[0]
+            order_index = headers.index("订单支撑、性质与可撤销性")
+            for row in supply_rows[1:]:
+                order_quality = row[order_index] if len(row) > order_index else ""
+                if len(normalize_text(order_quality)) < 8:
+                    errors.append("supply row has an empty or thin order-quality field")
+                    continue
+                if not re.search(
+                    r"预付款|长协|take-or-pay|不可撤销|可撤销|取消|框架|意向|条款|未披露|订单|招标|采购|承诺|缺口|销售|交付",
+                    order_quality,
+                    re.IGNORECASE,
+                ):
+                    errors.append("supply row does not identify order nature or cancellability")
+                if re.search(r"框架意向", order_quality) and re.search(
+                    r"确定|硬订单|不可撤销|锁定", order_quality
+                ) and not re.search(r"不能|不代表|非|未|无法|缺口", order_quality):
+                    errors.append("framework intention is treated as a firm order")
+        if not re.search(r"重复下单|多头下单", supply):
+            errors.append("section 3 missing duplicate or multi-supplier ordering risk")
+
     # --- Section 4: interpretation cells must carry content ---
     signals = section(text, "## 4. 供需矛盾与高频信号")
     if mode == "full" and signals:
@@ -348,10 +483,54 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
             errors.append("supply-demand signal table has fewer than 5 data rows")
         for row in signal_rows:
             for cell in row:
-                if cell in EMPTY_INTERPRETATION_CELLS:
+                if cell in EMPTY_INTERPRETATION_CELLS and "平台/渠道" not in row:
                     errors.append(
                         f"signal interpretation cell is contentless boilerplate: '{cell}'"
                     )
+
+        if re.search(r"###\s*4\.1\s+公开渠道代理|平台/渠道\s*\|\s*SKU/规格", signals):
+            channel_required = {
+                "平台/渠道",
+                "SKU/规格",
+                "卖家/主体",
+                "价格口径",
+                "观察时间",
+                "可得性",
+                "对比基线",
+                "证据",
+                "局限",
+                "交叉验证",
+            }
+            channel_rows = table_with_headers(signals, channel_required)
+            if len(channel_rows) < 2:
+                errors.append("public-channel proxy is missing its required structured table")
+            else:
+                headers = channel_rows[0]
+                indexes = {header: headers.index(header) for header in channel_required}
+                for row in channel_rows[1:]:
+                    if any(
+                        len(row) <= index or not normalize_text(row[index])
+                        for index in indexes.values()
+                    ):
+                        errors.append("public-channel proxy row has an empty required field")
+                        continue
+                    if not re.search(
+                        r"挂牌价|券后价|成交价|含税价|未税价",
+                        row[indexes["价格口径"]],
+                    ):
+                        errors.append("public-channel proxy lacks an explicit price definition")
+                    if not re.search(
+                        r"\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}(?::\d{2})?.*(?:[+-]\d{2}:?\d{2}|UTC|GMT)",
+                        row[indexes["观察时间"]],
+                        re.IGNORECASE,
+                    ):
+                        errors.append("public-channel proxy timestamp lacks date, HH:mm and timezone")
+                    if not re.search(r"\bE\d+\b", row[indexes["证据"]]):
+                        errors.append("public-channel proxy row lacks an evidence ID")
+                    if not re.search(r"\bE\d+\b", row[indexes["交叉验证"]]):
+                        errors.append("public-channel proxy lacks cross-channel or upstream evidence")
+            if not re.search(r"单一渠道.{0,12}(?:不能|不可).{0,12}(?:行业|全市场)", signals):
+                errors.append("public-channel proxy lacks the single-channel inference limitation")
 
     # --- Section 5: prior-cycle comparison and falsification ---
     cycle = section(text, "## 5. 周期位置与传导")
@@ -428,6 +607,30 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
             for row in attempt_rows
         ) and len(proxy_rows) < 3:
             errors.append("all capital-market attempts are gaps; market lane cannot be complete")
+
+        calibration = re.search(
+            r"(?:^###\s*\d+(?:\.\d+)*\s*)?估值口径校准[：:]?\s*([\s\S]*?)(?=^###\s+|^##\s+|\Z)",
+            capital,
+            re.MULTILINE,
+        )
+        if not calibration or len(normalize_text(calibration.group(1))) < 30:
+            errors.append("section 6 missing substantive 估值口径校准")
+        else:
+            calibration_text = calibration.group(1)
+            if not re.search(r"PE|市盈率|估值", calibration_text, re.IGNORECASE):
+                errors.append("valuation calibration does not identify the valuation metric")
+            if not re.search(r"利润|盈利|毛利率|净利率", calibration_text):
+                errors.append("valuation calibration is not tied to the profit cycle")
+            if not re.search(r"价格|库存|利用率|开工率|产能", calibration_text):
+                errors.append("valuation calibration is not tied to an operating-cycle metric")
+            if not re.search(r"\bE\d+\b|不适用|亏损|口径不可比|数据缺口|无公开", calibration_text):
+                errors.append("valuation calibration lacks evidence or an explicit applicability gap")
+        if re.search(
+            r"(?:低\s*PE|低市盈率|PE\s*低).{0,10}(?:等于|就是|意味着|说明).{0,8}(?:便宜|低估)",
+            capital,
+            re.IGNORECASE,
+        ):
+            errors.append("low PE is treated as direct proof of cheap valuation")
 
     # --- Section 7: future capital flow scenarios ---
     future = section(text, "## 7. 未来资金可能流向")

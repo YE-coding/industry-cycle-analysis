@@ -29,10 +29,10 @@ def valid_report(timestamp: datetime | None = None) -> str:
 
 **代表企业**：
 
-| 企业/机构 | 上市地/代码或属性 | 角色 | 代表性依据 | 证据 |
-|---|---|---|---|---|
-| 节点{index}甲公司 | 上交所 / 60000{index} | 主要供应商 | 已披露产品收入和客户结构 | E{index} |
-| 节点{index}乙机构 | 未上市/机构 | 行业运营者 | 发布持续运营及招标数据 | E{index + 4} |
+| 企业/机构 | 上市地/代码或属性 | 角色 | 产能/生产控制方式 | 代表性依据 | 证据 |
+|---|---|---|---|---|---|
+| 节点{index}甲公司 | 上交所 / 60000{index} | 主要供应商 | 自有工厂并控制认证产线 | 已披露产品收入和客户结构 | E{index} |
+| 节点{index}乙机构 | 未上市/机构 | 行业运营者 | 委外生产并以长协锁定合格产能 | 发布持续运营及招标数据 | E{index + 4} |
 
 **怎么赚钱、议价能力**：节点{index}依靠合格产能利用率、良率和服务附加值取得毛利；只有认证稀缺时才有提价能力。
 
@@ -87,12 +87,12 @@ flowchart LR
 
 ### 1.3 权力与利润传导
 
-| 环节 | 谁最终付款 | 利润来源 | 当前约束 |
+| 问题 | 回答（必须点名具体环节和企业，禁止通用套话） | 证据 | 缺口 |
 |---|---|---|---|
-| 矿物提纯 | 部件厂 | 提纯费与收率 | 环保许可 |
-| 核心部件 | 集成商 | 良率与认证溢价 | 专用设备 |
-| 整机集成 | 运营商 | 系统毛利 | 验收周期 |
-| 终端运营 | 使用客户 | 运行服务费 | 上电进度 |
+| 谁最终付款？ | 使用客户向终端运营者付款，运营者再覆盖集成、部件和提纯采购。 | E2 | 细分合同未完全披露。 |
+| 付款方资金来源与预算持续性 | 终端运营者以经营现金流、存量现金和债务融资支付；若自由现金流转负、融资成本上升或资本开支指引下调，预算即出现可观测收紧。 | E2、E5 | 未披露按产品拆分的已承诺预算。 |
+| 利润当前集中在哪个环节，为什么？ | 认证产能稀缺时利润集中于核心部件，交付正常化后向集成与运营移动。 | E3、E5 | 分部利润口径不可完全比较。 |
+| 谁承担资本开支和库存风险？ | 核心部件公司承担扩产和良率风险，集成商承担库存及验收回款风险。 | E3、E6 | 供应链融资条款未公开。 |
 
 ## 2. 需求
 
@@ -110,6 +110,11 @@ flowchart LR
 ## 3. 供给
 
 供给必须区分公告、开工、安装、认证与稳定良率，只有最后两项才能形成短期有效产能（E1、E3）。
+
+| 供给动作 | 公告或计划 | 已安装/已投产 | 已通过量产与客户认证 | 订单支撑、性质与可撤销性 | 当前有效性 |
+|---|---|---|---|---|---|
+| 核心部件扩产 | 计划增加 30 单位 | 已安装 12 单位 | 8 单位完成客户认证 | 已有采购订单，但预付款、长协及取消条款未披露；存在多头下单风险（E3） | 仅认证部分计入有效供给 |
+| 集成产线升级 | 计划改造两条线 | 一条已投产 | 已通过首批验收 | 框架意向不代表不可撤销硬订单，重复下单比例仍是公开缺口（E4） | 只能计入已验收部分 |
 
 **进阶视角**：新增厂房只改变远期供给上限，认证和良率爬坡决定当期交付；设备到位而人员不足仍会造成供给延迟（E1、E3）。
 
@@ -153,6 +158,10 @@ flowchart LR
 
 - 市场当前大概率**已定价**：订单增长与当前利润改善。
 - 市场当前大概率**未定价**：新线认证良率与取消风险。
+
+### 6.3 估值口径校准
+
+不能用静态低 PE 直接判断便宜：利润高点会机械压低市盈率，利润低点会抬高或使其失真。估值必须与毛利率和利润所处位置、产品价格、库存及产能利用率一起核验；当前缺少同口径历史分位，因此只保留口径不可比的数据缺口（E3、E5）。
 
 ## 7. 未来资金可能流向
 
@@ -286,10 +295,119 @@ class ValidateReportTests(unittest.TestCase):
 
     def test_company_coverage_is_rejected(self) -> None:
         report = valid_report().replace(
-            "| 节点4乙机构 | 未上市/机构 | 行业运营者 | 发布持续运营及招标数据 | E8 |\n",
+            "| 节点4乙机构 | 未上市/机构 | 行业运营者 | 委外生产并以长协锁定合格产能 | 发布持续运营及招标数据 | E8 |\n",
             "",
         )
         self.assert_has_error(report, "fewer than 2 representative companies")
+
+    def test_production_control_column_is_required(self) -> None:
+        report = valid_report().replace(" | 产能/生产控制方式", "", 1).replace(
+            " | 自有工厂并控制认证产线", "", 1
+        ).replace(" | 委外生产并以长协锁定合格产能", "", 1)
+        self.assert_has_error(report, "missing 产能/生产控制方式")
+
+    def test_empty_production_control_is_rejected(self) -> None:
+        report = valid_report().replace(
+            "| 节点2甲公司 | 上交所 / 600002 | 主要供应商 | 自有工厂并控制认证产线 |",
+            "| 节点2甲公司 | 上交所 / 600002 | 主要供应商 |  |",
+        )
+        self.assert_has_error(report, "lacks a production-control model")
+
+    def test_payer_funding_row_is_required(self) -> None:
+        report = valid_report().replace(
+            "| 付款方资金来源与预算持续性 | 终端运营者以经营现金流、存量现金和债务融资支付；若自由现金流转负、融资成本上升或资本开支指引下调，预算即出现可观测收紧。 | E2、E5 | 未披露按产品拆分的已承诺预算。 |\n",
+            "",
+        )
+        self.assert_has_error(report, "missing 付款方资金来源与预算持续性")
+
+    def test_payer_funding_needs_tightening_condition(self) -> None:
+        report = valid_report().replace(
+            "；若自由现金流转负、融资成本上升或资本开支指引下调，预算即出现可观测收紧",
+            "",
+        ).replace("未披露按产品拆分的已承诺预算", "产品资金来源已经披露")
+        self.assert_has_error(report, "lacks an observable tightening condition")
+
+    def test_precise_funding_runway_without_evidence_is_rejected(self) -> None:
+        report = valid_report().replace(
+            "终端运营者以经营现金流、存量现金和债务融资支付；",
+            "终端运营者以经营现金流、存量现金和债务融资支付，可以烧 3 年；",
+        ).replace("| E2、E5 | 未披露按产品拆分的已承诺预算。 |", "|  | 未披露按产品拆分的已承诺预算。 |", 1)
+        self.assert_has_error(report, "falsely precise")
+
+    def test_order_quality_column_is_required(self) -> None:
+        report = valid_report().replace("订单支撑、性质与可撤销性", "客户订单支撑")
+        self.assert_has_error(report, "missing supply table")
+
+    def test_framework_intention_cannot_be_firm_order(self) -> None:
+        report = valid_report().replace(
+            "框架意向不代表不可撤销硬订单，重复下单比例仍是公开缺口",
+            "框架意向已经确定为不可撤销硬订单，重复下单比例为零",
+        )
+        self.assert_has_error(report, "framework intention is treated as a firm order")
+
+    def test_duplicate_ordering_risk_is_required(self) -> None:
+        report = valid_report().replace("多头下单", "客户采购").replace("重复下单", "客户采购")
+        self.assert_has_error(report, "missing duplicate or multi-supplier ordering risk")
+
+    def test_incomplete_public_channel_proxy_is_rejected(self) -> None:
+        block = """
+### 4.1 公开渠道代理
+
+| 平台/渠道 | SKU/规格 | 卖家/主体 | 价格口径 | 观察时间 | 可得性 | 对比基线 | 证据 | 局限 | 交叉验证 |
+|---|---|---|---|---|---|---|---|---|---|
+| 示例商城 | 64GB | 自营 | 79.9 元 | 2026-07-27 | 有货 | 2026-06 为 39.9 元 | E8 | 单一商品 | 无 |
+"""
+        report = valid_report().replace("## 5. 周期位置与传导", f"{block}\n## 5. 周期位置与传导")
+        self.assert_has_error(report, "explicit price definition")
+        self.assert_has_error(report, "timestamp lacks")
+        self.assert_has_error(report, "lacks cross-channel")
+        self.assert_has_error(report, "single-channel inference limitation")
+
+    def test_valid_public_channel_proxy_passes(self) -> None:
+        block = """
+### 4.1 公开渠道代理
+
+| 平台/渠道 | SKU/规格 | 卖家/主体 | 价格口径 | 观察时间 | 可得性 | 对比基线 | 证据 | 局限 | 交叉验证 |
+|---|---|---|---|---|---|---|---|---|---|
+| 示例商城 | 同代 64GB 型号 | 平台自营 | 含税挂牌价 79.9 元 | 2026-07-27 14:30 +08:00 | 有货 | 2026-06-27 同口径 39.9 元 | E8 | 促销与区域可得性会影响挂牌价；单一 SKU 不代表全市场 | 第二平台同规格及上游报价交叉验证（E6、E8） |
+
+单一渠道不能外推行业或全市场短缺，只能证明该时点的渠道现象。
+"""
+        errors, warnings = validate(
+            valid_report().replace("## 5. 周期位置与传导", f"{block}\n## 5. 周期位置与传导"),
+            "full",
+            True,
+        )
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
+
+    def test_low_pe_directly_equal_to_cheap_is_rejected(self) -> None:
+        report = valid_report().replace(
+            "不能用静态低 PE 直接判断便宜",
+            "低 PE 就是便宜",
+        )
+        self.assert_has_error(report, "direct proof of cheap valuation")
+
+    def test_valuation_calibration_is_required(self) -> None:
+        report = valid_report().replace("### 6.3 估值口径校准", "### 6.3 常规比较")
+        self.assert_has_error(report, "missing substantive 估值口径校准")
+
+    def test_explicit_not_applicable_and_public_gap_can_pass(self) -> None:
+        report = valid_report().replace(
+            "委外生产并以长协锁定合格产能",
+            "非生产主体；生产控制方式不适用，仅提供行业运营数据",
+            1,
+        ).replace(
+            "| E2、E5 | 未披露按产品拆分的已承诺预算。 |",
+            "|  | 公开数据缺口：未披露按产品拆分的已承诺预算及融资到期结构。 |",
+            1,
+        ).replace(
+            "框架意向不代表不可撤销硬订单，重复下单比例仍是公开缺口（E4）",
+            "公开数据缺口：合同条款未披露，无法判断可撤销性；重复下单比例亦未披露（E4）",
+        )
+        errors, warnings = validate(report, "full", True)
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
 
     def test_all_gap_capital_market_evidence_is_rejected(self) -> None:
         report = valid_report().replace(

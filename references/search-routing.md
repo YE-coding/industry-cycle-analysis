@@ -13,6 +13,7 @@ Use this reference before collecting web evidence.
 | Dynamic, login-gated, or anti-bot original page | `web-access` after static official page, PDF, or API routes are insufficient | Evidence only after original identity, date, metric, and locator verification |
 | GitHub, Twitter/X, LinkedIn, YouTube, Bilibili, RSS, forums | Agent-Reach and its active backend | Leads, direct first-party statements, or expectation mapping |
 | Company, regulator, government, association | Official site, filing, API, or original PDF | Preferred Tier 1 evidence |
+| Public retail or distribution channel | Fixed platform, seller, SKU/specification and timestamped observation | Tier 2 channel observation only; industry inference requires cross-channel or upstream corroboration |
 
 Use an available hosted web search/open capability when appropriate, but never depend on one named tool. Continue with SearXNG, Exa, direct page reading, or Agent-Reach according to the task.
 
@@ -103,6 +104,20 @@ Include period, geography, unit, and definition:
 ```
 
 Search in Chinese and English when the supply chain is global.
+
+## Public-Channel Proxy Verification
+
+Use public-channel observations only when they can answer a concrete question that filings or industry statistics cannot answer at the same cadence.
+
+1. Fix the platform or channel.
+2. Fix the seller or quoting entity.
+3. Fix the same SKU and specification; do not compare different generations, capacities, packages, or service terms.
+4. Record whether the price is a list price, coupon price, observed transaction price, or other stated definition.
+5. Record the observation timestamp with timezone and the availability state.
+6. Check promotions, clearance, seller changes, product refreshes, delisting, and regional delivery restrictions.
+7. Obtain a second channel or upstream source before inferring an industry-wide price move or shortage.
+
+A single SKU being repriced, out of stock, or delisted proves only that channel event at that time. It does not by itself prove industry shortage, broad price inflation, or upstream capacity tightness.
 
 ## Verification Gates
 
