@@ -122,8 +122,9 @@ Declaring the capital-market lane a gap without trying is not allowed. Before wr
 
 1. Load `references/capital-market-mapping.md` and actually attempt the free-source checklist there (index valuation percentile, sector ETF flows/shares, northbound/margin balances where applicable, leader price-vs-earnings divergence). Record every attempt and its outcome in the section-6 attempts table — including failures.
 2. Whether or not quantitative data was obtained, section 6 must contain the qualitative paragraph: what the market has probably already priced, what it probably has not, and on what indirect evidence — clearly labeled as inference, never as measured fact.
-3. Section 7 (未来资金可能流向) is mandatory: for each of the three scenarios in section 8's logic, state which chain node the profit pool would shift toward, which benefits first/later, derived from order lead times, qualification barriers, and capacity elasticity — never from price charts. Keep the no-buy/sell-advice disclaimer visible.
-4. Only after steps 1-2 are recorded may the lane be marked gap, and the conclusion stays provisional.
+3. When dated market prices and comparable earnings or cash-flow inputs are available, run the `隐含预期反推` in `references/capital-market-mapping.md`: infer the earnings, cash-flow, margin, utilization, or return-on-capital hurdle embedded in the current price, then compare that hurdle with industry evidence. Treat “price unchanged -> lower future PE” only as a sensitivity calculation, not proof of undervaluation. If the required inputs are unavailable, record the precise gap instead of inventing a hurdle.
+4. Section 7 (未来资金可能流向) is mandatory: for each of the three scenarios in section 8's logic, state which chain node the profit pool would shift toward, which benefits first/later, derived from order lead times, qualification barriers, and capacity elasticity — never from price charts. Keep the no-buy/sell-advice disclaimer visible.
+5. Only after steps 1-3 are recorded may the lane be marked gap, and the conclusion stays provisional.
 
 ### Use a layered proxy basket, not an impossible one-instrument test
 
@@ -168,7 +169,7 @@ materials/equipment -> packaging/foundry capacity (parallel inputs)
 8. Locate the bottleneck or surplus and explain the transmission lag from demand to orders, revenue, margin, capex, qualified capacity, and reversal.
 9. Preserve conflicting evidence and unresolved definitions instead of averaging them away.
 10. Judge the cycle stage only after applying the evidence-readiness gate.
-11. Map industrial reality to the market expectation stage without giving a buy/sell call. For cyclical industries, never interpret a PE percentile without calibrating current earnings, margin, price, inventory, and utilization against the cycle.
+11. Map industrial reality to the market expectation stage without giving a buy/sell call. For cyclical industries, never interpret a PE percentile without calibrating current earnings, margin, price, inventory, and utilization against the cycle. When usable inputs exist, reverse-engineer the operating hurdle implied by the current price using a disclosed required return and terminal/exit assumption; compare the hurdle with demand funding, order quality, effective supply, margins, reinvestment, dilution, and the mid-cycle baseline. Do not turn the result into a target price.
 12. Produce 3-5 falsifiable watchpoints with an actual source, baseline, frequency, direction, and numeric or event threshold.
 13. When public data permits, preserve at least one real comparable time series: the same indicator, definition, unit, geography, and reporting entity across two or more dates. Never combine revenue, margin, inventory, forecasts, or different companies into a synthetic line. If no such series is available, write the precise evidence gap and the source to monitor next.
 14. Keep the stage judgment separate from its epistemic status. Record `阶段判断`, `结论状态`, `置信度`, `证据截至时间`, `上调条件`, and `下调条件` as independent fields. A stage may be “扩张” while the conclusion remains “暂定”; the interface must never make these look like one label.
@@ -180,7 +181,7 @@ For full research:
 
 1. Use `references/report-template.md` and preserve the exact header labels `分析日期`, `地理范围`, `数据时效`, and `行业边界`. Follow its section order: reader-facing body (0-10) first, audit appendices (A/B/C) last.
 2. Separate facts, inferences, assumptions, and gaps.
-3. Include the mermaid chain map with parallel inputs, at least four fully structured node explanations, representative-company tables with production-control models and two or more rows per node, the funding-durability row, order-quality and cancellation evidence or a precise gap, the policy-materiality gate, capital-flow attempts table, cycle-adjusted valuation calibration, layered market-proxy evidence, qualitative pricing paragraph, complete future-capital-flow scenarios, mainstream-vs-report contrast, watchpoints, the glossary, and either a comparable time-series table or an explicit time-series evidence gap.
+3. Include the mermaid chain map with parallel inputs, at least four fully structured node explanations, representative-company tables with production-control models and two or more rows per node, the funding-durability row, order-quality and cancellation evidence or a precise gap, the policy-materiality gate, capital-flow attempts table, cycle-adjusted valuation calibration, an implied-expectation reverse test when usable inputs exist (otherwise a precise gap), layered market-proxy evidence, qualitative pricing paragraph, complete future-capital-flow scenarios, mainstream-vs-report contrast, watchpoints, the glossary, and either a comparable time-series table or an explicit time-series evidence gap.
 4. Do not use placeholders such as `官方/协会/公司`, `待按产品核验`, `市场可能交易`, `见数据时效表`, or a generic “连续两期改善”. Also banned as filler: `钱和订单从…的需求向前传`, `负责把上游投入转成…可采购、可验证的产品或服务`, `核心产品需求`, `新增场景`, `直接观测`/`交叉验证` as an entire interpretation cell, `最新已披露期` as a period, and reusing one identical Limitation sentence across every ledger row.
 5. Run:
 
@@ -207,6 +208,7 @@ Keep these warnings visible in full reports:
 supply-demand gap != stock-price rise
 correct direction != correct timing
 earnings realization != continued stock rise
+price unchanged -> lower future PE != undervaluation
 AI answer != fact
 stale data != current fact
 ```

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import sys
 import tempfile
 import unittest
@@ -162,6 +163,12 @@ flowchart LR
 ### 6.3 估值口径校准
 
 不能用静态低 PE 直接判断便宜：利润高点会机械压低市盈率，利润低点会抬高或使其失真。估值必须与毛利率和利润所处位置、产品价格、库存及产能利用率一起核验；当前缺少同口径历史分位，因此只保留口径不可比的数据缺口（E3、E5）。
+
+### 6.4 隐含预期反推
+
+| 反推方法 | 已知输入 | 关键假设 | 反推出的门槛 | 产业证据对照 | 证据与局限 |
+|---|---|---|---|---|---|
+| PE桥接 | 2026-07-17 价格100元；2026Q1正常化每股收益EPS 2元 | 5年期限、必要回报率10%、中周期退出倍数20倍 | 第5年EPS需达到8.05元，复合增速约32.1% | 证据不足：订单和有效供给尚不能支持连续五年该增速 | E3、E5、E7；情景推算，不输出目标价 |
 
 ## 7. 未来资金可能流向
 
@@ -391,6 +398,40 @@ class ValidateReportTests(unittest.TestCase):
     def test_valuation_calibration_is_required(self) -> None:
         report = valid_report().replace("### 6.3 估值口径校准", "### 6.3 常规比较")
         self.assert_has_error(report, "missing substantive 估值口径校准")
+
+    def test_implied_expectation_reverse_test_checks_assumptions(self) -> None:
+        report = valid_report().replace(
+            "5年期限、必要回报率10%、中周期退出倍数20倍",
+            "5年期限",
+        )
+        self.assert_has_error(report, "hides the discount or terminal assumption")
+
+    def test_implied_expectation_reverse_test_rejects_target_price(self) -> None:
+        report = valid_report().replace(
+            "E3、E5、E7；情景推算，不输出目标价",
+            "E3、E5、E7；情景推算，合理目标价500元",
+        )
+        self.assert_has_error(report, "outputs a target price")
+
+    def test_implied_expectation_explicit_gap_can_pass(self) -> None:
+        report = re.sub(
+            r"### 6\.4 隐含预期反推[\s\S]*?(?=## 7\. 未来资金可能流向)",
+            "### 6.4 隐含预期反推\n\n公开数据缺口：未取得同日期价格、正常化每股收益与股本数据；已尝试交易所和公司IR，下一步监测季度报告。\n\n",
+            valid_report(),
+        )
+        errors, warnings = validate(report, "full", True)
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
+
+    def test_legacy_report_without_reverse_test_still_passes(self) -> None:
+        report = re.sub(
+            r"### 6\.4 隐含预期反推[\s\S]*?(?=## 7\. 未来资金可能流向)",
+            "",
+            valid_report(),
+        )
+        errors, warnings = validate(report, "full", True)
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
 
     def test_explicit_not_applicable_and_public_gap_can_pass(self) -> None:
         report = valid_report().replace(

@@ -12,6 +12,7 @@ correct industry direction != correct timing
 real shortage != unpriced opportunity
 earnings realization != continued re-rating
 low cyclical PE != cheap without normalizing earnings
+price unchanged -> lower future PE != undervaluation
 ```
 
 ## Cycle-adjust valuation before interpreting it
@@ -24,6 +25,32 @@ Every full report records an `估值口径校准` paragraph that:
 - cross-checks PE with margin plus at least one of price, inventory, or utilization;
 - explains when PE is not meaningful because earnings are negative, distorted, or not comparable;
 - names the alternative evidence used, such as PB, EV/EBITDA, replacement cost, normalized earnings, or price-versus-order divergence, without turning it into a buy/sell call.
+
+## Reverse the expectations embedded in price
+
+Use `隐含预期反推` only after obtaining a dated market price and a comparable, source-backed earnings or cash-flow base. Its purpose is to ask “what operating path must become true for the current price to be internally consistent?”, not to predict a future stock price.
+
+Choose the method that matches the available evidence:
+
+- **Simplified PE bridge**: useful as a transparent sensitivity screen. With current price `P0`, required equity return `k`, horizon `n`, and a mid-cycle exit multiple `Mn`, calculate `required EPSn = P0 × (1+k)^n / Mn`, then `required EPS CAGR = (required EPSn / EPS0)^(1/n) - 1`. Disclose that this simplification omits interim distributions unless they are modeled separately.
+- **Reverse DCF**: preferred when free cash flow, reinvestment and capital structure can be modeled. Solve for the growth, margin, utilization, ROIC or reinvestment path that equates the present value of cash flows and terminal value to the current enterprise or equity value. Keep cash flow and discount-rate definitions consistent.
+- **Price-unchanged sensitivity**: `future PE = current price / future EPS` is arithmetic only. It does not discount time, price risk, dilution or the probability that the earnings path occurs, so it cannot establish cheapness by itself.
+
+Rules:
+
+1. Date-align price, shares, net debt and the earnings/cash-flow base; state whether the base is actual, guidance, consensus or an analyst scenario.
+2. Normalize cyclical peak/trough earnings and show the mid-cycle basis. Never extrapolate a rebound quarter or one-off gain as a durable base.
+3. Disclose the required return, horizon, exit multiple or terminal-growth assumption. Use a range or scenarios when the assumption is material rather than hiding it in one point estimate.
+4. Reconcile dilution, buybacks, leverage, capital expenditure, working capital and cash conversion. EPS growth unsupported by cash flow is not enough.
+5. Translate the inferred financial hurdle back into observable industrial conditions: buyer funding, binding order quality, volume, price, margin, utilization, qualification, effective capacity and competitive response.
+6. Label the result as `情景推算` or `推论`, then judge the hurdle as `产业证据支持 / 要求偏高 / 证据不足`. Do not output a target price, a buy/sell call or “大概率涨到” language.
+7. If comparable inputs are unavailable, write the exact evidence gap and keep the market-pricing conclusion provisional; do not leave an empty table.
+
+Use this table:
+
+| 反推方法 | 已知输入 | 关键假设 | 反推出的门槛 | 产业证据对照 | 证据与局限 |
+|---|---|---|---|---|---|
+| PE桥接 / 反向DCF / 其他 | 价格日期、业绩或现金流期间、股本/净债务 | 期限、必要回报率、退出倍数或终值增长 | EPS/FCF/利润率/利用率/ROIC 所需路径 | 支持 / 要求偏高 / 证据不足，并说明对应产业条件 | 证据ID；情景推算的口径与缺口 |
 
 ## Mandatory attempt checklist (before any gap is declared)
 

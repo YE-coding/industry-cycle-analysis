@@ -29,6 +29,7 @@ Do not deliver a full report when any blocker remains:
 - The payer's funding source and an observable budget-tightening condition are missing, or a precise funding runway is asserted without evidence.
 - Order support is described without contract type and cancellability, or framework intentions and possible duplicate/multi-supplier orders are treated as firm demand.
 - Section 6 calls a low PE or low valuation percentile “cheap” without calibrating against margins/profit, inventory, price and utilization/open-rate conditions.
+- An implied-expectation reverse test omits the price date, comparable earnings/cash-flow base, required return or terminal/exit assumption; treats a price-unchanged future PE as proof of undervaluation; or turns the calculation into a target price.
 - A public-channel proxy is used without fixing the platform, seller, SKU/specification, price definition, observation time and availability; or one channel is extrapolated to the industry without cross-channel or upstream corroboration.
 
 ## Reader experience (both audiences)
@@ -94,6 +95,7 @@ Structure:
 - Is there at least one real disconfirming source or a clearly stated contradiction-search gap?
 - Are industrial evidence and market-pricing/narrative evidence kept separate?
 - Is PE or valuation percentile interpreted together with the profit/margin, inventory, price and utilization/open-rate cycle rather than as a stand-alone cheap/expensive signal?
+- When dated price and comparable fundamentals exist, does the report reverse the operating hurdle implied by price, disclose required-return and terminal/exit assumptions, and compare the hurdle with demand funding, order quality, effective supply, cash conversion and mid-cycle earnings? If inputs do not exist, is the exact gap recorded?
 - Does the report avoid buy/sell calls, target prices, and short-term forecasts?
 
 ## Tracking quality

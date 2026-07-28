@@ -632,6 +632,55 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
         ):
             errors.append("low PE is treated as direct proof of cheap valuation")
 
+        implied = re.search(
+            r"^###\s*\d+(?:\.\d+)*\s*隐含预期反推\s*([\s\S]*?)(?=^###\s+|^##\s+|\Z)",
+            capital,
+            re.MULTILINE,
+        )
+        if implied:
+            implied_text = implied.group(1)
+            if "公开数据缺口" in implied_text:
+                if len(normalize_text(implied_text)) < 30:
+                    errors.append("implied-expectation gap is not specific enough")
+            else:
+                implied_required = {"反推方法", "已知输入", "关键假设", "反推出的门槛", "产业证据对照", "证据与局限"}
+                implied_rows = table_with_headers(implied_text, implied_required)
+                if len(implied_rows) < 2:
+                    errors.append("implied-expectation reverse test lacks a complete row")
+                else:
+                    headers = implied_rows[0]
+                    for row in implied_rows[1:]:
+                        values = {
+                            header: row[headers.index(header)] if len(row) > headers.index(header) else ""
+                            for header in implied_required
+                        }
+                        if not re.search(r"价格|市值|企业价值", values["已知输入"]):
+                            errors.append("implied-expectation reverse test lacks a dated market-value input")
+                        if not re.search(r"EPS|每股收益|利润|盈利|现金流|FCF|EBITDA|ROIC", values["已知输入"], re.IGNORECASE):
+                            errors.append("implied-expectation reverse test lacks a comparable fundamental base")
+                        if not re.search(r"必要回报率|折现率|资本成本|WACC|退出倍数|终值|terminal", values["关键假设"], re.IGNORECASE):
+                            errors.append("implied-expectation reverse test hides the discount or terminal assumption")
+                        if not re.search(r"EPS|每股收益|FCF|现金流|CAGR|增速|利润率|利用率|ROIC|路径", values["反推出的门槛"], re.IGNORECASE):
+                            errors.append("implied-expectation reverse test does not state an operating hurdle")
+                        if not re.search(r"产业证据支持|要求偏高|证据不足", values["产业证据对照"]):
+                            errors.append("implied-expectation reverse test lacks an industry-evidence verdict")
+                        if not re.search(r"\bE\d+\b|https?://", values["证据与局限"]):
+                            errors.append("implied-expectation reverse test lacks evidence")
+                        if not re.search(r"情景|推论|假设|局限|缺口", values["证据与局限"]):
+                            errors.append("implied-expectation reverse test is not labeled as a scenario or inference")
+
+            for line in implied_text.splitlines():
+                target_call = re.search(r"目标价|合理股价|股价.{0,8}(?:涨到|达到)", line)
+                target_context = line[max(0, target_call.start() - 8) : target_call.start()] if target_call else ""
+                if target_call and not re.search(r"不构成|不得|不能|不输出|禁止|不是", target_context):
+                    errors.append("implied-expectation reverse test outputs a target price")
+                    break
+            if re.search(
+                r"(?:股价|价格)不变.{0,30}(?:低估|便宜|低位)",
+                implied_text,
+            ):
+                errors.append("price-unchanged future PE is treated as proof of undervaluation")
+
     # --- Section 7: future capital flow scenarios ---
     future = section(text, "## 7. 未来资金可能流向")
     if mode == "full":
