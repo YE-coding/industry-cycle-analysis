@@ -560,6 +560,55 @@ def validate(text: str, mode: str, strict: bool) -> tuple[list[str], list[str]]:
         if not re.search(r"什么会证明这个判断错了|What would prove this wrong", cycle):
             errors.append("section 5 missing falsification condition")
 
+        # Capital-cycle diagnostics are conditional so legacy reports remain valid.
+        # Once the author opts into the block, however, its definitions and
+        # falsification fields are part of the publication contract.
+        capital_cycle_match = re.search(
+            r"^###\s+5\.\d+\s+资本周期交叉校验(?:（[^\n]*）)?\s*$([\s\S]*?)(?=^###\s+|^##\s+|\Z)",
+            cycle,
+            re.MULTILINE,
+        )
+        if capital_cycle_match:
+            capital_cycle = capital_cycle_match.group(1)
+            capital_fields = (
+                "观察节点",
+                "资本开支方向",
+                "资本开支口径",
+                "资本开支性质",
+                "回报代理",
+                "口径可比性",
+                "供给兑现时滞",
+                "交叉判断",
+                "反证条件",
+            )
+            for field in capital_fields:
+                match = re.search(
+                    rf"^[-*]\s*{re.escape(field)}[：:]\s*(.+)$",
+                    capital_cycle,
+                    re.MULTILINE,
+                )
+                if match is None or len(normalize_text(match.group(1))) < 8:
+                    errors.append(f"capital-cycle block missing or empty field: {field}")
+
+            evidence_ids = set(re.findall(r"\bE\d+\b", capital_cycle))
+            if len(evidence_ids) < 2:
+                errors.append("capital-cycle block needs at least 2 distinct evidence IDs")
+            if not re.search(r"增长性|扩张性|维护性|替换性|混合|未拆分", capital_cycle):
+                errors.append("capital-cycle block does not classify capex nature")
+            if not re.search(r"平均人数|期末人数|统计范围|合并范围|分子|分母|可比|不可比", capital_cycle):
+                errors.append("capital-cycle block does not explain metric comparability")
+
+            rejected_shortcuts = {
+                "ignores funded demand": r"需求不重要|忽略需求|只看供给|无需看需求",
+                "equates capex with effective supply": r"资本开支(?:就是|等于|=)有效供给",
+                "maps capex directly to industry direction": r"资本开支(?:上涨|上升|增长).{0,8}(?:就是|等于|意味着).{0,8}(?:行业上涨|行业上坡|上行)",
+                "claims supply alone determines returns": r"(?:回报|收益).{0,8}(?:只由|完全由|仅由).{0,8}供给决定|供给.{0,8}(?:唯一|完全).{0,8}决定.{0,8}(?:回报|收益)",
+                "turns per-capita profit into a forecast": r"人均(?:净)?利润.{0,12}(?:直接|足以|可以).{0,8}(?:预测|判断).{0,8}(?:工资|招聘|就业|职业|收入|行业)",
+            }
+            for label, pattern in rejected_shortcuts.items():
+                if re.search(pattern, capital_cycle):
+                    errors.append(f"capital-cycle block contains a rejected shortcut: {label}")
+
     # --- Advanced-reader blocks across the body ---
     if mode == "full":
         advanced_count = len(re.findall(r"进阶视角", text))

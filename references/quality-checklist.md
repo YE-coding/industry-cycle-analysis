@@ -25,6 +25,9 @@ Do not deliver a full report when any blocker remains:
 - The policy gate says `是` but has no structured jurisdiction table, policy status/deadline, economic transmission, implementation gap, reversal risk, and evidence; or it says `否` while retaining an empty or `N/A` country table.
 - Observation posts lack a specific source, baseline, direction, and numeric or event threshold — or an indicator cell contains a value instead of an indicator name, or a baseline is stale beyond one release cycle without a 数据滞后 note.
 - Qualification, pilot line, announced capacity, installed capacity, and volume production are conflated.
+- A capital-cycle block treats capex as effective supply, omits the reporting/accounting definition, or compares cash paid, asset additions, leases and guidance as if they were the same series.
+- A capital-cycle block treats supply-side emphasis as permission to ignore funded demand, or maps `capex up` / `capital flight` directly to a unique stage or entry decision.
+- A per-capita return proxy mixes profit total with net profit, average with period-end employees, or changing reporting populations; or it is presented as a direct forecast of wages, hiring or career outcomes.
 - Any representative company lacks a stated production-control model, or externally purchased/contracted output is presented as self-owned capacity.
 - The payer's funding source and an observable budget-tightening condition are missing, or a precise funding runway is asserted without evidence.
 - Order support is described without contract type and cancellability, or framework intentions and possible duplicate/multi-supplier orders are treated as firm demand.
@@ -91,6 +94,9 @@ Structure:
 ## Cycle and market expectations
 
 - Is the stage tied to date anchors and evidence IDs?
+- When the prompt asks about the capital cycle or an industry turning point, does section 5 name the chain node, normalize capex and return definitions, state the supply-release lag, cross-check price/orders/inventory/utilization, and give a falsifier?
+- Is the same capex classified relative to each node—for example, cloud supply for the spender but accelerator/HBM/power demand for suppliers—rather than labeled once for the whole theme?
+- Does the two-axis capex/return result remain a working hypothesis instead of a deterministic stage label?
 - Is the next transition conditional on measurable triggers rather than a generic “future 2-6 quarters”?
 - Is there at least one real disconfirming source or a clearly stated contradiction-search gap?
 - Are industrial evidence and market-pricing/narrative evidence kept separate?
