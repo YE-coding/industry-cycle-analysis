@@ -47,6 +47,8 @@ Use these questions to turn an industry into a concrete chain of conflicts.
 ## Expansion Questions
 
 - Who is expanding?
+- Is the disclosed capex cash paid, asset additions, finance leases or guidance, and does it include maintenance, offices, land, software, logistics or other non-capacity items?
+- How much is growth/expansion capex versus maintenance or replacement capex? If undisclosed, is the mix explicitly marked as a gap?
 - How much is planned?
 - How much is funded?
 - How much is actually under construction?

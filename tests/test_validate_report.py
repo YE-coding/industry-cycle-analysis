@@ -15,6 +15,21 @@ from validate_corpus import audit  # noqa: E402
 from validate_report import validate  # noqa: E402
 
 
+CAPITAL_CYCLE_BLOCK = """### 5.1 资本周期交叉校验
+
+- 观察节点：核心部件制造与认证产能，不把整个示例行业合并为单一节点。
+- 资本开支方向：2025H1 至 2026H1 资产增加继续上升，方向依据 E3、E6。
+- 资本开支口径：甲公司合并口径资产增加额，按自然年比较；不等同现金支付或管理层指引（E3）。
+- 资本开支性质：增长性与维护性混合且未拆分，因此不能把总额全部视为新增产能。
+- 回报代理：2025H2 至 2026H1 单位利润同比增加 8%，并以毛利率复核（E5、E6）。
+- 口径可比性：资本开支主体和自然年可比；单位利润分子与分母统计范围不变，但与集团净利润不可比。
+- 供给兑现时滞：资产增加后仍需安装、客户认证、良率爬坡和连续交付，当前估计需要两个至三个季度。
+- 交叉判断：资本开支上升且回报改善支持健康扩张假设，但仍需订单、库存、交期和利用率共同确认。
+- 反证条件：若订单覆盖低于一倍且库存连续两个季度上升，即推翻健康扩张判断。
+
+"""
+
+
 def valid_report(timestamp: datetime | None = None) -> str:
     timestamp = timestamp or datetime.now(timezone(timedelta(hours=8)))
     nodes = []
@@ -140,6 +155,8 @@ flowchart LR
 
 **进阶视角**：与上轮只靠补库存不同，本轮需要终端使用量和认证交付共同成立；利润先于大规模扩产改善才是有效收紧（E5、E6）。
 
+{CAPITAL_CYCLE_BLOCK}
+
 什么会证明这个判断错了：终端使用量连续下降，同时新增认证产能提前释放并造成库存回升。
 
 ## 6. 资金动向
@@ -240,6 +257,40 @@ class ValidateReportTests(unittest.TestCase):
         errors, warnings = validate(valid_report(), "full", True)
         self.assertEqual([], errors)
         self.assertEqual([], warnings)
+
+    def test_legacy_report_without_capital_cycle_block_still_passes(self) -> None:
+        report = valid_report().replace(CAPITAL_CYCLE_BLOCK, "")
+        errors, warnings = validate(report, "full", True)
+        self.assertEqual([], errors)
+        self.assertEqual([], warnings)
+
+    def test_capital_cycle_block_requires_every_field(self) -> None:
+        report = valid_report().replace(
+            "- 资本开支口径：甲公司合并口径资产增加额，按自然年比较；不等同现金支付或管理层指引（E3）。\n",
+            "",
+        )
+        self.assert_has_error(report, "missing or empty field: 资本开支口径")
+
+    def test_capital_cycle_block_rejects_ignoring_demand(self) -> None:
+        report = valid_report().replace(
+            "不把整个示例行业合并为单一节点。",
+            "不把整个示例行业合并为单一节点，而且需求不重要，只看供给即可。",
+        )
+        self.assert_has_error(report, "rejected shortcut: ignores funded demand")
+
+    def test_capital_cycle_block_rejects_capex_as_effective_supply(self) -> None:
+        report = valid_report().replace(
+            "不等同现金支付或管理层指引",
+            "资本开支就是有效供给，且不等同现金支付或管理层指引",
+        )
+        self.assert_has_error(report, "rejected shortcut: equates capex with effective supply")
+
+    def test_capital_cycle_block_rejects_career_forecast_shortcut(self) -> None:
+        report = valid_report().replace(
+            "资本开支上升且回报改善支持健康扩张假设",
+            "人均利润足以直接预测职业收入；资本开支上升且回报改善支持健康扩张假设",
+        )
+        self.assert_has_error(report, "rejected shortcut: turns per-capita profit into a forecast")
 
     def test_policy_gate_is_required(self) -> None:
         report = valid_report().replace(

@@ -2,6 +2,8 @@
 
 Use these stages to classify where an industry is in its lifecycle. The stage is a hypothesis to be updated, not a fixed label.
 
+When a prompt uses capital-cycle shorthand such as `涌入 / 狂热 / 崩盘 / 继承`, load `capital-cycle-diagnostics.md` and map the evidence back to the stages below. The shorthand is not a separate canonical stage system, and capex plus one return proxy cannot identify a stage by itself.
+
 ## 1. Introduction
 
 Signals:

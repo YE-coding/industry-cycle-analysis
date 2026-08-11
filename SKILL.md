@@ -1,6 +1,6 @@
 ---
 name: industry-cycle-analysis
-description: 产业供需周期分析 Skill，触发词包括“产析skill”。用于研究一个行业、赛道或产业链的需求来源、有效供给、产能周期、价格/订单/库存/利润、资本开支、产业链传导和资本市场预期阶段。适合半导体、AI算力、光通信、新能源、化工、钢铁、资源品、机器人、数据中心、电力、液冷等周期性或成长性行业；不要用于短线荐股、技术分析、K线预测、目标价或直接投资建议。
+description: 产业供需周期分析 Skill，触发词包括“产析skill”。用于研究行业、赛道或产业链的需求来源、有效供给、产能周期、价格/订单/库存/利润、资本开支、产业链传导和资本市场预期阶段，也用于判断行业在走上坡还是下坡、资本周期处于哪一段、热门风口是否已进入晚周期。适合半导体、AI算力、光通信、新能源、化工、钢铁、资源品、机器人、数据中心、电力、液冷等周期性或成长性行业；不要用于职业收入命中率预测、短线荐股、技术分析、K线预测、目标价或直接投资建议。
 ---
 
 # Industry Cycle Analysis
@@ -49,6 +49,7 @@ Anti-boilerplate rules (hard):
 - For agentic or multi-round deep research, also load `references/deepsearch-research-protocol.md`.
 - For full research, always run the policy-materiality gate. Load `references/policy-materiality.md` when the gate is `是` or when the answer is uncertain.
 - Load `references/framework.md`, `references/supply-demand-questions.md`, or `references/cycle-stages.md` only when that part of the analysis needs them.
+- When the user asks whether an industry is rising or declining, invokes the capital cycle, treats capex or per-capita profit as a timing signal, or asks whether a popular theme is already late-cycle, load `references/capital-cycle-diagnostics.md`. Use it as a cross-check on the seven cycle stages, not as a replacement stage system.
 
 ## Synchronize time and release status first
 
@@ -174,6 +175,7 @@ materials/equipment -> packaging/foundry capacity (parallel inputs)
 13. When public data permits, preserve at least one real comparable time series: the same indicator, definition, unit, geography, and reporting entity across two or more dates. Never combine revenue, margin, inventory, forecasts, or different companies into a synthetic line. If no such series is available, write the precise evidence gap and the source to monitor next.
 14. Keep the stage judgment separate from its epistemic status. Record `阶段判断`, `结论状态`, `置信度`, `证据截至时间`, `上调条件`, and `下调条件` as independent fields. A stage may be “扩张” while the conclusion remains “暂定”; the interface must never make these look like one label.
 15. Build the cycle timeline from 4-6 industry-specific dated events or quarters. Mark each row as an actual, company plan, forecast, or risk window. The visible time label must carry meaning beyond a reused sequence of calendar years.
+16. For capital-cycle questions, diagnose each relevant chain node separately. Normalize capex and return metrics, classify the direction of both, state the lag from spending to qualified supply, and name a falsifier. Never infer an industry or career outcome from capex plus per-capita profit alone.
 
 ## Write and validate the report
 
@@ -181,7 +183,7 @@ For full research:
 
 1. Use `references/report-template.md` and preserve the exact header labels `分析日期`, `地理范围`, `数据时效`, and `行业边界`. Follow its section order: reader-facing body (0-10) first, audit appendices (A/B/C) last.
 2. Separate facts, inferences, assumptions, and gaps.
-3. Include the mermaid chain map with parallel inputs, at least four fully structured node explanations, representative-company tables with production-control models and two or more rows per node, the funding-durability row, order-quality and cancellation evidence or a precise gap, the policy-materiality gate, capital-flow attempts table, cycle-adjusted valuation calibration, an implied-expectation reverse test when usable inputs exist (otherwise a precise gap), layered market-proxy evidence, qualitative pricing paragraph, complete future-capital-flow scenarios, mainstream-vs-report contrast, watchpoints, the glossary, and either a comparable time-series table or an explicit time-series evidence gap.
+3. Include the mermaid chain map with parallel inputs, at least four fully structured node explanations, representative-company tables with production-control models and two or more rows per node, the funding-durability row, order-quality and cancellation evidence or a precise gap, the policy-materiality gate, capital-flow attempts table, cycle-adjusted valuation calibration, an implied-expectation reverse test when usable inputs exist (otherwise a precise gap), layered market-proxy evidence, qualitative pricing paragraph, complete future-capital-flow scenarios, mainstream-vs-report contrast, watchpoints, the glossary, and either a comparable time-series table or an explicit time-series evidence gap. When `references/capital-cycle-diagnostics.md` is triggered, also include its compact cross-check block in section 5.
 4. Do not use placeholders such as `官方/协会/公司`, `待按产品核验`, `市场可能交易`, `见数据时效表`, or a generic “连续两期改善”. Also banned as filler: `钱和订单从…的需求向前传`, `负责把上游投入转成…可采购、可验证的产品或服务`, `核心产品需求`, `新增场景`, `直接观测`/`交叉验证` as an entire interpretation cell, `最新已披露期` as a period, and reusing one identical Limitation sentence across every ledger row.
 5. Run:
 
@@ -209,6 +211,8 @@ supply-demand gap != stock-price rise
 correct direction != correct timing
 earnings realization != continued stock rise
 price unchanged -> lower future PE != undervaluation
+capex growth != effective supply
+per-capita profit != career outcome
 AI answer != fact
 stale data != current fact
 ```
